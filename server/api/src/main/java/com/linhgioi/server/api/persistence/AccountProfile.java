@@ -2,15 +2,14 @@ package com.linhgioi.server.api.persistence;
 
 import java.util.Objects;
 
-public record AccountProfile(String accountId, String devKeyHash, String displayName, long createdAtUnixMs, long updatedAtUnixMs) {
+public record AccountProfile(String accountId, String displayName, long createdAtUnixMs, long updatedAtUnixMs) {
     public AccountProfile {
         requireIdentifier(accountId, "accountId");
-        requireIdentifier(devKeyHash, "devKeyHash");
         if (displayName == null || displayName.isBlank()) {
             throw new IllegalArgumentException("displayName must not be blank");
         }
-        if (displayName.length() > 32) {
-            throw new IllegalArgumentException("displayName must be <= 32 characters");
+        if (displayName.length() > 254) {
+            throw new IllegalArgumentException("displayName must be <= 254 characters");
         }
         if (createdAtUnixMs <= 0 || updatedAtUnixMs <= 0) {
             throw new IllegalArgumentException("timestamps must be positive");

@@ -22,8 +22,8 @@ import java.util.UUID;
 public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     // v1 remains untouched as a rollback baseline; v2 owns persistent character slots.
     // Persistence hygiene: raw dev key values are never written to disk.
-    public static final int SCHEMA_VERSION = 2;
-    public static final String STORE_FILE_NAME = "players-v2.json";
+    public static final int SCHEMA_VERSION = 3;
+    public static final String STORE_FILE_NAME = "players-v3.json";
     private static final long INITIAL_ENTITY_ID = 1001L;
 
     private final Path storeFile;
@@ -55,7 +55,7 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
 
         long now = clock.millis();
         String accountId = "account.dev." + keyHash.substring(0, 16);
-        AccountProfile account = new AccountProfile(accountId, keyHash, safeDisplayName, now, now);
+        AccountProfile account = new AccountProfile(accountId, safeDisplayName, now, now);
         snapshot.getAccountsById().put(account.accountId(), account);
         snapshot.getAccountIdByDevKeyHash().put(keyHash, account.accountId());
         persist();
@@ -66,6 +66,34 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     public synchronized java.util.Optional<AccountProfile> findAccount(String accountId) {
         if (accountId == null || accountId.isBlank()) return java.util.Optional.empty();
         return java.util.Optional.ofNullable(snapshot.getAccountsById().get(accountId.trim()));
+    }
+
+    @Override
+    public synchronized AccountProfile createProductAccount(String displayName) {
+        String safeDisplayName = normalizeProductDisplayName(displayName);
+        long now = clock.millis();
+        String accountId;
+        do {
+            accountId = "account.product." + UUID.randomUUID().toString().replace("-", "");
+        } while (snapshot.getAccountsById().containsKey(accountId));
+        AccountProfile account = new AccountProfile(accountId, safeDisplayName, now, now);
+        snapshot.getAccountsById().put(accountId, account);
+        persist();
+        return account;
+    }
+
+    @Override
+    public synchronized boolean deleteEmptyProductAccount(String accountId) {
+        if (accountId == null || !accountId.startsWith("account.product.")) return false;
+        AccountProfile account = snapshot.getAccountsById().get(accountId);
+        if (account == null) return false;
+        if (snapshot.getAccountIdByDevKeyHash().containsValue(accountId)) return false;
+        boolean occupied = snapshot.getCharactersById().values().stream()
+                .anyMatch(character -> accountId.equals(character.accountId()));
+        if (occupied) return false;
+        snapshot.getAccountsById().remove(accountId);
+        persist();
+        return true;
     }
 
     @Override
@@ -146,40 +174,71 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     private PlayerPersistenceSnapshot loadOrCreate() {
         try {
             Files.createDirectories(storeFile.getParent());
-            if (!Files.exists(storeFile)) {
-                Path legacyFile = storeFile.resolveSibling("players-v1.json");
-                if (Files.exists(legacyFile)) return migrateLegacy(legacyFile);
-                PlayerPersistenceSnapshot created = new PlayerPersistenceSnapshot();
-                created.setNextEntityId(INITIAL_ENTITY_ID);
-                return created;
+            if (Files.exists(storeFile)) {
+                PlayerPersistenceSnapshot loaded = mapper.readValue(storeFile.toFile(), PlayerPersistenceSnapshot.class);
+                validateSnapshot(loaded);
+                return loaded;
             }
-            PlayerPersistenceSnapshot loaded = mapper.readValue(storeFile.toFile(), PlayerPersistenceSnapshot.class);
-            validateSnapshot(loaded);
-            return loaded;
+            Path v2File = storeFile.resolveSibling("players-v2.json");
+            if (Files.exists(v2File)) return migrateLegacy(v2File, 2);
+            Path v1File = storeFile.resolveSibling("players-v1.json");
+            if (Files.exists(v1File)) return migrateLegacy(v1File, 1);
+            PlayerPersistenceSnapshot created = new PlayerPersistenceSnapshot();
+            created.setNextEntityId(INITIAL_ENTITY_ID);
+            return created;
         } catch (IOException exception) {
             throw new UncheckedIOException("failed to load player persistence store: " + storeFile, exception);
         }
     }
 
-    private PlayerPersistenceSnapshot migrateLegacy(Path legacyFile) throws IOException {
-        PlayerPersistenceSnapshot legacy = mapper.readValue(legacyFile.toFile(), PlayerPersistenceSnapshot.class);
-        if (legacy.getSchemaVersion() != 1) throw new IllegalStateException("unsupported legacy player schema");
-        for (String accountId : legacy.getAccountsById().keySet()) {
-            var characters = legacy.getCharactersById().values().stream()
+    private PlayerPersistenceSnapshot migrateLegacy(Path legacyFile, int expectedVersion) throws IOException {
+        LegacySnapshot legacy = mapper.readValue(legacyFile.toFile(), LegacySnapshot.class);
+        if (legacy.schemaVersion != expectedVersion) {
+            throw new IllegalStateException("unsupported legacy player schema");
+        }
+        if (expectedVersion == 1) assignLegacySlots(legacy);
+        PlayerPersistenceSnapshot migrated = new PlayerPersistenceSnapshot();
+        migrated.setSchemaVersion(SCHEMA_VERSION);
+        migrated.setNextEntityId(legacy.nextEntityId);
+        migrated.setAccountIdByDevKeyHash(legacy.accountIdByDevKeyHash);
+        migrated.setCharactersById(legacy.charactersById);
+        legacy.accountsById.forEach((accountId, account) -> {
+            if (account == null || !accountId.equals(account.accountId)) {
+                throw new IllegalStateException("legacy account index drift: " + accountId);
+            }
+            if (expectedVersion == 2 && (account.devKeyHash == null || account.devKeyHash.isBlank())) {
+                throw new IllegalStateException("v2 account missing devKeyHash: " + accountId);
+            }
+            if (account.devKeyHash != null && !account.devKeyHash.isBlank()) {
+                String indexed = legacy.accountIdByDevKeyHash.get(account.devKeyHash);
+                if (!accountId.equals(indexed)) {
+                    throw new IllegalStateException("dev-key index hash drift for account: " + accountId);
+                }
+            }
+            migrated.getAccountsById().put(accountId, new AccountProfile(
+                    account.accountId, account.displayName, account.createdAtUnixMs, account.updatedAtUnixMs));
+        });
+        validateSnapshot(migrated);
+        writeSnapshot(migrated);
+        return migrated;
+    }
+
+    private static void assignLegacySlots(LegacySnapshot legacy) {
+        for (String accountId : legacy.accountsById.keySet()) {
+            var characters = legacy.charactersById.values().stream()
                     .filter(character -> character.accountId().equals(accountId))
-                    .sorted(Comparator.comparingLong(CharacterProfile::createdAtUnixMs).thenComparingLong(CharacterProfile::entityId))
+                    .sorted(Comparator.comparingLong(CharacterProfile::createdAtUnixMs)
+                            .thenComparingLong(CharacterProfile::entityId))
                     .toList();
             if (characters.size() > 3) {
-                throw new IllegalStateException("legacy account exceeds three slots; owner resolution required; v1 file preserved: " + accountId);
+                throw new IllegalStateException(
+                        "legacy account exceeds three slots; owner resolution required; v1 file preserved: " + accountId);
             }
             for (int index = 0; index < characters.size(); index++) {
                 var character = characters.get(index);
-                legacy.getCharactersById().put(character.characterId(), character.withSlot(index + 1));
+                legacy.charactersById.put(character.characterId(), character.withSlot(index + 1));
             }
         }
-        legacy.setSchemaVersion(SCHEMA_VERSION);
-        validateSnapshot(legacy);
-        return legacy;
     }
 
     private void validateSnapshot(PlayerPersistenceSnapshot loaded) {
@@ -190,16 +249,15 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
             throw new IllegalStateException("nextEntityId must be >= " + INITIAL_ENTITY_ID);
         }
         loaded.getAccountIdByDevKeyHash().forEach((hash, accountId) -> {
+            if (!hash.matches("[0-9a-f]{64}")) {
+                throw new IllegalStateException("invalid dev-key hash index");
+            }
             if (!loaded.getAccountsById().containsKey(accountId)) {
                 throw new IllegalStateException("dev-key index references missing account: " + accountId);
             }
-            AccountProfile account = loaded.getAccountsById().get(accountId);
-            if (!account.devKeyHash().equals(hash)) {
-                throw new IllegalStateException("dev-key index hash drift for account: " + accountId);
-            }
         });
         loaded.getCharactersById().values().forEach(character -> {
-            if (character.slot() == null) throw new IllegalStateException("v2 character is missing slot");
+            if (character.slot() == null) throw new IllegalStateException("v3 character is missing slot");
             if (!loaded.getAccountsById().containsKey(character.accountId())) {
                 throw new IllegalStateException("character references missing account: " + character.characterId());
             }
@@ -214,11 +272,15 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     }
 
     private void persist() {
+        writeSnapshot(snapshot);
+    }
+
+    private void writeSnapshot(PlayerPersistenceSnapshot value) {
         try {
             Files.createDirectories(storeFile.getParent());
-            validateSnapshot(snapshot);
+            validateSnapshot(value);
             Path temp = storeFile.resolveSibling(storeFile.getFileName() + ".tmp");
-            mapper.writeValue(temp.toFile(), snapshot);
+            mapper.writeValue(temp.toFile(), value);
             try {
                 Files.move(temp, storeFile, StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
             } catch (IOException atomicMoveFailed) {
@@ -286,6 +348,61 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
             throw new IllegalArgumentException("classId must be class.sword or class.martial");
         }
         return normalized;
+    }
+
+    private static String normalizeProductDisplayName(String displayName) {
+        if (displayName == null || displayName.isBlank()) {
+            throw new IllegalArgumentException("displayName must not be blank");
+        }
+        String normalized = displayName.trim();
+        if (normalized.length() > 254) {
+            throw new IllegalArgumentException("displayName must be <= 254 characters");
+        }
+        return normalized;
+    }
+
+    public static final class LegacySnapshot {
+        public int schemaVersion = 1;
+        public long nextEntityId = INITIAL_ENTITY_ID;
+        public java.util.Map<String, LegacyAccountProfile> accountsById = new java.util.LinkedHashMap<>();
+        public java.util.Map<String, String> accountIdByDevKeyHash = new java.util.LinkedHashMap<>();
+        public java.util.Map<String, CharacterProfile> charactersById = new java.util.LinkedHashMap<>();
+
+        public int getSchemaVersion() { return schemaVersion; }
+        public void setSchemaVersion(int value) { schemaVersion = value; }
+        public long getNextEntityId() { return nextEntityId; }
+        public void setNextEntityId(long value) { nextEntityId = value; }
+        public java.util.Map<String, LegacyAccountProfile> getAccountsById() { return accountsById; }
+        public void setAccountsById(java.util.Map<String, LegacyAccountProfile> value) {
+            accountsById = value == null ? new java.util.LinkedHashMap<>() : new java.util.LinkedHashMap<>(value);
+        }
+        public java.util.Map<String, String> getAccountIdByDevKeyHash() { return accountIdByDevKeyHash; }
+        public void setAccountIdByDevKeyHash(java.util.Map<String, String> value) {
+            accountIdByDevKeyHash = value == null ? new java.util.LinkedHashMap<>() : new java.util.LinkedHashMap<>(value);
+        }
+        public java.util.Map<String, CharacterProfile> getCharactersById() { return charactersById; }
+        public void setCharactersById(java.util.Map<String, CharacterProfile> value) {
+            charactersById = value == null ? new java.util.LinkedHashMap<>() : new java.util.LinkedHashMap<>(value);
+        }
+    }
+
+    public static final class LegacyAccountProfile {
+        public String accountId;
+        public String devKeyHash;
+        public String displayName;
+        public long createdAtUnixMs;
+        public long updatedAtUnixMs;
+
+        public String getAccountId() { return accountId; }
+        public void setAccountId(String value) { accountId = value; }
+        public String getDevKeyHash() { return devKeyHash; }
+        public void setDevKeyHash(String value) { devKeyHash = value; }
+        public String getDisplayName() { return displayName; }
+        public void setDisplayName(String value) { displayName = value; }
+        public long getCreatedAtUnixMs() { return createdAtUnixMs; }
+        public void setCreatedAtUnixMs(long value) { createdAtUnixMs = value; }
+        public long getUpdatedAtUnixMs() { return updatedAtUnixMs; }
+        public void setUpdatedAtUnixMs(long value) { updatedAtUnixMs = value; }
     }
 
     private static String sha256(String value) {

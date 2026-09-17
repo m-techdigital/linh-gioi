@@ -162,4 +162,62 @@ class JsonFilePlayerProfileStoreTest {
 
         assertThrows(IllegalStateException.class, () -> new JsonFilePlayerProfileStore(tempDir, clock));
     }
+    @Test
+    void migratesV2ToNeutralV3WithoutChangingV2FileAndKeepsDevLogin() throws Exception {
+        String devKey = "v2-dev-key";
+        String hash = sha256(devKey);
+        String accountId = "account.dev." + hash.substring(0, 16);
+        String v2 = """
+                {"schemaVersion":2,"nextEntityId":1001,
+                 "accountsById":{"%s":{"accountId":"%s","devKeyHash":"%s","displayName":"Legacy","createdAtUnixMs":1700000000000,"updatedAtUnixMs":1700000000000}},
+                 "accountIdByDevKeyHash":{"%s":"%s"},"charactersById":{}}
+                """.formatted(accountId, accountId, hash, hash, accountId).trim();
+        Path v2File = tempDir.resolve("players-v2.json");
+        Files.writeString(v2File, v2, StandardCharsets.UTF_8);
+
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+
+        assertEquals(v2, Files.readString(v2File, StandardCharsets.UTF_8));
+        assertEquals("players-v3.json", JsonFilePlayerProfileStore.STORE_FILE_NAME);
+        assertEquals(accountId, store.findAccount(accountId).orElseThrow().accountId());
+        assertEquals(accountId, store.loginDev(devKey, "Ignored").account().accountId());
+        String v3 = Files.readString(tempDir.resolve("players-v3.json"), StandardCharsets.UTF_8);
+        assertFalse(v3.contains("devKeyHash"));
+        assertTrue(v3.contains(hash));
+    }
+
+    @Test
+    void productAccountCreationNeverAddsDevKeyIndex() throws Exception {
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+
+        AccountProfile account = store.createProductAccount("minh@example.com");
+
+        assertTrue(account.accountId().startsWith("account.product."));
+        assertEquals("minh@example.com", account.displayName());
+        var mapper = tools.jackson.databind.json.JsonMapper.builder().build();
+        var root = mapper.readTree(tempDir.resolve(JsonFilePlayerProfileStore.STORE_FILE_NAME).toFile());
+        assertEquals(0, root.path("accountIdByDevKeyHash").size());
+        assertFalse(root.path("accountsById").path(account.accountId()).has("devKeyHash"));
+    }
+
+    @Test
+    void rollbackDeletesOnlyEmptyProductAccounts() {
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+        AccountProfile emptyProduct = store.createProductAccount("empty@example.com");
+        assertTrue(store.deleteEmptyProductAccount(emptyProduct.accountId()));
+        assertTrue(store.findAccount(emptyProduct.accountId()).isEmpty());
+
+        AccountProfile occupiedProduct = store.createProductAccount("occupied@example.com");
+        store.createCharacter(new CreateCharacterCommand(occupiedProduct.accountId(), "ProductHero", "class.sword"));
+        assertFalse(store.deleteEmptyProductAccount(occupiedProduct.accountId()));
+
+        AccountProfile dev = store.loginDev("dev-rollback-guard", "Dev").account();
+        assertFalse(store.deleteEmptyProductAccount(dev.accountId()));
+    }
+
+    private static String sha256(String value) throws Exception {
+        var digest = java.security.MessageDigest.getInstance("SHA-256");
+        return java.util.HexFormat.of().formatHex(digest.digest(value.getBytes(StandardCharsets.UTF_8)));
+    }
+
 }
