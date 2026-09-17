@@ -1,0 +1,522 @@
+{
+  "version": 1,
+  "program": "LGO Whole-game UI/UX Fidelity & Foundation Program",
+  "baseline": "9f4591ad79f8daa2f7878c3e1ce79b42a4b5bffb",
+  "authorityRules": [
+    "owner canonical/approved art outranks runtime evidence",
+    "approved proposal is valid only when explicitly owner-approved",
+    "runtime capture proves implementation state, not design authority",
+    "mobile-landscape-simulation is not physical-device evidence"
+  ],
+  "surfaces": [
+    {
+      "id": "entry-login",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v5-entry/01-entry-login-CANONICAL.png",
+        "status": "canonical",
+        "sha256": "204178a0a0236873e59af781479d4f7440b5f702f6f8a84130b121cfeca1b52d"
+      },
+      "runtimeEvidence": [
+        "build/whole-flow-p0-v1/pc/entry/entry-login.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Entry.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "validation",
+        "authenticating",
+        "invalid-credentials"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "runtime scene/logo/hero/ornament/typography are materially simpler than canonical"
+      ]
+    },
+    {
+      "id": "server-select",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v7-server-select/01-server-select-CANONICAL.png",
+        "status": "canonical",
+        "sha256": "653e6850feb17425e72a0900b2e8d7d2e5bac9ba6d1ec9b310f0c46187665007"
+      },
+      "runtimeEvidence": [
+        "build/whole-flow-p0-v1/pc/server-select/server-select.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.ServerSelect.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "confirm"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "runtime preserves function but not owner scene/panel silhouette fidelity"
+      ]
+    },
+    {
+      "id": "register",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v8-register/01-register-account-CANONICAL.png",
+        "status": "canonical",
+        "sha256": "a63c51012a184f3ad1752a351aeced21cbec639d0057272926c00952d26febfb"
+      },
+      "runtimeEvidence": [
+        "build/register-recovery-product-flow-v1/after-closure/pc/register/register-account.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Register.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "validation",
+        "loading",
+        "conflict"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "auth-family shell is rebuilt in C# instead of shared owner-derived composition"
+      ]
+    },
+    {
+      "id": "recovery-request",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v9-password-recovery-request/01-password-recovery-request-CANONICAL-CANDIDATE.png",
+        "status": "canonical-candidate",
+        "sha256": "c0576e5e078941e856e50a7d3885175480e9de30d3808c61d8c2d094ac7b3a48"
+      },
+      "runtimeEvidence": [
+        "build/register-recovery-product-flow-v1/after-closure/pc/password-recovery/password-recovery-request.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.PasswordRecovery.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "validation",
+        "loading",
+        "delivery-unavailable"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "owner candidate fidelity incomplete"
+      ]
+    },
+    {
+      "id": "recovery-verify",
+      "designAuthority": {
+        "kind": "approved-proposal",
+        "relativePath": "build/register-recovery-visual-proposal-v3-owner-derived/01-verify-code-PROPOSAL-v3.png",
+        "status": "owner-approved-proposal-v3",
+        "sha256": "0567590cb95a286e697db669c476ab14082e4951befe1e77ae63844a8e80b038"
+      },
+      "runtimeEvidence": [
+        "build/register-recovery-product-flow-v1/after-closure/pc/password-recovery-verify/password-recovery-verify.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.PasswordRecovery.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "invalid-expired",
+        "resend-cooldown"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "proposal is approved extension of v9; runtime remains simplified"
+      ]
+    },
+    {
+      "id": "recovery-new-password",
+      "designAuthority": {
+        "kind": "approved-proposal",
+        "relativePath": "build/register-recovery-visual-proposal-v3-owner-derived/02-new-password-PROPOSAL-v3.png",
+        "status": "owner-approved-proposal-v3",
+        "sha256": "d6827b5aa135c72fbb79984d804198e7b161d0d463a3afc35dc74093d879d3aa"
+      },
+      "runtimeEvidence": [
+        "build/register-recovery-product-flow-v1/after-closure/pc/password-recovery-new-password/password-recovery-new-password.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.PasswordRecovery.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "validation-rule",
+        "success-return"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "proposal is approved extension of v8/v9; runtime remains simplified"
+      ]
+    },
+    {
+      "id": "character-select",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v6-character-select/01-character-select-CANONICAL.png",
+        "status": "canonical",
+        "sha256": "afdc76db54df285b02bd641b3588faa3e7a757d3cfc4eed56ca2fbd266e8d108"
+      },
+      "runtimeEvidence": [
+        "build/five-class-map01a-runtime-entry-v1/entry-evidence-exact/pc/character-entry/character-select.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.CharacterSelect.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "loading-list",
+        "occupied-selection",
+        "empty-slot",
+        "loading-character",
+        "load-error"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "live account binding is closed but visual stage/slot/detail/action composition is far from v6"
+      ]
+    },
+    {
+      "id": "hub-character",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v4-five-tabs/01-nhan-vat-nam-tab-compact-APPROVED.png",
+        "status": "approved",
+        "sha256": "1e9e1d969e6308df769187261cb651b5d358fef472b4f97a0a995377bf6dd0b7"
+      },
+      "runtimeEvidence": [
+        "build/character-hub-whole-polish-v59/runtime-final/pc/character-info.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.CharacterHub.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "disabled-or-locked"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "structure is closer than other families but ornament/density/icon/detail fidelity remains incomplete"
+      ]
+    },
+    {
+      "id": "hub-bag",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v4-five-tabs/02-ruong-do-phan-loai-doc-tab-compact-APPROVED.png",
+        "status": "approved",
+        "sha256": "2e0fcfed6cca9e8266b9586a98135b95bd2894b86c9cf19bad8b442ffcaabc04"
+      },
+      "runtimeEvidence": [
+        "build/character-hub-whole-polish-v59/runtime-final/pc/bag.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.CharacterHub.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "disabled-or-locked"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "structure is closer than other families but ornament/density/icon/detail fidelity remains incomplete"
+      ]
+    },
+    {
+      "id": "hub-skills",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v4-five-tabs/03-ky-nang-five-tab-APPROVED.png",
+        "status": "approved",
+        "sha256": "92d5aa08047a0e1a9e2604ae15510c76f889d5b5a12b71cda56613725cb30e08"
+      },
+      "runtimeEvidence": [
+        "build/character-hub-whole-polish-v59/runtime-final/pc/skills.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.CharacterHub.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "disabled-or-locked"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "structure is closer than other families but ornament/density/icon/detail fidelity remains incomplete"
+      ]
+    },
+    {
+      "id": "hub-potential",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v4-five-tabs/04-tiem-nang-five-tab-APPROVED.png",
+        "status": "approved",
+        "sha256": "64ae605db80ecedda0ef30d1594ee254945c921d1b63a9e62f1967ed0202a15d"
+      },
+      "runtimeEvidence": [
+        "build/character-hub-whole-polish-v59/runtime-final/pc/potential.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.CharacterHub.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "disabled-or-locked"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "structure is closer than other families but ornament/density/icon/detail fidelity remains incomplete"
+      ]
+    },
+    {
+      "id": "hub-spirit-pet",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "redesign-v4-five-tabs/05-linh-thu-five-tab-APPROVED.png",
+        "status": "approved",
+        "sha256": "de050c7aeedaa7c00bec58f7d22614938822b90179edf1d8dd655231f0620624"
+      },
+      "runtimeEvidence": [
+        "build/character-hub-whole-polish-v59/runtime-final/pc/spirit-pet.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Inventory.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.CharacterHub.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "default",
+        "selected",
+        "disabled-or-locked"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "structure is closer than other families but ornament/density/icon/detail fidelity remains incomplete"
+      ]
+    },
+    {
+      "id": "gameplay-hud-pc",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "02-hud-gameplay-dong-lam-desktop-demo.png",
+        "status": "reference-approved",
+        "sha256": "e90dba0ec997642d2194a65418f377de92f3f80bad82e60d50df80c1638d7748"
+      },
+      "runtimeEvidence": [
+        "build/whole-flow-p0-v1/pc/quest/01-arrival-q01.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "normal",
+        "quest",
+        "combat",
+        "interaction"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "current playfield is much sparser and HUD information hierarchy differs from reference"
+      ]
+    },
+    {
+      "id": "gameplay-hud-touch",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "01-hud-gameplay-dong-lam-touch-demo.png",
+        "status": "reference-approved",
+        "sha256": "0ac6cd36fe0daf060775eca368a87bf6bb1bb8b1341ded44f13769ee7608b050"
+      },
+      "runtimeEvidence": [
+        "build/whole-flow-p0-v1/mobile/quest/01-arrival-q01.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs",
+        "client/Unity/Assets/Game/UI/Runtime/RuntimeTouchMovementPad.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "normal",
+        "movement",
+        "combat",
+        "interaction"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "mobile evidence is macOS aspect/touch simulation, not physical-device proof"
+      ]
+    },
+    {
+      "id": "gameplay-menu",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "02-hud-gameplay-dong-lam-desktop-demo.png",
+        "status": "context-reference",
+        "sha256": "e90dba0ec997642d2194a65418f377de92f3f80bad82e60d50df80c1638d7748"
+      },
+      "runtimeEvidence": [
+        "build/whole-flow-p0-v1/pc/menu/menu.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Menu.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "open",
+        "destination-selected"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "no dedicated owner menu screen; gameplay reference constrains edge occupancy only"
+      ]
+    },
+    {
+      "id": "npc-dialogue",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "02-hud-gameplay-dong-lam-desktop-demo.png",
+        "status": "context-reference",
+        "sha256": "e90dba0ec997642d2194a65418f377de92f3f80bad82e60d50df80c1638d7748"
+      },
+      "runtimeEvidence": [
+        "build/whole-flow-p0-v1/pc/quest/02-ha-van-dialogue.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+      ],
+      "states": [
+        "open",
+        "advance",
+        "close"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "no dedicated owner dialogue modal; gameplay reference constrains playfield/edge hierarchy"
+      ]
+    },
+    {
+      "id": "map01a-world-composition",
+      "designAuthority": {
+        "kind": "owner",
+        "relativePath": "02-hud-gameplay-dong-lam-desktop-demo.png",
+        "status": "context-reference",
+        "sha256": "e90dba0ec997642d2194a65418f377de92f3f80bad82e60d50df80c1638d7748"
+      },
+      "runtimeEvidence": [
+        "build/whole-flow-p0-v1/pc/quest/01-arrival-q01.png"
+      ],
+      "codeOwners": [
+        "client/Unity/Assets/Game/World/Runtime/CongDongLamMap01AArtPreview.cs",
+        "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs"
+      ],
+      "states": [
+        "normal",
+        "npc",
+        "combat",
+        "portal"
+      ],
+      "profiles": [
+        "pc",
+        "tablet-simulation",
+        "mobile-landscape-simulation"
+      ],
+      "knownGaps": [
+        "map art remains draft/runtime-comparison; camera/actor/device scale requires UIF-07"
+      ],
+      "secondaryReferences": [
+        "/Users/minhdc/Projects/Design/LGO-Selected-2D-Source-v1/map-01a-cong-dong-lam/01-gameplay-screen-16x9.png"
+      ]
+    }
+  ]
+}
