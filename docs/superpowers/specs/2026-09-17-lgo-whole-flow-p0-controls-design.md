@@ -1,7 +1,7 @@
 # LGO Whole-flow P0 Controls — Design
 
 Date: 2026-09-17
-Status: DESIGN_REVIEW
+Status: OWNER_APPROVED
 
 ## Purpose
 
