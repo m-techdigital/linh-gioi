@@ -1,9 +1,9 @@
-# NEXT ACTION — Whole Product / after Product Auth Foundation closure
+# NEXT ACTION — Whole Product / after Register + Recovery 3-step closure
 
-1. Preserve Product Auth Foundation at the verified contract: dedicated BCrypt credential store, opaque in-memory session token, `/auth/login|session|logout`, memory-only Unity session state, generic 401 copy, and `/dev/auth/login` development-only.
-2. Next subproject: **Register + Password Recovery 3-step**. Add account/credential provisioning, Request → Verify Code → New Password, resend/expiry/error semantics and end-to-end Unity↔API evidence. Do not fold Character persistence into this slice.
-3. Reuse the current canonical Register and Password Recovery Request screens when viable. Verify Code and New Password do not yet have canonical screens: before implementation, prepare proposed designs and send old/missing-vs-new comparisons for owner approval.
-4. After Register/Recovery closes, continue to Character persistence/list/create/load; carry the known Character Select mobile motto/stage visual debt into that subproject.
+1. Preserve the closed product-account contract: neutral `players-v3.json`, BCrypt product credentials, `/auth/register|login|session|logout`, Request → Verify → New Password recovery, memory-only grants/session state, generic auth/recovery errors, and development-only `/dev/auth/login`. Do not reopen the approved Entry v5→v9 + Character Hub chrome visuals without a concrete Player defect.
+2. Next P0 subproject: **Character Select persistence/list/create/load**. Replace the hard-coded saved profile with the authenticated account's existing 3-slot API, add the current-canonical Create Character flow, and prove list/create/load on PC/tablet/mobile. Carry the known Character Select mobile motto/stage overlap into this subproject.
+3. Production recovery mail requires SMTP configuration (`LG_API_RECOVERY_SMTP_HOST`, `LG_API_RECOVERY_SMTP_FROM`; port/user/password/STARTTLS as provider requires). Without delivery configuration the request endpoint must stay fail-closed with `503`; never fake a sent code.
+4. After Character Select/Create closes, the low-conflict Character Hub product-visible candidate is wiring existing `EquippedSkillIndices` into the world hotbar/cast path before deeper five-class combat/progression work. Do not substitute additional artwork polish for this functional slice.
 5. Every visible task keeps before/after screenshots plus intermediate defect evidence at PC/tablet/mobile where relevant. Any material redesign must be shown old-vs-new and approved before replacing canonical design; fidelity/bug fixes inside an approved design do not need a new design approval.
 
 # NEXT ACTION — Character Hub / after v55
