@@ -1,9 +1,9 @@
-# NEXT ACTION — UI Fidelity / after UIF-03 Entry/Auth closure
+# NEXT ACTION — UI Fidelity / after UIF-04 Character Select closure
 
-1. Preserve closed UIF-03 Entry/Login, Server Select, Register and Recovery Request/Verify/New Password canonical fidelity unless a concrete regression is proven. Do not reopen auth/account semantics.
-2. Next scoped task is **LGO-UIF-04 Character Select v6 canonical fidelity on live account binding** using the authority matrix and owner v6 canonical. Carry existing bearer/account-bound list/load behavior forward unchanged.
-3. Reuse UIF-01/02 foundation: ThemeTokens → shared USS/primitives → screen composition; one PanelSettings `1672x941/match=1`; one `RuntimeViewportMetrics → RuntimeUiLayoutProfile` path.
-4. Create Character remains `DESIGN_GATED`. Do not fabricate non-Võ renderer art or mix renderer authority into this fidelity slice.
+1. Preserve closed UIF-03 Entry/Auth and UIF-04 Character Select visual hierarchy unless a concrete regression is proven. Keep bearer/account isolation, three-slot list/load semantics and Map01A entry behavior unchanged.
+2. Next scoped task is **LGO-UIF-05 Character Hub five-tab fidelity and component consolidation** against approved `redesign-v4-five-tabs` authority. Start with a fresh five-tab BEFORE matrix and component-ownership audit; do not reopen already-accepted skill artwork without a concrete defect.
+3. Reuse UIF-01/02 foundation and the dedicated `Skin.CharacterSelect` split pattern: ThemeTokens → shared USS/primitives → screen composition. Any repeated Hub recipe must have one shared owner instead of five tab-local copies.
+4. Preserve truthful states and product scope. Do not fabricate stats/progression, pet/item behavior or unapproved art; Create Character remains `DESIGN_GATED`; production five-class renderer authority remains a separate gate.
 5. Keep evidence truthful: PC/tablet/mobile macOS captures prove aspect/profile behavior only; Android/iOS physical sizing/touch proof remains an explicit separate open gate.
 
 # NEXT ACTION — Whole Product / after Register + Recovery 3-step closure
