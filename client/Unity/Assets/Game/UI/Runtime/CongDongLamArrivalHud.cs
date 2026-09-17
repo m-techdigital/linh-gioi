@@ -93,6 +93,7 @@ namespace LinhGioi.UI
         {
             _root = root;
             _root.style.flexGrow = 1;
+            RuntimeUiStyleSheetProvider.Attach(_root);
             RuntimeUiTypography.ApplyBodyFont(_root);
             _root.pickingMode = PickingMode.Ignore;
             _safe = new VisualElement { name = "Map01A Safe Hud", pickingMode = PickingMode.Ignore };

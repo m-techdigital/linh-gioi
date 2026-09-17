@@ -1,0 +1,63 @@
+/* LGO product UI structural primitives. Semantic colors remain ThemeTokens-owned. */
+.lgo-panel {
+    flex-direction: column;
+}
+
+.lgo-modal {
+    flex-direction: column;
+}
+
+.lgo-action {
+    flex-shrink: 0;
+    white-space: normal;
+    -unity-text-align: middle-center;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 1px;
+    border-left-width: 1px;
+}
+
+.lgo-action-primary {
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.lgo-input {
+    border-top-width: 2px;
+    border-right-width: 2px;
+    border-bottom-width: 2px;
+    border-left-width: 2px;
+}
+
+.lgo-tab {
+    flex-grow: 1;
+    flex-basis: 0;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.lgo-icon-frame {
+    flex-grow: 0;
+    flex-shrink: 0;
+}
+
+.lgo-badge {
+    -unity-text-align: middle-center;
+}
+
+.lgo-status {
+    flex-shrink: 0;
+}
+
+.lgo-utility-action {
+    position: relative;
+    white-space: nowrap;
+    -unity-text-align: lower-center;
+}
+
+.lgo-ornament {
+    height: 2px;
+    flex-shrink: 0;
+}

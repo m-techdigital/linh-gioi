@@ -103,6 +103,57 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void ProductRootAttachesOneSharedRuntimeStyleSheet()
+        {
+            var type = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeUiStyleSheetProvider");
+            Assert.That(type, Is.Not.Null, "Product UI needs one shared USS provider.");
+            var attach = type.GetMethod("Attach", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(attach, Is.Not.Null);
+            var root = new VisualElement();
+            Assert.That((bool)attach.Invoke(null, new object[] { root }), Is.True);
+            Assert.That(root.styleSheets.count, Is.EqualTo(1));
+            Assert.That((bool)attach.Invoke(null, new object[] { root }), Is.False);
+            Assert.That(root.styleSheets.count, Is.EqualTo(1), "Shared stylesheet must not be attached twice.");
+        }
+
+        [Test]
+        public void ProductSkinHelpersAttachSharedRoleClasses()
+        {
+            var action = new Button(); InvokeHudSkin("ApplyLgoButton", action, false);
+            Assert.That(action.ClassListContains("lgo-action"), Is.True);
+            var input = new VisualElement(); InvokeHudSkin("ApplyLgoInputField", input);
+            Assert.That(input.ClassListContains("lgo-input"), Is.True);
+            var tab = new Button(); InvokeHudSkin("ApplyLgoInventoryMainTab", tab, false);
+            Assert.That(tab.ClassListContains("lgo-tab"), Is.True);
+            var icon = new VisualElement(); InvokeHudSkin("ApplyLgoItemIcon", icon);
+            Assert.That(icon.ClassListContains("lgo-icon-frame"), Is.True);
+            var badge = new Label(); InvokeHudSkin("ApplyLgoInventoryBadge", badge);
+            Assert.That(badge.ClassListContains("lgo-badge"), Is.True);
+            var status = new VisualElement(); InvokeHudSkin("ApplyLgoStatusCard", status, 10f, 8f);
+            Assert.That(status.ClassListContains("lgo-status"), Is.True);
+            var utility = new Button(); InvokeHudSkin("ApplyLgoEntrySideAction", utility);
+            Assert.That(utility.ClassListContains("lgo-utility-action"), Is.True);
+            var ornament = new VisualElement(); InvokeHudSkin("ApplyLgoOrnamentRail", ornament);
+            Assert.That(ornament.ClassListContains("lgo-ornament"), Is.True);
+            var modal = new VisualElement(); InvokeHudSkin("ApplyLgoModalShell", modal, 12f);
+            Assert.That(modal.ClassListContains("lgo-modal"), Is.True);
+        }
+
+        private static void InvokeHudSkin(string methodName, params object[] arguments)
+        {
+            var methods = typeof(CongDongLamArrivalHud).GetMethods(System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public);
+            foreach (var method in methods)
+            {
+                if (method.Name != methodName || method.GetParameters().Length != arguments.Length) continue;
+                method.Invoke(null, arguments);
+                return;
+            }
+            Assert.Fail("Missing HUD skin helper: " + methodName);
+        }
+
+        [Test]
         public void SafeAreaCanBeAppliedWithoutHorizontalOverflow()
         {
             var root = new SafeAreaRoot();

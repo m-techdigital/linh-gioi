@@ -129,13 +129,18 @@ namespace LinhGioi.UI
             => LoadLgoCharacterHubTexture(ref _characterHubPotentialTopology, "character-hub-potential-topology");
 
 
-        private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
+        private static void ApplyLgoFrameColors(VisualElement element, Color background, Color border)
         {
             element.style.backgroundColor = background;
-            element.style.borderTopWidth = element.style.borderBottomWidth = 1;
-            element.style.borderLeftWidth = element.style.borderRightWidth = 1;
             element.style.borderTopColor = element.style.borderBottomColor = border;
             element.style.borderLeftColor = element.style.borderRightColor = border;
+        }
+
+        private static void ApplyLgoFrame(VisualElement element, Color background, Color border)
+        {
+            ApplyLgoFrameColors(element, background, border);
+            element.style.borderTopWidth = element.style.borderBottomWidth = 1;
+            element.style.borderLeftWidth = element.style.borderRightWidth = 1;
         }
 
         private static void ApplyLgoGlassPanel(VisualElement element, bool raised = false)
@@ -217,9 +222,9 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoModalShell(VisualElement element, float padding = 12)
         {
+            element.AddToClassList("lgo-modal");
             ApplyLgoGlassPanel(element);
             ApplyLgoLayeredFrame(element);
-            element.style.flexDirection = FlexDirection.Column;
             element.style.paddingLeft = element.style.paddingRight = padding;
             element.style.paddingTop = element.style.paddingBottom = padding;
         }
@@ -258,10 +263,10 @@ namespace LinhGioi.UI
         private static void ApplyLgoInputField(VisualElement element)
         {
             element.AddToClassList(LgoInputFieldClass);
-            ApplyLgoFrame(element, new Color(.010f, .035f, .060f, .86f), new Color(.46f, .64f, .74f, .50f));
+            element.AddToClassList("lgo-input");
+            ApplyLgoFrameColors(element, new Color(.010f, .035f, .060f, .86f), new Color(.46f, .64f, .74f, .50f));
             element.style.paddingLeft = element.style.paddingRight = 16;
             element.style.paddingTop = element.style.paddingBottom = 2;
-            element.style.borderTopWidth = element.style.borderBottomWidth = 2;
             element.style.color = UiSubText;
         }
 
@@ -303,15 +308,14 @@ namespace LinhGioi.UI
         private static void ApplyLgoOrnamentRail(VisualElement element)
         {
             element.AddToClassList(LgoOrnamentRailClass);
-            element.style.height = 2;
+            element.AddToClassList("lgo-ornament");
             element.style.backgroundColor = new Color(.95f, .75f, .36f, .72f);
         }
 
         private static void ApplyLgoItemIcon(VisualElement icon)
         {
             icon.AddToClassList(LgoItemIconFrameClass);
-            icon.style.flexGrow = 0;
-            icon.style.flexShrink = 0;
+            icon.AddToClassList("lgo-icon-frame");
             icon.style.width = 58;
             icon.style.height = 58;
             icon.style.marginTop = 8;
@@ -466,6 +470,7 @@ namespace LinhGioi.UI
         private static void ApplyLgoButton(Button button, bool primary = false)
         {
             button.AddToClassList(LgoActionButtonClass);
+            button.AddToClassList("lgo-action");
             button.EnableInClassList(LgoActionPrimaryClass, primary);
             button.EnableInClassList(LgoActionStandardClass, !primary);
             button.style.minHeight = primary ? 46 : 38;
@@ -473,23 +478,15 @@ namespace LinhGioi.UI
             button.style.paddingLeft = button.style.paddingRight = primary ? 20 : 14;
             button.style.paddingTop = button.style.paddingBottom = primary ? 3 : 2;
             button.style.fontSize = primary ? 18 : 14;
-            button.style.whiteSpace = WhiteSpace.Normal;
-            button.style.unityTextAlign = TextAnchor.MiddleCenter;
             button.style.unityFontStyleAndWeight = primary ? FontStyle.Bold : FontStyle.Normal;
             button.style.color = primary ? new Color(.10f, .07f, .03f, 1f) : UiText;
-            ApplyLgoFrame(button, primary ? UiGold : new Color(.038f, .118f, .172f, .98f), primary ? new Color(.98f, .86f, .48f, .94f) : new Color(.56f, .68f, .70f, .58f));
-            if (primary)
-            {
-                button.style.borderTopWidth = 2;
-                button.style.borderBottomWidth = 2;
-                button.style.borderLeftWidth = 2;
-                button.style.borderRightWidth = 2;
-            }
+            ApplyLgoFrameColors(button, primary ? UiGold : new Color(.038f, .118f, .172f, .98f), primary ? new Color(.98f, .86f, .48f, .94f) : new Color(.56f, .68f, .70f, .58f));
         }
 
         private static void ApplyLgoInventoryPanelShell(VisualElement panel)
         {
             panel.AddToClassList(LgoInventoryPanelShellClass);
+            panel.AddToClassList("lgo-panel");
             panel.style.backgroundColor = new Color(.004f, .024f, .046f, .985f);
             ApplyLgoCharacterHubSectionFrame(panel);
             panel.style.paddingLeft = panel.style.paddingRight = 12;
@@ -543,10 +540,10 @@ namespace LinhGioi.UI
         private static void ApplyLgoInventoryBadge(Label badge)
         {
             badge.AddToClassList(LgoInventoryBadgeClass);
+            badge.AddToClassList("lgo-badge");
             badge.style.paddingLeft = badge.style.paddingRight = 10;
             badge.style.paddingTop = badge.style.paddingBottom = 4;
             badge.style.marginRight = 6;
-            badge.style.unityTextAlign = TextAnchor.MiddleCenter;
             ApplyLgoFrame(badge, new Color(.018f, .060f, .096f, .88f), new Color(.72f, .62f, .38f, .62f));
         }
 
@@ -735,6 +732,7 @@ namespace LinhGioi.UI
         private static void ApplyLgoStatusCard(VisualElement card, float horizontalPadding = 10, float verticalPadding = 8)
         {
             card.AddToClassList(LgoStatusCardClass);
+            card.AddToClassList("lgo-status");
             card.style.paddingLeft = card.style.paddingRight = horizontalPadding;
             card.style.paddingTop = card.style.paddingBottom = verticalPadding;
             ApplyLgoFrame(card, new Color(.018f, .055f, .090f, .86f), new Color(.56f, .68f, .72f, .52f));
@@ -758,14 +756,11 @@ namespace LinhGioi.UI
         private static void ApplyLgoInventoryMainTab(Button button, bool touch)
         {
             button.AddToClassList(LgoInventoryMainTabClass);
+            button.AddToClassList("lgo-tab");
             ApplyLgoButton(button);
-            button.style.flexGrow = 1;
-            button.style.flexBasis = 0;
-            button.style.minWidth = 0;
             button.style.minHeight = 52;
             button.style.fontSize = 23;
             button.style.marginRight = 6;
-            button.style.whiteSpace = WhiteSpace.NoWrap;
             ApplyLgoCharacterHubSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
             RemoveLgoOuterBorder(button);
             ApplyLgoCharacterHubInteractiveMotion(button);
@@ -1660,8 +1655,8 @@ namespace LinhGioi.UI
         private static void ApplyLgoEntrySideAction(Button button)
         {
             button.AddToClassList(LgoEntrySideActionClass);
+            button.AddToClassList("lgo-utility-action");
             ApplyLgoButton(button);
-            button.style.position = Position.Relative;
             button.style.width = 72;
             button.style.height = 72;
             button.style.marginLeft = 8;
@@ -1671,8 +1666,6 @@ namespace LinhGioi.UI
             button.style.paddingBottom = 5;
             button.style.fontSize = 12;
             button.style.opacity = .90f;
-            button.style.whiteSpace = WhiteSpace.NoWrap;
-            button.style.unityTextAlign = TextAnchor.LowerCenter;
             button.style.backgroundColor = new Color(.008f, .030f, .054f, .72f);
             button.style.borderTopLeftRadius = button.style.borderTopRightRadius = 36;
             button.style.borderBottomLeftRadius = button.style.borderBottomRightRadius = 36;
