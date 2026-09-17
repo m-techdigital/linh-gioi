@@ -60,7 +60,8 @@ namespace LinhGioi.UI
             ApplyLgoStatusCard(help, 10, 8);
             help.style.marginTop = 6;
             help.Add(LgoLabel("ĐIỀU KHIỂN", 12, UiGold, true));
-            var helpText = LgoSubtitleLabel("Di chuyển: Shift  ·  Nhảy: W  ·  Đánh: Z  ·  Tương tác: E", 12);
+            var helpText = LgoSubtitleLabel(MenuControlsHelpForProfile(_touch), 12);
+            helpText.name = "Map01A Menu Controls Help";
             helpText.style.whiteSpace = WhiteSpace.Normal;
             helpText.style.marginTop = 4;
             help.Add(helpText);
@@ -76,6 +77,13 @@ namespace LinhGioi.UI
 
             _root.Add(_menuOverlay);
             UpdateMenu();
+        }
+
+        public static string MenuControlsHelpForProfile(bool touch)
+        {
+            return touch
+                ? "Di chuyển: Cần điều khiển trái  ·  Chạy · Nhảy · Đánh · Kỹ năng: nút hành động\nTương tác và Hành trang: nút HUD"
+                : "Di chuyển: A/D hoặc ←/→  ·  Chạy: Shift  ·  Nhảy: W/J/↑\nĐánh: Z  ·  Kỹ năng: X  ·  Tương tác: E  ·  Hành trang: I";
         }
 
         private Button MenuAction(string name, string text, string destination)

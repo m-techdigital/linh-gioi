@@ -39,6 +39,7 @@ namespace LinhGioi.UI
         private RuntimeViewportMetrics _metrics;
         private PanelSettings _ownedPanel;
         private bool _touch;
+        private bool _reviewHotkeysEnabled;
         public static void Attach(CongDongLamMap01AArtPreview scene)
         {
             var host = new GameObject("Map01A Arrival HUD");
@@ -55,6 +56,7 @@ namespace LinhGioi.UI
             var args = Environment.GetCommandLineArgs();
             var index = Array.IndexOf(args, "--lgo-map01a-device");
             hud._touch = Application.isMobilePlatform || (index >= 0 && index + 1 < args.Length && args[index + 1] != "pc");
+            hud._reviewHotkeysEnabled = ShouldEnableReviewHotkeysForArgs(args);
             hud.Build(document.rootVisualElement);
         }
         private static void Place(VisualElement e, float? left, float? right, float? top, float? bottom)
@@ -375,6 +377,11 @@ namespace LinhGioi.UI
             return entryOpen || menuOpen || inventoryOpen || dialogueOpen || characterSelectOpen || serverSelectOpen;
         }
 
+        public static bool ShouldEnableReviewHotkeysForArgs(string[] args)
+        {
+            return args != null && Array.IndexOf(args, "--lgo-map01a-review-hotkeys") >= 0;
+        }
+
         private void HandleEscape()
         {
             if (_passwordRecoveryOpen) ClosePasswordRecovery();
@@ -489,12 +496,16 @@ namespace LinhGioi.UI
                     if (!_touch) _scene.SetCharacterRun(Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift));
                     _scene.MoveOnLane(Mathf.Abs(_pad.Value.x) > .01f ? _pad.Value.x : keyboard, Time.deltaTime);
                     if (Input.GetKeyDown(KeyCode.E)) _scene.UseCurrentRouteAction();
-                    if (!_scene.IsSourcePoseReviewActive && Input.GetKeyDown(KeyCode.C)) _scene.CycleCharacterAvatarMode();
-                    if (Input.GetKeyDown(KeyCode.L)) _scene.CycleCharacterLevel();
-                    if (Input.GetKeyDown(KeyCode.G)) _scene.CycleCharacterGender();
-                    if (Input.GetKeyDown(KeyCode.V)) _scene.CycleEquipmentSlot();
-                    if (Input.GetKeyDown(KeyCode.M)) _scene.CycleSelectedEquipmentItemLevel();
-                    if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleEquipmentSlot();
+                    if (_reviewHotkeysEnabled)
+                    {
+                        if (!_scene.IsSourcePoseReviewActive && Input.GetKeyDown(KeyCode.C)) _scene.CycleCharacterAvatarMode();
+                        if (Input.GetKeyDown(KeyCode.L)) _scene.CycleCharacterLevel();
+                        if (Input.GetKeyDown(KeyCode.G)) _scene.CycleCharacterGender();
+                        if (Input.GetKeyDown(KeyCode.V)) _scene.CycleEquipmentSlot();
+                        if (Input.GetKeyDown(KeyCode.M)) _scene.CycleSelectedEquipmentItemLevel();
+                        if (Input.GetKeyDown(KeyCode.B)) _scene.ToggleEquipmentSlot();
+                        if (Input.GetKeyDown(KeyCode.F)) _scene.CycleSourcePoseClass();
+                    }
                     if (Input.GetKeyDown(KeyCode.X)) _scene.TriggerCharacterSkill();
                     _scene.SetCharacterJumpHeld(_touchJumpHeld || Input.GetKey(KeyCode.J) || Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow));
                     if (Input.GetKeyDown(KeyCode.Z)) _scene.TriggerCharacterBasicAttack();
@@ -502,7 +513,6 @@ namespace LinhGioi.UI
                     if (Input.GetKeyDown(KeyCode.H)) _scene.UseHealthPotion();
                     if (Input.GetKeyDown(KeyCode.K)) _scene.UseManaPotion();
                     if (Input.GetKeyDown(KeyCode.R)) _scene.EquipClassReward();
-                    if (Input.GetKeyDown(KeyCode.F)) _scene.CycleSourcePoseClass();
                 }
                 else
                 {

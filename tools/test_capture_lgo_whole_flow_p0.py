@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+import importlib
+import tempfile
+import time
+import unittest
+from pathlib import Path
+
+capture = importlib.import_module("tools.capture_lgo_whole_flow_p0")
+
+
+class WholeFlowP0CaptureTests(unittest.TestCase):
+    def test_profiles_match_approved_viewports(self):
+        self.assertEqual(capture.PROFILES, {
+            "pc": (1600, 900),
+            "tablet": (1024, 768),
+            "mobile": (1600, 720),
+        })
+
+    def test_surface_matrix_covers_current_product_flow(self):
+        self.assertEqual(tuple(capture.SCREEN_CAPTURES), (
+            "entry", "server-select", "register", "password-recovery",
+            "character-select", "menu",
+        ))
+        self.assertEqual(capture.FLOW_COMPONENTS, ("quest", "character-hub"))
+    def test_auth_commands_request_validation_evidence_without_os_input(self):
+        player = Path("/tmp/LinhGioiOnline.app/Contents/MacOS/Unity")
+        out = Path("/tmp/evidence")
+        command = capture.build_screen_command(player, out, "pc", "entry")
+        self.assertIn("--lgo-map01a-entry-capture", command)
+        self.assertIn("--lgo-map01a-auth-validation-capture", command)
+        self.assertNotIn("osascript", command)
+
+        register = capture.build_screen_command(player, out, "tablet", "register")
+        self.assertIn("--lgo-map01a-register-capture", register)
+        self.assertIn("--lgo-map01a-auth-validation-capture", register)
+
+        recovery = capture.build_screen_command(player, out, "mobile", "password-recovery")
+        self.assertIn("--lgo-map01a-password-recovery-capture", recovery)
+        self.assertIn("--lgo-map01a-auth-validation-capture", recovery)
+
+    def test_non_auth_commands_do_not_request_validation_state(self):
+        player = Path("/tmp/LinhGioiOnline.app/Contents/MacOS/Unity")
+        command = capture.build_screen_command(player, Path("/tmp/evidence"), "pc", "menu")
+        self.assertIn("--lgo-map01a-menu-capture", command)
+        self.assertNotIn("--lgo-map01a-auth-validation-capture", command)
+    def test_existing_profile_is_rejected_without_explicit_replace(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            profile = Path(tmp) / "pc"
+            profile.mkdir()
+            with self.assertRaises(FileExistsError):
+                capture.prepare_profile_directory(profile, replace=False)
+            capture.prepare_profile_directory(profile, replace=True)
+            self.assertTrue(profile.is_dir())
+            self.assertEqual(list(profile.iterdir()), [])
+
+    def test_required_frame_validation_rejects_missing_and_stale_files(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            started = time.time_ns()
+            missing = capture.validate_required_frames(root, ("menu.png",), started)
+            self.assertEqual(missing, ["MISSING_FRAME:menu.png"])
+
+            frame = root / "menu.png"
+            frame.write_bytes(b"png")
+            stale_ns = started - 10_000_000_000
+            import os
+            os.utime(frame, ns=(stale_ns, stale_ns))
+            self.assertEqual(
+                capture.validate_required_frames(root, ("menu.png",), started),
+                ["STALE_FRAME:menu.png"],
+            )
+    def test_screen_contract_requires_default_and_validation_auth_frames(self):
+        self.assertEqual(capture.SCREEN_CAPTURES["entry"].frames,
+                         ("entry-login.png", "entry-login-validation.png"))
+        self.assertEqual(capture.SCREEN_CAPTURES["register"].frames,
+                         ("register-account.png", "register-validation.png"))
+        self.assertEqual(capture.SCREEN_CAPTURES["password-recovery"].frames,
+                         ("password-recovery-request.png", "password-recovery-validation.png"))
+
+
+if __name__ == "__main__":
+    unittest.main()
+
+# PNG header validation is intentionally independent from Unity manifest claims.
+class WholeFlowP0PngTests(unittest.TestCase):
+    def test_png_dimensions_reads_ihdr_size(self):
+        import struct
+        with tempfile.TemporaryDirectory() as tmp:
+            frame = Path(tmp) / "frame.png"
+            frame.write_bytes(
+                b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\x0d" + b"IHDR" + struct.pack(">II", 1600, 900)
+            )
+            self.assertEqual(capture.png_dimensions(frame), (1600, 900))

@@ -19,6 +19,7 @@
 - No product auth, character lifecycle backend, skill-hotbar, five-class combat, economy, social, or artwork scope enters P0.
 - Every behavior change follows RED → verify RED → minimal GREEN → verify GREEN before refactor.
 - Final Player evidence must be fresh, isolated under `build/whole-flow-p0-v1/`, and report actual warnings/errors without rewriting history.
+- Every task with visible UI/gameplay impact must capture a before/after image pair; meaningful intermediate visual changes or discovered defects should also be captured. Store task evidence under `build/whole-flow-p0-v1/task-evidence/<task>/` and never overwrite historical images.
 
 ---### Task 1: Product/review hotkey ownership
 

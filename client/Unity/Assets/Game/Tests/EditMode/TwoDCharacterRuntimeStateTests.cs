@@ -564,6 +564,9 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(CongDongLamMap01AArtPreview.IsMapQuestCaptureForArgs(args), Is.False,
                 "Entry capture must not enter the quest capture clock because that hides the entry overlay.");
             Assert.That(CongDongLamArrivalHud.ShouldShowEntryOnLaunchForArgs(args, sceneIsCapturing: false), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.ShouldCaptureAuthValidationForArgs(args), Is.False);
+            var validationArgs = new[] { "LinhGioiOnline", "--lgo-map01a-entry-capture", "--lgo-map01a-auth-validation-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldCaptureAuthValidationForArgs(validationArgs), Is.True);
             var inventoryTabArgs = new[] { "LinhGioiOnline", "--lgo-map01a-inventory-tabs-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(inventoryTabArgs), Is.True);
             var characterScreenArgs = new[] { "LinhGioiOnline", "--lgo-map01a-character-screen-capture" };
@@ -2307,6 +2310,17 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Menu Spirit Pet Action"), Is.Not.Null);
                 Assert.That(root.Q("Map01A Menu Panel").ClassListContains("lgo-layered-frame"), Is.True,
                     "Menu should reuse the shared modal frame instead of defining a second panel system.");
+                var controlsHelp = root.Q<Label>("Map01A Menu Controls Help");
+                Assert.That(controlsHelp, Is.Not.Null,
+                    "Menu must expose one named player-facing controls summary for visual and regression review.");
+                Assert.That(controlsHelp.text, Does.Contain("A/D"));
+                Assert.That(controlsHelp.text, Does.Contain("Shift"));
+                Assert.That(controlsHelp.text, Does.Contain("W/J"));
+                Assert.That(controlsHelp.text, Does.Contain("Z"));
+                Assert.That(controlsHelp.text, Does.Contain("X"));
+                Assert.That(controlsHelp.text, Does.Contain("E"));
+                Assert.That(controlsHelp.text, Does.Contain("I"));
+                Assert.That(controlsHelp.text, Does.Not.Contain("Di chuyển: Shift"));
                 Assert.That(root.Q<Button>("Map01A Menu Character Action").style.flexGrow.value, Is.EqualTo(0),
                     "Menu grid actions must keep a bounded row height instead of stretching into the panel body.");
                 InvokeBoundButton(potentialAction);
@@ -2336,6 +2350,34 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void MenuControlsHelpMatchesPointerAndTouchProfiles()
+        {
+            var pointer = CongDongLamArrivalHud.MenuControlsHelpForProfile(false);
+            Assert.That(pointer, Does.Contain("A/D"));
+            Assert.That(pointer, Does.Contain("Shift"));
+            Assert.That(pointer, Does.Contain("W/J"));
+            Assert.That(pointer, Does.Contain("Kỹ năng: X"));
+            Assert.That(pointer, Does.Contain("Hành trang: I"));
+
+            var touch = CongDongLamArrivalHud.MenuControlsHelpForProfile(true);
+            Assert.That(touch, Does.Contain("Cần điều khiển trái"));
+            Assert.That(touch, Does.Contain("Chạy"));
+            Assert.That(touch, Does.Contain("Nhảy"));
+            Assert.That(touch, Does.Contain("Đánh"));
+            Assert.That(touch, Does.Contain("Kỹ năng"));
+            Assert.That(touch, Does.Not.Contain("A/D"));
+        }
+
+        [Test]
+        public void ProductModeDisablesReviewHotkeysUnlessExplicitlyOptedIn()
+        {
+            Assert.That(CongDongLamArrivalHud.ShouldEnableReviewHotkeysForArgs(new[] { "LinhGioiOnline" }), Is.False);
+            Assert.That(CongDongLamArrivalHud.ShouldEnableReviewHotkeysForArgs(new[] { "LinhGioiOnline", "--lgo-map01a-entry-capture" }), Is.False);
+            Assert.That(CongDongLamArrivalHud.ShouldEnableReviewHotkeysForArgs(new[] { "LinhGioiOnline", "--lgo-map01a-inventory-tabs-capture" }), Is.False);
+            Assert.That(CongDongLamArrivalHud.ShouldEnableReviewHotkeysForArgs(new[] { "LinhGioiOnline", "--lgo-map01a-review-hotkeys" }), Is.True);
+        }
+
+        [Test]
         public void GameplayWorldInputIsBlockedByEveryForegroundWorkspace()
         {
             Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(
@@ -2351,6 +2393,8 @@ namespace LinhGioi.Tests.EditMode
                 "NPC dialogue must block movement and combat behind it.");
             Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(false, false, false, false, true), Is.True,
                 "Character selection must block movement and combat behind it.");
+            Assert.That(CongDongLamArrivalHud.ShouldBlockWorldInput(false, false, false, false, false, true), Is.True,
+                "Server selection must block movement and combat behind it.");
         }
 
         [Test]

@@ -759,6 +759,9 @@ namespace LinhGioi.World
 
         public static bool IsMapQuestCaptureForArgs(string[] args) => Array.IndexOf(args, "--lgo-map01a-art-capture") >= 0;
 
+        public static bool ShouldCaptureAuthValidationForArgs(string[] args)
+            => args != null && Array.IndexOf(args, "--lgo-map01a-auth-validation-capture") >= 0;
+
         public static bool QuestCaptureRequiresWorldView(int captureIndex) => captureIndex >= 10 && captureIndex <= 17;
 
         public static CongDongLamMap01AArtPreview Attach(TwoDOnboardingController controller)
@@ -2258,12 +2261,23 @@ namespace LinhGioi.World
             yield return null;
             yield return new WaitForEndOfFrame();
             var imagePath = Path.Combine(directory, "entry-login.png");
-            var image = new Texture2D(Screen.width, Screen.height, TextureFormat.RGBA32, false);
-            image.ReadPixels(new Rect(0, 0, Screen.width, Screen.height), 0, 0);
-            image.Apply();
-            File.WriteAllBytes(imagePath, image.EncodeToPNG());
-            Destroy(image);
-            var status = File.Exists(imagePath) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            CaptureScreenPng(imagePath);
+            var captureValidation = ShouldCaptureAuthValidationForArgs(args);
+            var validationPath = Path.Combine(directory, "entry-login-validation.png");
+            if (captureValidation)
+            {
+                var document = GetComponentInChildren<UIDocument>();
+                if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for entry validation capture");
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Entry Login Button"));
+                yield return null;
+                yield return new WaitForEndOfFrame();
+                CaptureScreenPng(validationPath);
+            }
+            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath))
+                ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var validationManifest = captureValidation
+                ? ",\n  \"validationFrame\": \"entry-login-validation.png\""
+                : string.Empty;
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-entry-login\",\n"
@@ -2271,7 +2285,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frame\": \"entry-login.png\"\n"
+                + "  \"frame\": \"entry-login.png\"" + validationManifest + "\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
@@ -2636,7 +2650,22 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var imagePath = Path.Combine(directory, "register-account.png");
             CaptureScreenPng(imagePath);
-            var status = File.Exists(imagePath) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var captureValidation = ShouldCaptureAuthValidationForArgs(args);
+            var validationPath = Path.Combine(directory, "register-validation.png");
+            if (captureValidation)
+            {
+                var document = GetComponentInChildren<UIDocument>();
+                if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for register validation capture");
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Register Submit"));
+                yield return null;
+                yield return new WaitForEndOfFrame();
+                CaptureScreenPng(validationPath);
+            }
+            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath))
+                ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var validationManifest = captureValidation
+                ? ",\n  \"validationFrame\": \"register-validation.png\""
+                : string.Empty;
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-register\",\n"
@@ -2644,7 +2673,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frame\": \"register-account.png\"\n"
+                + "  \"frame\": \"register-account.png\"" + validationManifest + "\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
@@ -2664,7 +2693,22 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var imagePath = Path.Combine(directory, "password-recovery-request.png");
             CaptureScreenPng(imagePath);
-            var status = File.Exists(imagePath) ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var captureValidation = ShouldCaptureAuthValidationForArgs(args);
+            var validationPath = Path.Combine(directory, "password-recovery-validation.png");
+            if (captureValidation)
+            {
+                var document = GetComponentInChildren<UIDocument>();
+                if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for recovery validation capture");
+                InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Password Recovery Submit"));
+                yield return null;
+                yield return new WaitForEndOfFrame();
+                CaptureScreenPng(validationPath);
+            }
+            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath))
+                ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var validationManifest = captureValidation
+                ? ",\n  \"validationFrame\": \"password-recovery-validation.png\""
+                : string.Empty;
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-password-recovery-request\",\n"
@@ -2672,7 +2716,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frame\": \"password-recovery-request.png\"\n"
+                + "  \"frame\": \"password-recovery-request.png\"" + validationManifest + "\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
