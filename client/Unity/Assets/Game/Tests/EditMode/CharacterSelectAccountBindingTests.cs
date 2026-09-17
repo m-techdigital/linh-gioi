@@ -34,6 +34,9 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Button>("Map01A Character Slot 1").text, Does.Contain("KiemTu"));
                 Assert.That(root.Q<Button>("Map01A Character Slot 2").text, Does.Contain("Chưa có nhân vật"));
                 Assert.That(root.Q<Button>("Map01A Character Slot 3").text, Does.Contain("VoGia"));
+                Assert.That(root.Q<Label>("Map01A Character Slot 1 Meta").text, Does.Contain("Kiếm"));
+                Assert.That(root.Q<Label>("Map01A Character Slot 1 Meta").text, Does.Not.Contain("class.sword"));
+                Assert.That(root.Q<Label>("Map01A Character Slot 3 Meta").text, Does.Contain("Võ"));
                 Assert.That(root.Q<Label>("Map01A Character Select Stage Name").text, Is.EqualTo("KiemTu"));
 
                 Invoke(root.Q<Button>("Map01A Character Slot 3"));

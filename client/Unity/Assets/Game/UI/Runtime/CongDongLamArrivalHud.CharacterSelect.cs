@@ -323,7 +323,7 @@ namespace LinhGioi.UI
             button.text = character.name;
             ApplyLgoCharacterSelectProfile(button, ReferenceEquals(character, _selectedProductCharacter));
             AddCharacterSelectProfileIcon(button, _scene.GetCharacterAvatarThumbnailSprite(), "Slot " + slotNumber);
-            var meta = LgoSubtitleLabel("Slot " + slotNumber + " · " + character.classId, 12);
+            var meta = LgoSubtitleLabel("Slot " + slotNumber + " · " + ProductCharacterClassLabel(character.classId), 12);
             meta.name = "Map01A Character Slot " + slotNumber + " Meta";
             meta.style.position = Position.Absolute;
             meta.style.left = 92;
@@ -343,6 +343,16 @@ namespace LinhGioi.UI
             if (_characterSelectStatus != null) _characterSelectStatus.text = message;
         }
 
+        private static string ProductCharacterClassLabel(string classId)
+        {
+            switch (classId)
+            {
+                case "class.sword": return "Kiếm";
+                case "class.martial": return "Võ";
+                default: return "Nhân vật";
+            }
+        }
+
         private void RefreshCharacterSelectContent()
         {
             if (_scene == null) return;
@@ -354,7 +364,7 @@ namespace LinhGioi.UI
             if (_characterSelectDetailMeta != null)
                 _characterSelectDetailMeta.text = _selectedProductCharacter == null
                     ? "Chưa có hồ sơ được chọn."
-                    : _selectedProductCharacter.classId + " · Slot " + _selectedProductCharacter.slot + "\nS1 Đông Lâm";
+                    : ProductCharacterClassLabel(_selectedProductCharacter.classId) + " · Slot " + _selectedProductCharacter.slot + "\nS1 Đông Lâm";
             if (_characterSelectEnterButton != null)
                 _characterSelectEnterButton.SetEnabled(!_characterSelectLoading && _selectedProductCharacter != null);
         }
