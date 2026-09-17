@@ -54,10 +54,18 @@ namespace LinhGioi.Tests.EditMode
             var before = Roots();
             try
             {
-                var fake = FakeCharacterClient.Success(Character(1, "character.1", "KiemTu", "class.sword"));
+                var character = Character(1, "character.1", "KiemTu", "class.sword");
+                character.runtimeClassId = "kiem";
+                character.runtimeState = new CharacterRuntimeStateResponse
+                {
+                    mapId = "map-01a-cong-dong-lam", laneX = 18.5f, facing = -1,
+                    updatedAtUnixMs = 1_700_000_000_000L
+                };
+                var fake = FakeCharacterClient.Success(character);
                 var session = AuthenticatedSession("account.product.abc");
                 var host = new GameObject("character load identity test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var rendererClassBefore = scene.ActiveEquipmentClassId;
                 CongDongLamArrivalHud.Attach(scene, fake, session);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 OpenCharacterSelect(host);
@@ -68,6 +76,64 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value,
                     Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q<Label>("Map01A Player Name").text, Is.EqualTo("KiemTu"));
+                Assert.That(scene.PlayerX, Is.EqualTo(18.5f).Within(.0001f));
+                Assert.That(scene.CurrentRouteNodeId, Is.EqualTo("village-square"));
+                Assert.That(scene.ProductEntryFacingSign, Is.EqualTo(-1));
+                Assert.That(scene.LoadedProductRuntimeClassId, Is.EqualTo("kiem"));
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(rendererClassBefore),
+                    "Persisted semantic class must not impersonate an unavailable renderer.");
+            }
+            finally { DestroyNewRoots(before); }
+        }
+
+        [Test]
+        public void LegacyCoordinatesUseSafeMap01ASpawnAndIgnoreRawXyzYaw()
+        {
+            var before = Roots();
+            try
+            {
+                var character = Character(1, "character.legacy", "LegacyKiem", "class.sword");
+                character.runtimeClassId = "kiem";
+                character.x = 42f; character.y = 99f; character.z = -77f; character.yawDegrees = 270f;
+                var fake = FakeCharacterClient.Success(character);
+                var host = new GameObject("legacy map01a fallback test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var rendererClassBefore = scene.ActiveEquipmentClassId;
+                CongDongLamArrivalHud.Attach(scene, fake, AuthenticatedSession("account.product.abc"));
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                OpenCharacterSelect(host);
+                Invoke(root.Q<Button>("Map01A Character Select Enter Game"));
+
+                Assert.That(scene.PlayerX, Is.EqualTo(-3.6f).Within(.0001f));
+                Assert.That(scene.ProductEntryFacingSign, Is.EqualTo(1));
+                Assert.That(scene.LoadedProductRuntimeClassId, Is.EqualTo("kiem"));
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(rendererClassBefore));
+            }
+            finally { DestroyNewRoots(before); }
+        }
+
+        [Test]
+        public void FiveClassSemanticEntryNeverSwitchesReviewOnlyRenderer()
+        {
+            var before = Roots();
+            try
+            {
+                var character = Character(1, "character.linh", "LinhTu", "linh");
+                character.runtimeClassId = "linh";
+                character.runtimeState = new CharacterRuntimeStateResponse
+                { mapId = "map-01a-cong-dong-lam", laneX = 23f, facing = 1, updatedAtUnixMs = 100 };
+                var fake = FakeCharacterClient.Success(character);
+                var host = new GameObject("five class semantic entry test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var rendererClassBefore = scene.ActiveEquipmentClassId;
+                CongDongLamArrivalHud.Attach(scene, fake, AuthenticatedSession("account.product.abc"));
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                OpenCharacterSelect(host);
+                Invoke(root.Q<Button>("Map01A Character Select Enter Game"));
+
+                Assert.That(scene.LoadedProductRuntimeClassId, Is.EqualTo("linh"));
+                Assert.That(scene.PlayerX, Is.EqualTo(23f).Within(.0001f));
+                Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(rendererClassBefore));
             }
             finally { DestroyNewRoots(before); }
         }

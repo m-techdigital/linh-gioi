@@ -85,6 +85,8 @@ namespace LinhGioi.World
             return registered && sourcePose && !args.Contains("--lgo-registered-capture");
         }
         public float PlayerX => _routeX;
+        public string LoadedProductRuntimeClassId { get; private set; }
+        public int ProductEntryFacingSign => _voState.FacingSign;
         public bool CanTalk => Mathf.Abs(PlayerX + 2.65f) <= .95f;
         public string QuestDisplayTitle => ActiveQuestId == "COMPLETE"
             ? "Cổng Đông Lâm hoàn tất"
@@ -157,6 +159,26 @@ namespace LinhGioi.World
             _controller.RefreshForSmoke();
             Refresh();
         }
+        public void ApplyProductCharacterEntryState(Map01ACharacterEntryState state)
+        {
+            if (state == null) throw new ArgumentNullException(nameof(state));
+            if (Array.IndexOf(CharacterHubClassOrder, state.RuntimeClassId) < 0)
+                throw new ArgumentException("Unsupported product runtime class: " + state.RuntimeClassId, nameof(state));
+            if (!float.IsFinite(state.LaneX) || state.LaneX < Map01ACharacterEntryMapper.MinLaneX
+                || state.LaneX > Map01ACharacterEntryMapper.MaxLaneX)
+                throw new ArgumentException("Map01A product entry lane is invalid.", nameof(state));
+            if (state.Facing != -1 && state.Facing != 1)
+                throw new ArgumentException("Map01A product entry facing is invalid.", nameof(state));
+
+            LoadedProductRuntimeClassId = state.RuntimeClassId;
+            _routeX = state.LaneX;
+            _sourcePoseFacing = state.Facing;
+            _voState.FaceMovement(state.Facing);
+            _controller?.RefreshForSmoke();
+            ApplyVoPose();
+            Refresh();
+        }
+
         public bool TalkToHaVan() => CanTalk && CurrentRouteNodeId == "spawn-ha-van" && UseNpcConversation();
 
         private static string QuestName(string id)

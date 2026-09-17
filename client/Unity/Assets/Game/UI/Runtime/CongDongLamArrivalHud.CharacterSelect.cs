@@ -1,3 +1,4 @@
+using LinhGioi.World;
 using UnityEngine;
 using System;
 using LinhGioi.Account;
@@ -450,6 +451,8 @@ namespace LinhGioi.UI
                     _productAuthSession.AccessToken, _selectedProductCharacter.characterId, ProductAuthCancellationToken);
                 if (loaded == null || loaded.characterId != _selectedProductCharacter.characterId)
                     throw new InvalidOperationException("Loaded character does not match selection.");
+                var entryState = Map01ACharacterEntryMapper.Resolve(loaded);
+                _scene.ApplyProductCharacterEntryState(entryState);
                 _selectedProductCharacter = loaded;
                 _loadedProductCharacterName = loaded.name;
                 if (_vitalsName != null) _vitalsName.text = loaded.name;
