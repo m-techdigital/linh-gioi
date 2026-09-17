@@ -181,6 +181,69 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void ViewportMetricsConvertWidePhoneSafeAreaWithoutOverflow()
+        {
+            var viewport = CreateViewportMetrics(2532, 1170, new Rect(132, 63, 2268, 1070), 2037, 941, "mobile");
+            Assert.That(GetMember<string>(viewport, "LayoutClass"), Is.EqualTo("mobile"));
+            Assert.That(GetMember<string>(viewport, "InputClass"), Is.EqualTo("touch"));
+            var safe = GetMember<Rect>(viewport, "SafePanelRect");
+            var panelWidth = GetMember<int>(viewport, "PanelWidth");
+            var panelHeight = GetMember<int>(viewport, "PanelHeight");
+            Assert.That(safe.x, Is.GreaterThan(0));
+            Assert.That(safe.y, Is.GreaterThanOrEqualTo(0));
+            Assert.That(safe.xMax, Is.LessThanOrEqualTo(panelWidth + .01f));
+            Assert.That(safe.yMax, Is.LessThanOrEqualTo(panelHeight + .01f));
+        }
+
+        [TestCase(1600, 900, 1673, 941, "desktop", "pointer", 286f, 154f, 15)]
+        [TestCase(1600, 720, 2091, 941, "mobile", "touch", 228f, 226f, 16)]
+        [TestCase(1024, 768, 1255, 941, "tablet", "touch", 286f, 226f, 16)]
+        public void LayoutProfileOwnsHudDensityByDeviceProfile(int screenWidth, int screenHeight,
+            int panelWidth, int panelHeight, string forcedProfile, string inputClass,
+            float rightColumnWidth, float combatBarBottom, int talkFontSize)
+        {
+            var viewport = CreateViewportMetrics(screenWidth, screenHeight,
+                new Rect(0, 0, screenWidth, screenHeight), panelWidth, panelHeight, forcedProfile);
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var layoutType = uiAssembly.GetType("LinhGioi.UI.RuntimeUiLayoutProfile");
+            var viewportType = uiAssembly.GetType("LinhGioi.UI.RuntimeViewportMetrics");
+            Assert.That(layoutType, Is.Not.Null);
+            var fromViewport = layoutType.GetMethod("FromViewport", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic, null,
+                new[] { viewportType }, null);
+            Assert.That(fromViewport, Is.Not.Null);
+            var layout = fromViewport.Invoke(null, new[] { viewport });
+            Assert.That(GetMember<string>(layout, "Name"), Is.EqualTo(forcedProfile));
+            Assert.That(GetMember<string>(layout, "InputClass"), Is.EqualTo(inputClass));
+            Assert.That(GetMember<float>(layout, "WorldRightColumnWidth"), Is.EqualTo(rightColumnWidth).Within(.01f));
+            Assert.That(GetMember<float>(layout, "WorldCombatBarBottom"), Is.EqualTo(combatBarBottom).Within(.01f));
+            Assert.That(GetMember<int>(layout, "WorldTalkFontSize"), Is.EqualTo(talkFontSize));
+        }
+
+        private static object CreateViewportMetrics(int screenWidth, int screenHeight, Rect safeArea,
+            int panelWidth, int panelHeight, string forcedProfile)
+        {
+            var type = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeViewportMetrics");
+            Assert.That(type, Is.Not.Null);
+            var method = type.GetMethod("FromMeasurements", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(method, Is.Not.Null, "Viewport math needs a pure measurement entry point for device tests.");
+            return method.Invoke(null, new object[] { screenWidth, screenHeight, safeArea, panelWidth, panelHeight, forcedProfile });
+        }
+
+        private static T GetMember<T>(object target, string name)
+        {
+            var flags = System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public
+                | System.Reflection.BindingFlags.NonPublic;
+            var type = target.GetType();
+            var field = type.GetField(name, flags);
+            if (field != null) return (T)field.GetValue(target);
+            var property = type.GetProperty(name, flags);
+            Assert.That(property, Is.Not.Null, "Missing semantic UI member: " + name);
+            return (T)property.GetValue(target);
+        }
+
+        [Test]
         public void SafeAreaCanBeAppliedWithoutHorizontalOverflow()
         {
             var root = new SafeAreaRoot();

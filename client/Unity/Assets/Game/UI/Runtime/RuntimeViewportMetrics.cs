@@ -47,8 +47,22 @@ namespace LinhGioi.UI
             var panelWidth = ResolvePanelSize(root != null ? root.resolvedStyle.width : 0f, screenWidth);
             var panelHeight = ResolvePanelSize(root != null ? root.resolvedStyle.height : 0f, screenHeight);
             var safeAreaPixels = Screen.safeArea;
+            return FromMeasurements(screenWidth, screenHeight, safeAreaPixels, panelWidth, panelHeight, forcedProfile);
+        }
+
+        internal static RuntimeViewportMetrics FromMeasurements(int screenWidth, int screenHeight, Rect safeAreaPixels,
+            int panelWidth, int panelHeight, string forcedProfile = null)
+        {
+            screenWidth = Mathf.Max(1, screenWidth);
+            screenHeight = Mathf.Max(1, screenHeight);
+            panelWidth = Mathf.Max(1, panelWidth);
+            panelHeight = Mathf.Max(1, panelHeight);
             if (safeAreaPixels.width <= 0f || safeAreaPixels.height <= 0f)
                 safeAreaPixels = new Rect(0f, 0f, screenWidth, screenHeight);
+            safeAreaPixels.xMin = Mathf.Clamp(safeAreaPixels.xMin, 0f, screenWidth);
+            safeAreaPixels.xMax = Mathf.Clamp(safeAreaPixels.xMax, safeAreaPixels.xMin, screenWidth);
+            safeAreaPixels.yMin = Mathf.Clamp(safeAreaPixels.yMin, 0f, screenHeight);
+            safeAreaPixels.yMax = Mathf.Clamp(safeAreaPixels.yMax, safeAreaPixels.yMin, screenHeight);
             var safePanelRect = ConvertSafeAreaToPanel(safeAreaPixels, screenWidth, screenHeight, panelWidth, panelHeight);
             return new RuntimeViewportMetrics(screenWidth, screenHeight, safeAreaPixels, panelWidth, panelHeight, safePanelRect, forcedProfile);
         }

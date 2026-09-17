@@ -158,6 +158,9 @@ namespace LinhGioi.UI
             if (IsMobile) return dialogueVisible ? 232f : 180f;
             return 300f;
         }
+        internal float WorldRightColumnWidth => IsMobile ? 228f : 286f;
+        internal float WorldCombatBarBottom => InputClass == "touch" ? 226f : 154f;
+        internal int WorldTalkFontSize => InputClass == "touch" ? 16 : 15;
         internal int WorldHudPaddingHorizontal => IsMobile ? 6 : IsTablet ? 12 : 10;
         internal int WorldHudPaddingVertical => IsMobile ? 4 : IsTablet ? 10 : 8;
         internal int WorldHudDialoguePaddingHorizontal => IsMobile ? 6 : WorldHudPaddingHorizontal;

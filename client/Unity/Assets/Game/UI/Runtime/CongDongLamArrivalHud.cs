@@ -42,6 +42,7 @@ namespace LinhGioi.UI
         private RuntimeViewportMetrics _metrics;
         private PanelSettings _ownedPanel;
         private bool _touch;
+        private string _forcedLayoutProfile;
         private bool _reviewHotkeysEnabled;
         private IProductAuthClient _productAuthClient;
         private IProductAccountClient _productAccountClient;
@@ -73,7 +74,11 @@ namespace LinhGioi.UI
             document.panelSettings = hud._ownedPanel;
             var args = Environment.GetCommandLineArgs();
             var index = Array.IndexOf(args, "--lgo-map01a-device");
-            hud._touch = Application.isMobilePlatform || (index >= 0 && index + 1 < args.Length && args[index + 1] != "pc");
+            var requestedProfile = index >= 0 && index + 1 < args.Length ? args[index + 1] : null;
+            hud._forcedLayoutProfile = requestedProfile == "pc" ? "desktop"
+                : !string.IsNullOrWhiteSpace(requestedProfile) ? requestedProfile
+                : Application.isMobilePlatform ? "mobile" : null;
+            hud._touch = hud._forcedLayoutProfile == "mobile" || hud._forcedLayoutProfile == "tablet";
             hud._reviewHotkeysEnabled = ShouldEnableReviewHotkeysForArgs(args);
             hud.Build(document.rootVisualElement);
         }
@@ -445,10 +450,11 @@ namespace LinhGioi.UI
 
         private void Layout()
         {
-            _metrics = RuntimeViewportMetrics.FromRoot(_root);
+            _metrics = RuntimeViewportMetrics.FromRoot(_root, _forcedLayoutProfile);
+            var layout = RuntimeUiLayoutProfile.FromViewport(_metrics);
             var r = _metrics.SafePanelRect;
             Place(_safe, r.x, null, r.y, null); _safe.style.width = r.width; _safe.style.height = r.height;
-            var rightColumnWidth = r.width < 900 ? 228f : 286f;
+            var rightColumnWidth = layout.WorldRightColumnWidth;
             _rightHudCluster.style.width = rightColumnWidth;
             _quest.style.width = rightColumnWidth;
             _questTabs.style.width = rightColumnWidth;
@@ -464,8 +470,8 @@ namespace LinhGioi.UI
             _inventory.style.bottom = StyleKeyword.Auto;
             _inventory.style.width = inventoryRect.width;
             _inventory.style.height = CalculateInventoryShellHeight(inventoryRect, _touch, IsInventoryCompactShellActive());
-            _combatBar.style.bottom = _touch ? 226 : 154;
-            _talk.style.fontSize = _touch ? 16 : 15;
+            _combatBar.style.bottom = layout.WorldCombatBarBottom;
+            _talk.style.fontSize = layout.WorldTalkFontSize;
             if (_inventoryHeroPanel != null)
             {
                 var body = _inventory.Q("Map01A Inventory Body");
@@ -498,7 +504,7 @@ namespace LinhGioi.UI
         private void Update()
         {
             if (_scene == null || _root == null) return;
-            var metrics = RuntimeViewportMetrics.FromRoot(_root);
+            var metrics = RuntimeViewportMetrics.FromRoot(_root, _forcedLayoutProfile);
             if (!_metrics.LayoutEquals(metrics)) Layout();
             UpdatePasswordRecoveryCooldown();
             if (!_scene.IsCapturing)
