@@ -9,7 +9,7 @@ namespace LinhGioi.UI.Editor
     public static class ThemeTokenImporter
     {
         public const string SourcePath = "Assets/Game/UI/design-tokens.json";
-        public const string GeneratedAssetPath = "Assets/Game/Generated/UI/ThemeTokens.asset";
+        public const string GeneratedAssetPath = "Assets/Resources/ThemeTokens.asset";
 
         public static ThemeTokens EnsureTheme()
         {
@@ -19,7 +19,7 @@ namespace LinhGioi.UI.Editor
             var existing = AssetDatabase.LoadAssetAtPath<ThemeTokens>(GeneratedAssetPath);
             if (existing != null && existing.sourceSha256 == hash) return existing;
 
-            EnsureFolder("Assets/Game/Generated/UI");
+            EnsureFolder("Assets/Resources");
             var parsed = ThemeTokens.FromJson(source.text, hash);
             if (existing == null)
             {

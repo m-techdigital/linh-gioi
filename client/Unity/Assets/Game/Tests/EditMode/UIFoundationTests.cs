@@ -77,6 +77,32 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimeThemeProviderLoadsGeneratedDesignTokens()
+        {
+            var type = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeUiTheme");
+            Assert.That(type, Is.Not.Null, "Product UI needs one runtime token provider.");
+            var current = type.GetProperty("Current", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(current, Is.Not.Null);
+            var theme = current.GetValue(null) as ThemeTokens;
+            Assert.That(theme, Is.Not.Null);
+            Assert.That(theme.minimumTouchTarget, Is.EqualTo(44));
+            Assert.That(theme.gold.r, Is.EqualTo(230f / 255f).Within(0.0001f));
+            Assert.That(theme.gold.g, Is.EqualTo(184f / 255f).Within(0.0001f));
+            Assert.That(theme.gold.b, Is.EqualTo(92f / 255f).Within(0.0001f));
+            Assert.That(theme.gold.a, Is.EqualTo(1f).Within(0.0001f));
+        }
+
+        [Test]
+        public void ProductHudDoesNotDeclareSecondSemanticPalette()
+        {
+            var source = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.dataPath,
+                "Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"));
+            foreach (var field in new[] { "UiGold", "UiText", "UiBlue", "UiGlass", "UiGlassStrong", "UiGlassRaised" })
+                Assert.That(source, Does.Not.Contain("private static readonly Color " + field), field);
+        }
+
+        [Test]
         public void SafeAreaCanBeAppliedWithoutHorizontalOverflow()
         {
             var root = new SafeAreaRoot();

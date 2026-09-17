@@ -6,14 +6,16 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private static readonly Color UiGlass = new Color(.010f, .034f, .064f, .92f);
-        private static readonly Color UiGlassStrong = new Color(.016f, .052f, .092f, .96f);
-        private static readonly Color UiGlassRaised = new Color(.022f, .072f, .118f, .94f);
-        private static readonly Color UiGold = new Color(.95f, .75f, .36f, .96f);
-        private static readonly Color UiGoldBorder = new Color(.78f, .62f, .32f, .70f);
-        private static readonly Color UiBlue = new Color(.10f, .35f, .58f, .96f);
-        private static readonly Color UiText = new Color(.96f, .91f, .76f, .96f);
-        private static readonly Color UiSubText = new Color(.73f, .85f, .88f, .90f);
+        // Semantic product colors come from design-tokens.json through RuntimeUiTheme.
+        // Role-specific alpha belongs here; RGB palette ownership does not.
+        private static Color UiGlass => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.bg, .92f);
+        private static Color UiGlassStrong => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.bg, .96f);
+        private static Color UiGlassRaised => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.surface, .94f);
+        private static Color UiGold => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.gold, .96f);
+        private static Color UiGoldBorder => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.gold, .70f);
+        private static Color UiBlue => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.surfaceRaised, .96f);
+        private static Color UiText => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.text, .96f);
+        private static Color UiSubText => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.muted, .90f);
         private const string LgoInventoryButtonBaseClass = "lgo-inventory-button-base";
         private const string LgoCharacterHubShellClass = "lgo-character-hub-shell";
         private const string LgoCharacterHubTitleClass = "lgo-character-hub-title";
