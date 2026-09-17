@@ -47,6 +47,49 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void ProductAccountDtosAndRoutesMatchServerContract()
+        {
+            Assert.That(typeof(IProductAccountClient).IsAssignableFrom(typeof(AccountApiClient)), Is.True);
+            Assert.That(ProductAccountRoutes.Register, Is.EqualTo("/auth/register"));
+            Assert.That(ProductAccountRoutes.RecoveryRequest, Is.EqualTo("/auth/recovery/request"));
+            Assert.That(ProductAccountRoutes.RecoveryVerify, Is.EqualTo("/auth/recovery/verify"));
+            Assert.That(ProductAccountRoutes.RecoveryReset, Is.EqualTo("/auth/recovery/reset"));
+
+            var registerJson = JsonUtility.ToJson(new ProductRegisterRequest("Minh@Example.COM", "Secret#123", true));
+            var verifyJson = JsonUtility.ToJson(new PasswordRecoveryVerifyRequest("challenge.1", "123456"));
+            Assert.That(registerJson, Does.Contain("\"email\":\"Minh@Example.COM\""));
+            Assert.That(registerJson, Does.Contain("\"acceptedTerms\":true"));
+            Assert.That(verifyJson, Does.Contain("\"challengeId\":\"challenge.1\""));
+            Assert.That(typeof(AccountApiClient).GetMethod("RegisterAsync"), Is.Not.Null);
+            Assert.That(typeof(AccountApiClient).GetMethod("RequestPasswordRecoveryAsync"), Is.Not.Null);
+            Assert.That(typeof(AccountApiClient).GetMethod("VerifyPasswordRecoveryAsync"), Is.Not.Null);
+            Assert.That(typeof(AccountApiClient).GetMethod("ResetPasswordAsync"), Is.Not.Null);
+        }
+
+        [Test]
+        public void RecoveryStateTransitionsAndClearRemovesTransientSecrets()
+        {
+            var state = new ProductAccountRecoveryState();
+            state.Begin(" Minh@Example.COM ");
+            Assert.That(state.Stage, Is.EqualTo(ProductAccountRecoveryStage.Request));
+            state.AcceptRequest(new PasswordRecoveryRequestResponse
+            {
+                challengeId = "challenge.1", expiresAtUnixMs = 1000, resendAvailableAtUnixMs = 500
+            });
+            Assert.That(state.Stage, Is.EqualTo(ProductAccountRecoveryStage.Verify));
+            Assert.That(state.Email, Is.EqualTo("minh@example.com"));
+            state.AcceptVerification(new PasswordRecoveryVerifyResponse { resetToken = "reset-secret", expiresAtUnixMs = 2000 });
+            Assert.That(state.Stage, Is.EqualTo(ProductAccountRecoveryStage.NewPassword));
+            Assert.That(state.ChallengeId, Is.Null);
+            Assert.That(state.ResetToken, Is.EqualTo("reset-secret"));
+            state.Clear();
+            Assert.That(state.Stage, Is.EqualTo(ProductAccountRecoveryStage.Request));
+            Assert.That(state.Email, Is.Null);
+            Assert.That(state.ChallengeId, Is.Null);
+            Assert.That(state.ResetToken, Is.Null);
+        }
+
+        [Test]
         public void AccountApiClientImplementsProductAuthContractAndApiErrorCarriesStatus()
         {
             Assert.That(typeof(IProductAuthClient).IsAssignableFrom(typeof(AccountApiClient)), Is.True);

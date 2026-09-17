@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace LinhGioi.Account
 {
-    public sealed class AccountApiClient : IProductAuthClient, IDisposable
+    public sealed class AccountApiClient : IProductAuthClient, IProductAccountClient, IDisposable
     {
         private const int DefaultTimeoutSeconds = 10;
         private readonly string _apiBaseUrl;
@@ -46,6 +46,33 @@ namespace LinhGioi.Account
         public async Task LogoutAsync(string accessToken, CancellationToken cancellationToken)
         {
             await SendJsonRawAsync("POST", "/auth/logout", null, 204, cancellationToken, accessToken);
+        }
+
+        public Task<ProductRegisterResponse> RegisterAsync(string email, string password, bool acceptedTerms,
+            CancellationToken cancellationToken)
+        {
+            return SendJsonAsync<ProductRegisterResponse>("POST", ProductAccountRoutes.Register,
+                new ProductRegisterRequest(email, password, acceptedTerms), 201, cancellationToken);
+        }
+
+        public Task<PasswordRecoveryRequestResponse> RequestPasswordRecoveryAsync(string email,
+            CancellationToken cancellationToken)
+        {
+            return SendJsonAsync<PasswordRecoveryRequestResponse>("POST", ProductAccountRoutes.RecoveryRequest,
+                new PasswordRecoveryRequest(email), 202, cancellationToken);
+        }
+
+        public Task<PasswordRecoveryVerifyResponse> VerifyPasswordRecoveryAsync(string challengeId, string code,
+            CancellationToken cancellationToken)
+        {
+            return SendJsonAsync<PasswordRecoveryVerifyResponse>("POST", ProductAccountRoutes.RecoveryVerify,
+                new PasswordRecoveryVerifyRequest(challengeId, code), 200, cancellationToken);
+        }
+
+        public async Task ResetPasswordAsync(string resetToken, string newPassword, CancellationToken cancellationToken)
+        {
+            await SendJsonRawAsync("POST", ProductAccountRoutes.RecoveryReset,
+                new PasswordRecoveryResetRequest(resetToken, newPassword), 204, cancellationToken);
         }
 
         public async Task<CharacterResponse[]> ListCharactersAsync(string accountId, CancellationToken cancellationToken)
