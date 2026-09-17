@@ -265,19 +265,19 @@
     min-height: 492px;
 }
 
-.lgo-register-header {
+.lgo-auth-flow-header {
     align-items: stretch;
     margin-bottom: 14px;
 }
 
-.lgo-register-subtitle-row {
+.lgo-auth-flow-subtitle-row {
     flex-direction: row;
     align-items: center;
     justify-content: center;
     margin-top: 3px;
 }
 
-.lgo-register-subtitle-row .lgo-ornament {
+.lgo-auth-flow-subtitle-row .lgo-ornament {
     width: 58px;
     margin-left: 12px;
     margin-right: 12px;
@@ -315,4 +315,34 @@
 
 .lgo-register-back {
     min-width: 180px;
+}
+
+.lgo-password-recovery-panel {
+    min-height: 410px;
+}
+
+.lgo-password-recovery-rule {
+    min-height: 24px;
+    margin-top: 4px;
+    margin-bottom: 6px;
+    white-space: nowrap;
+}
+
+.lgo-password-recovery-verify-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+}
+
+.lgo-password-recovery-resend-prompt {
+    margin-right: 8px;
+    white-space: nowrap;
+}
+
+.lgo-password-recovery-verify-footer .lgo-auth-flow-back {
+    min-height: 32px;
+    margin-top: 0;
+    padding-left: 8px;
+    padding-right: 8px;
 }

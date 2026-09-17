@@ -7,9 +7,9 @@ namespace LinhGioi.UI
 {
     public sealed partial class CongDongLamArrivalHud
     {
-        private VisualElement _passwordRecoveryOverlay;
+        private VisualElement _passwordRecoveryOverlay, _passwordRecoveryVerifyFooter;
         private Label _passwordRecoveryTitle, _passwordRecoverySubtitle, _passwordRecoveryGuidance;
-        private Label _passwordRecoveryMaskedEmail, _passwordRecoveryStatus;
+        private Label _passwordRecoveryMaskedEmail, _passwordRecoveryRule, _passwordRecoveryStatus;
         private TextField _passwordRecoveryAccountField, _passwordRecoveryCodeField;
         private TextField _passwordRecoveryNewPasswordField, _passwordRecoveryConfirmPasswordField;
         private Button _passwordRecoverySubmit, _passwordRecoveryVerifySubmit;
@@ -19,18 +19,29 @@ namespace LinhGioi.UI
         private void BuildPasswordRecovery()
         {
             _passwordRecoveryOverlay = new VisualElement { name = "Map01A Password Recovery Overlay" };
-            ApplyLgoAuthFlowPanel(_passwordRecoveryOverlay, 410);
-            _passwordRecoveryTitle = LgoTitleLabel("KHÔI PHỤC MẬT KHẨU", 25, TextAnchor.MiddleCenter);
+            ApplyLgoPasswordRecoveryPanel(_passwordRecoveryOverlay);
+
+            var header = new VisualElement { name = "Map01A Password Recovery Header", pickingMode = PickingMode.Ignore };
+            ApplyLgoAuthFlowHeader(header);
+            _passwordRecoveryTitle = LgoTitleLabel("KHÔI PHỤC MẬT KHẨU", 28, TextAnchor.MiddleCenter);
             _passwordRecoveryTitle.name = "Map01A Password Recovery Title";
             _passwordRecoveryTitle.style.whiteSpace = WhiteSpace.NoWrap;
-            _passwordRecoveryOverlay.Add(_passwordRecoveryTitle);
+            header.Add(_passwordRecoveryTitle);
 
+            var subtitleRow = new VisualElement { name = "Map01A Password Recovery Subtitle Row", pickingMode = PickingMode.Ignore };
+            ApplyLgoAuthFlowSubtitleRow(subtitleRow);
+            var ornamentLeft = new VisualElement { name = "Map01A Password Recovery Ornament Left", pickingMode = PickingMode.Ignore };
+            ApplyLgoOrnamentRail(ornamentLeft);
             _passwordRecoverySubtitle = LgoSubtitleLabel(
                 "Nhận hướng dẫn bảo mật qua email đã đăng ký", 14, TextAnchor.MiddleCenter);
             _passwordRecoverySubtitle.name = "Map01A Password Recovery Subtitle";
-            _passwordRecoverySubtitle.style.marginTop = 4;
-            _passwordRecoverySubtitle.style.marginBottom = 14;
-            _passwordRecoveryOverlay.Add(_passwordRecoverySubtitle);
+            var ornamentRight = new VisualElement { name = "Map01A Password Recovery Ornament Right", pickingMode = PickingMode.Ignore };
+            ApplyLgoOrnamentRail(ornamentRight);
+            subtitleRow.Add(ornamentLeft);
+            subtitleRow.Add(_passwordRecoverySubtitle);
+            subtitleRow.Add(ornamentRight);
+            header.Add(subtitleRow);
+            _passwordRecoveryOverlay.Add(header);
 
             _passwordRecoveryGuidance = LgoLabel(
                 "Nhập email đã dùng để đăng ký tài khoản.", 14, new Color(.86f, .92f, .94f, .94f));
@@ -59,6 +70,11 @@ namespace LinhGioi.UI
             _passwordRecoveryOverlay.Add(_passwordRecoveryNewPasswordField);
             _passwordRecoveryOverlay.Add(_passwordRecoveryConfirmPasswordField);
 
+            _passwordRecoveryRule = LgoSubtitleLabel("", 13, TextAnchor.MiddleCenter);
+            _passwordRecoveryRule.name = "Map01A Password Recovery Rule";
+            ApplyLgoPasswordRecoveryRule(_passwordRecoveryRule);
+            _passwordRecoveryOverlay.Add(_passwordRecoveryRule);
+
             _passwordRecoveryStatus = LgoSubtitleLabel("", 13, TextAnchor.MiddleCenter);
             _passwordRecoveryStatus.name = "Map01A Password Recovery Status";
             _passwordRecoveryStatus.style.minHeight = 36;
@@ -79,10 +95,17 @@ namespace LinhGioi.UI
             ApplyLgoAuthFlowPrimary(_passwordRecoveryNewPasswordSubmit);
             _passwordRecoveryOverlay.Add(_passwordRecoveryNewPasswordSubmit);
 
+            _passwordRecoveryVerifyFooter = new VisualElement { name = "Map01A Password Recovery Verify Footer" };
+            ApplyLgoPasswordRecoveryVerifyFooter(_passwordRecoveryVerifyFooter);
+            var resendPrompt = LgoSubtitleLabel("Chưa nhận được mã?", 13, TextAnchor.MiddleCenter);
+            resendPrompt.name = "Map01A Password Recovery Resend Prompt";
+            resendPrompt.AddToClassList("lgo-password-recovery-resend-prompt");
+            _passwordRecoveryVerifyFooter.Add(resendPrompt);
             _passwordRecoveryResend = new Button(ResendPasswordRecoveryCode)
             { name = "Map01A Password Recovery Resend", text = "Gửi lại mã" };
             ApplyLgoAuthFlowBack(_passwordRecoveryResend);
-            _passwordRecoveryOverlay.Add(_passwordRecoveryResend);
+            _passwordRecoveryVerifyFooter.Add(_passwordRecoveryResend);
+            _passwordRecoveryOverlay.Add(_passwordRecoveryVerifyFooter);
             _passwordRecoveryBack = new Button(HandlePasswordRecoveryBack)
             { name = "Map01A Password Recovery Back", text = "Quay lại đăng nhập" };
             ApplyLgoAuthFlowBack(_passwordRecoveryBack);
@@ -389,9 +412,13 @@ namespace LinhGioi.UI
             _passwordRecoveryCodeField.style.display = verify ? DisplayStyle.Flex : DisplayStyle.None;
             _passwordRecoveryNewPasswordField.style.display = reset ? DisplayStyle.Flex : DisplayStyle.None;
             _passwordRecoveryConfirmPasswordField.style.display = reset ? DisplayStyle.Flex : DisplayStyle.None;
+            _passwordRecoveryRule.text = verify ? "Mã có hiệu lực trong 10 phút · Tối đa 5 lần thử"
+                : reset ? "Từ 8 đến 128 ký tự" : string.Empty;
+            _passwordRecoveryRule.style.display = verify || reset ? DisplayStyle.Flex : DisplayStyle.None;
             _passwordRecoverySubmit.style.display = request ? DisplayStyle.Flex : DisplayStyle.None;
             _passwordRecoveryVerifySubmit.style.display = verify ? DisplayStyle.Flex : DisplayStyle.None;
             _passwordRecoveryNewPasswordSubmit.style.display = reset ? DisplayStyle.Flex : DisplayStyle.None;
+            _passwordRecoveryVerifyFooter.style.display = verify ? DisplayStyle.Flex : DisplayStyle.None;
             _passwordRecoveryResend.style.display = verify ? DisplayStyle.Flex : DisplayStyle.None;
             _passwordRecoveryBack.text = verify ? "Quay lại" : "Quay lại đăng nhập";
             UpdatePasswordRecoveryCooldown();

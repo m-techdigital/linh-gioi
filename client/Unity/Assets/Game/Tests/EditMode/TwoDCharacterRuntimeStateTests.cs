@@ -2351,6 +2351,66 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void PasswordRecoveryStagesUseCanonicalSharedHierarchyAndRuleRoles()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("canonical recovery shared hierarchy test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                var fake = FakeProductAuthClient.ProductAccountFlowSuccess();
+                CongDongLamArrivalHud.Attach(scene, fake, new ProductAuthSessionState());
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                root.Q<TextField>("Map01A Entry Account Field").value = "luc-thien@example.test";
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Forgot Password"));
+
+                var overlay = root.Q("Map01A Password Recovery Overlay");
+                var header = root.Q("Map01A Password Recovery Header");
+                var title = root.Q<Label>("Map01A Password Recovery Title");
+                var subtitleRow = root.Q("Map01A Password Recovery Subtitle Row");
+                var rule = root.Q<Label>("Map01A Password Recovery Rule");
+                var footer = root.Q("Map01A Password Recovery Verify Footer");
+                Assert.That(overlay.ClassListContains("lgo-password-recovery-panel"), Is.True);
+                Assert.That(header, Is.Not.Null);
+                Assert.That(title.parent, Is.SameAs(header));
+                Assert.That(subtitleRow, Is.Not.Null);
+                Assert.That(subtitleRow.Q("Map01A Password Recovery Ornament Left"), Is.Not.Null);
+                Assert.That(subtitleRow.Q("Map01A Password Recovery Ornament Right"), Is.Not.Null);
+                Assert.That(rule, Is.Not.Null);
+                Assert.That(rule.ClassListContains("lgo-password-recovery-rule"), Is.True);
+                Assert.That(rule.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(footer, Is.Not.Null);
+                Assert.That(footer.style.display.value, Is.EqualTo(DisplayStyle.None));
+
+                InvokeBoundButton(root.Q<Button>("Map01A Password Recovery Submit"));
+                Assert.That(title.text, Is.EqualTo("XÁC MINH MÃ"));
+                Assert.That(rule.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(rule.text, Is.EqualTo("Mã có hiệu lực trong 10 phút · Tối đa 5 lần thử"));
+                Assert.That(footer.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Button>("Map01A Password Recovery Resend").parent, Is.SameAs(footer));
+                Assert.That(root.Q<Label>("Map01A Password Recovery Resend Prompt").text,
+                    Is.EqualTo("Chưa nhận được mã?"));
+
+                root.Q<TextField>("Map01A Password Recovery Code Field").value = "123456";
+                InvokeBoundButton(root.Q<Button>("Map01A Password Recovery Verify Submit"));
+                Assert.That(title.text, Is.EqualTo("ĐẶT MẬT KHẨU MỚI"));
+                Assert.That(rule.text, Is.EqualTo("Từ 8 đến 128 ký tự"));
+                Assert.That(rule.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(footer.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<TextField>("Map01A Password Recovery New Password Field").style.display.value,
+                    Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<TextField>("Map01A Password Recovery Confirm Password Field").style.display.value,
+                    Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(root.Q<Button>("Map01A Password Recovery Back").ClassListContains("lgo-auth-flow-back"), Is.True);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void GameplayHudShowsProductShortcutGateWithoutDeadClicks()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

@@ -317,6 +317,12 @@ namespace LinhGioi.Tests
                 "Register agreement touch target belongs to shared USS.");
             Assert.That(source, Does.Contain(".lgo-register-primary"));
             Assert.That(source, Does.Contain(".lgo-register-back"));
+            Assert.That(source, Does.Contain(".lgo-password-recovery-panel"));
+            Assert.That(source, Does.Contain(".lgo-auth-flow-header"),
+                "Register/Recovery title geometry must share one auth-flow header primitive.");
+            Assert.That(source, Does.Contain(".lgo-auth-flow-subtitle-row"));
+            Assert.That(source, Does.Contain(".lgo-password-recovery-rule"));
+            Assert.That(source, Does.Contain(".lgo-password-recovery-verify-footer"));
         }
 
         [Test]

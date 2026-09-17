@@ -198,7 +198,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             recovery = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.PasswordRecovery.cs"
             recovery.write_text(
                 recovery.read_text(encoding="utf-8").replace(
-                    "ApplyLgoAuthFlowPanel(_passwordRecoveryOverlay, 410);",
+                    "ApplyLgoPasswordRecoveryPanel(_passwordRecoveryOverlay);",
                     "ApplyLgoFrame(_passwordRecoveryOverlay, Color.black, Color.yellow);",
                 ),
                 encoding="utf-8",
@@ -206,7 +206,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
             violations = validator.validate_root(Path(temp))
 
-        self.assertTrue(any("ApplyLgoAuthFlowPanel" in item for item in violations), violations)
+        self.assertTrue(any("ApplyLgoPasswordRecoveryPanel" in item for item in violations), violations)
 
 
     def test_rejects_missing_uploaded_design_reference_scope(self) -> None:

@@ -299,11 +299,13 @@ namespace LinhGioi.UI
         private static void ApplyLgoRegisterHeader(VisualElement header)
         {
             header.AddToClassList(LgoRegisterHeaderClass);
+            ApplyLgoAuthFlowHeader(header);
         }
 
         private static void ApplyLgoRegisterSubtitleRow(VisualElement row)
         {
             row.AddToClassList(LgoRegisterSubtitleRowClass);
+            ApplyLgoAuthFlowSubtitleRow(row);
         }
 
         private static void ApplyLgoAuthFlowPanel(VisualElement panel, float minHeight)

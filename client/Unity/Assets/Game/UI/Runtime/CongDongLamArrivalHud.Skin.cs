@@ -90,8 +90,13 @@ namespace LinhGioi.UI
         private const string LgoRegisterBackClass = "lgo-register-back";
         private const string LgoRegisterPasswordRevealClass = "lgo-register-password-reveal";
         private const string LgoAuthFlowPanelClass = "lgo-auth-flow-panel";
+        private const string LgoAuthFlowHeaderClass = "lgo-auth-flow-header";
+        private const string LgoAuthFlowSubtitleRowClass = "lgo-auth-flow-subtitle-row";
         private const string LgoAuthFlowPrimaryClass = "lgo-auth-flow-primary";
         private const string LgoAuthFlowBackClass = "lgo-auth-flow-back";
+        private const string LgoPasswordRecoveryPanelClass = "lgo-password-recovery-panel";
+        private const string LgoPasswordRecoveryRuleClass = "lgo-password-recovery-rule";
+        private const string LgoPasswordRecoveryVerifyFooterClass = "lgo-password-recovery-verify-footer";
         private const string LgoCharacterSelectProfileClass = "lgo-character-select-profile";
         private const string LgoCharacterSelectEmptySlotClass = "lgo-character-select-empty-slot";
         private const string LgoMenuActionClass = "lgo-menu-action";

@@ -306,7 +306,7 @@ REQUIRED_PARTIAL_MARKERS = {
     ],
     "CongDongLamArrivalHud.PasswordRecovery.cs": [
         "Map01A Password Recovery Overlay",
-        "ApplyLgoAuthFlowPanel(_passwordRecoveryOverlay, 410)",
+        "ApplyLgoPasswordRecoveryPanel(_passwordRecoveryOverlay)",
         "Map01A Password Recovery Account Field",
         "Map01A Password Recovery Code Field",
         "Map01A Password Recovery New Password Field",
