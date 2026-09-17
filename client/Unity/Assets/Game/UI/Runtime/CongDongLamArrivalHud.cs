@@ -45,6 +45,7 @@ namespace LinhGioi.UI
         private bool _reviewHotkeysEnabled;
         private IProductAuthClient _productAuthClient;
         private IProductAccountClient _productAccountClient;
+        private IProductCharacterClient _productCharacterClient;
         private ProductAuthSessionState _productAuthSession;
         private ProductAccountRecoveryState _productRecoveryState;
         private CancellationTokenSource _productAuthCts;
@@ -52,6 +53,7 @@ namespace LinhGioi.UI
         private bool _productLoginInFlight;
         private bool _productRegisterInFlight;
         private bool _productRecoveryInFlight;
+        private string _loadedProductCharacterName;
 
         public static void Attach(CongDongLamMap01AArtPreview scene,
             IProductAuthClient productAuthClient = null, ProductAuthSessionState authSession = null)
@@ -62,6 +64,7 @@ namespace LinhGioi.UI
             hud._scene = scene;
             hud._productAuthClient = productAuthClient;
             hud._productAccountClient = productAuthClient as IProductAccountClient;
+            hud._productCharacterClient = productAuthClient as IProductCharacterClient;
             hud._productAuthSession = authSession ?? new ProductAuthSessionState();
             hud._productRecoveryState = new ProductAccountRecoveryState();
             hud._productAuthCts = new CancellationTokenSource();
@@ -609,7 +612,7 @@ namespace LinhGioi.UI
                 + (_scene.CharacterGender == "female" ? "Nữ" : "Nam") + (_touch ? "" : " · G");
             _inventoryGender.SetEnabled(_scene.CanCycleSourcePoseGender);
             _vitals.style.display = _scene.InventoryOpen || _scene.DialogueOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _vitalsName.text = "LụcThiên";
+            _vitalsName.text = string.IsNullOrWhiteSpace(_loadedProductCharacterName) ? "LụcThiên" : _loadedProductCharacterName;
             _vitalsMeta.text = _scene.ActiveEquipmentClassLabel + " · " + (_scene.CharacterGender == "female" ? "Nữ" : "Nam") + "  ·  Lv.1";
             var playerPortrait = _scene.GetCharacterAvatarThumbnailSprite();
             _vitalsPortrait.style.backgroundImage = playerPortrait == null ? StyleKeyword.None : new StyleBackground(playerPortrait);
@@ -694,6 +697,7 @@ namespace LinhGioi.UI
             var client = new AccountApiClient(ClientRuntimeConfig.LoadStreamingAssets());
             _productAuthClient = client;
             _productAccountClient = client;
+            _productCharacterClient = client;
             _ownsProductAuthClient = true;
         }
 
@@ -704,6 +708,15 @@ namespace LinhGioi.UI
             _productAccountClient = _productAuthClient as IProductAccountClient;
             if (_productAccountClient == null)
                 throw new InvalidOperationException("Product account client is unavailable.");
+        }
+
+        private void EnsureProductCharacterClient()
+        {
+            if (_productCharacterClient != null) return;
+            EnsureProductAuthClient();
+            _productCharacterClient = _productAuthClient as IProductCharacterClient;
+            if (_productCharacterClient == null)
+                throw new InvalidOperationException("Product character client is unavailable.");
         }
 
         private CancellationToken ProductAuthCancellationToken => _productAuthCts?.Token ?? CancellationToken.None;

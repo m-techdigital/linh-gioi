@@ -2045,7 +2045,7 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
-        public void CharacterSelectUsesOneSavedProfileAndNeverMutatesClassSelection()
+        public void CharacterSelectUsesThreeServerSlotsWithoutFakeProfileOrClassMutation()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             try
@@ -2068,29 +2068,25 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q("Map01A Character Select Account Panel"), Is.Not.Null);
                 Assert.That(root.Q<VisualElement>("Map01A Character Select Preview").style.backgroundImage.value.sprite,
                     Is.EqualTo(scene.GetVoAvatarThumbnailSprite()),
-                    "The selected-character stage must reuse the current runtime avatar source.");
-
-                var selected = root.Q<Button>("Map01A Character Saved Profile");
-                Assert.That(selected, Is.Not.Null);
-                Assert.That(selected.text, Does.Contain("LụcThiên"));
-                Assert.That(selected.ClassListContains("lgo-character-select-profile"), Is.True);
-                Assert.That(root.Query<Button>(className: "lgo-character-select-empty-slot").ToList().Count, Is.EqualTo(2));
-                Assert.That(root.Q<Button>("Map01A Character Empty Slot 1").text, Does.Contain("Chưa có nhân vật"));
-                Assert.That(root.Q<Button>("Map01A Character Empty Slot 2").text, Does.Contain("Chưa có nhân vật"));
+                    "Character Select keeps the existing runtime avatar source while account data remains unbound.");
+                for (var slot = 1; slot <= 3; slot++)
+                {
+                    var button = root.Q<Button>("Map01A Character Slot " + slot);
+                    Assert.That(button, Is.Not.Null);
+                    Assert.That(button.text, Does.Contain("Chưa có nhân vật"));
+                    Assert.That(button.ClassListContains("lgo-character-select-empty-slot"), Is.True);
+                }
+                Assert.That(root.Q<Label>("Map01A Character Select Stage Name").text, Is.EqualTo("Chưa chọn nhân vật"));
+                Assert.That(root.Q<Button>("Map01A Character Select Enter Game").enabledSelf, Is.False);
                 Assert.That(root.Q("Map01A Character Card Võ"), Is.Null);
                 Assert.That(root.Q("Map01A Character Card Kiếm"), Is.Null);
                 Assert.That(root.Q("Map01A Character Card Pháp"), Is.Null);
 
-                InvokeBoundButton(selected);
+                InvokeBoundButton(root.Q<Button>("Map01A Character Slot 1"));
                 Assert.That(scene.ActiveEquipmentClassId, Is.EqualTo(classBefore),
-                    "Selecting the saved profile must never cycle class/pose review source.");
-                Assert.That(root.Q<Label>("Map01A Character Select Status").text, Does.Contain("đã chọn"));
+                    "Selecting an empty product slot must never cycle class/pose review source.");
+                Assert.That(root.Q<Label>("Map01A Character Select Status").text, Does.Contain("chưa có nhân vật"));
 
-                InvokeBoundButton(root.Q<Button>("Map01A Character Select Enter Game"));
-                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q("Map01A Product Shortcut Actions").style.display.value, Is.EqualTo(DisplayStyle.Flex),
-                    "Entering Map01A must restore the gameplay navigation instead of preserving the hidden overlay state.");
-                open.Invoke(hud, null);
                 InvokeBoundButton(root.Q<Button>("Map01A Character Select Back"));
                 Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));

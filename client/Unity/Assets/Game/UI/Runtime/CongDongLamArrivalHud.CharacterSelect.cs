@@ -1,4 +1,6 @@
 using UnityEngine;
+using System;
+using LinhGioi.Account;
 using UnityEngine.UIElements;
 
 namespace LinhGioi.UI
@@ -8,9 +10,14 @@ namespace LinhGioi.UI
         private VisualElement _characterSelectOverlay;
         private VisualElement _characterSelectPreview;
         private Label _characterSelectStatus;
-        private Label _characterSelectProfileMeta;
         private Label _characterSelectDetailMeta;
+        private Label _characterSelectStageName;
+        private Button _characterSelectEnterButton;
+        private readonly Button[] _characterSelectSlotButtons = new Button[3];
+        private readonly CharacterResponse[] _characterSelectCharacters = new CharacterResponse[3];
+        private CharacterResponse _selectedProductCharacter;
         private bool _characterSelectOpen;
+        private bool _characterSelectLoading;
 
         private void BuildCharacterSelect()
         {
@@ -27,7 +34,10 @@ namespace LinhGioi.UI
             BuildCharacterSelectAccountSurface();
 
             _root.Add(_characterSelectOverlay);
+            var captureArgs = Environment.GetCommandLineArgs();
             _characterSelectOpen = ShouldShowCharacterSelectOnLaunch();
+            if (ShouldSeedCharacterSelectCaptureForArgs(captureArgs))
+                PrepareCharacterSelectCaptureSeed();
             UpdateCharacterSelectScreen();
         }
 
@@ -106,10 +116,10 @@ namespace LinhGioi.UI
             _characterSelectPreview.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             stage.Add(_characterSelectPreview);
 
-            var identity = LgoTitleLabel("LụcThiên", 22, TextAnchor.MiddleCenter);
-            identity.name = "Map01A Character Select Stage Name";
-            identity.style.alignSelf = Align.Center;
-            stage.Add(identity);
+            _characterSelectStageName = LgoTitleLabel("Chưa chọn nhân vật", 22, TextAnchor.MiddleCenter);
+            _characterSelectStageName.name = "Map01A Character Select Stage Name";
+            _characterSelectStageName.style.alignSelf = Align.Center;
+            stage.Add(_characterSelectStageName);
             var title = LgoSubtitleLabel("Đệ tử Đông Lâm", 13, TextAnchor.MiddleCenter);
             title.name = "Map01A Character Select Stage Title";
             title.style.alignSelf = Align.Center;
@@ -146,26 +156,18 @@ namespace LinhGioi.UI
             subtitle.style.marginBottom = 9;
             panel.Add(subtitle);
 
-            var selected = new Button(SelectSavedCharacter)
+            for (var slotNumber = 1; slotNumber <= 3; slotNumber++)
             {
-                name = "Map01A Character Saved Profile",
-                text = "LụcThiên"
-            };
-            ApplyLgoCharacterSelectProfile(selected, true);
-            AddCharacterSelectProfileIcon(selected, _scene.GetCharacterAvatarThumbnailSprite(), "Selected");
-            var selectedText = new VisualElement { name = "Map01A Character Saved Profile Text", pickingMode = PickingMode.Ignore };
-            selectedText.style.position = Position.Absolute;
-            selectedText.style.left = 92;
-            selectedText.style.right = 12;
-            selectedText.style.top = 46;
-            _characterSelectProfileMeta = LgoSubtitleLabel("", 12);
-            _characterSelectProfileMeta.name = "Map01A Character Saved Profile Meta";
-            selectedText.Add(_characterSelectProfileMeta);
-            selected.Add(selectedText);
-            panel.Add(selected);
-
-            panel.Add(MakeEmptyCharacterSlot(1));
-            panel.Add(MakeEmptyCharacterSlot(2));
+                var capturedSlot = slotNumber;
+                var slot = new Button(() => SelectCharacterSlot(capturedSlot))
+                {
+                    name = "Map01A Character Slot " + capturedSlot,
+                    text = "Chưa có nhân vật\nSlot " + capturedSlot
+                };
+                _characterSelectSlotButtons[capturedSlot - 1] = slot;
+                BindCharacterSelectSlot(capturedSlot);
+                panel.Add(slot);
+            }
 
             var create = new Button(() => SetCharacterSelectStatus("Màn Tạo nhân vật đang chờ canonical design riêng."))
             {
@@ -192,7 +194,7 @@ namespace LinhGioi.UI
             detail.Add(description);
             panel.Add(detail);
 
-            _characterSelectStatus = LgoSubtitleLabel("LụcThiên đang được chọn.", 12, TextAnchor.MiddleCenter);
+            _characterSelectStatus = LgoSubtitleLabel("Đang chờ dữ liệu nhân vật.", 12, TextAnchor.MiddleCenter);
             _characterSelectStatus.name = "Map01A Character Select Status";
             ApplyLgoCharacterSelectStatus(_characterSelectStatus);
             panel.Add(_characterSelectStatus);
@@ -210,19 +212,19 @@ namespace LinhGioi.UI
                 name = "Map01A Character Select Delete",
                 text = "Xóa"
             };
-            var enter = new Button(CloseCharacterSelect)
+            _characterSelectEnterButton = new Button(EnterSelectedCharacter)
             {
                 name = "Map01A Character Select Enter Game",
                 text = "Vào game"
             };
             ApplyLgoCharacterSelectAction(edit);
             ApplyLgoCharacterSelectAction(delete);
-            ApplyLgoCharacterSelectAction(enter, true);
+            ApplyLgoCharacterSelectAction(_characterSelectEnterButton, true);
             edit.style.marginRight = 6;
             delete.style.marginRight = 6;
             actions.Add(edit);
             actions.Add(delete);
-            actions.Add(enter);
+            actions.Add(_characterSelectEnterButton);
             panel.Add(actions);
 
             var server = new VisualElement { name = "Map01A Character Select Server Row" };
@@ -249,18 +251,6 @@ namespace LinhGioi.UI
             RefreshCharacterSelectContent();
         }
 
-        private Button MakeEmptyCharacterSlot(int index)
-        {
-            var slot = new Button(() => SetCharacterSelectStatus("Slot " + index + " chưa có nhân vật. Hãy dùng Tạo nhân vật."))
-            {
-                name = "Map01A Character Empty Slot " + index,
-                text = "Chưa có nhân vật\nSlot " + index
-            };
-            ApplyLgoCharacterSelectEmptySlot(slot);
-            AddCharacterSelectProfileIcon(slot, _scene.GetMap01AHudIconSprite("crest"), "Empty " + index, 48);
-            return slot;
-        }
-
         private static void AddCharacterSelectProfileIcon(VisualElement parent, Sprite sprite, string suffix, float size = 64)
         {
             var icon = new VisualElement { name = "Map01A Character Profile Icon " + suffix, pickingMode = PickingMode.Ignore };
@@ -273,12 +263,79 @@ namespace LinhGioi.UI
 
         private bool ShouldShowCharacterSelectOnLaunch()
         {
-            return System.Array.IndexOf(System.Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
+            return ShouldSeedCharacterSelectCaptureForArgs(Environment.GetCommandLineArgs());
         }
 
-        private void SelectSavedCharacter()
+        public static bool ShouldSeedCharacterSelectCaptureForArgs(string[] args)
         {
-            SetCharacterSelectStatus("LụcThiên đã chọn · S1 Đông Lâm.");
+            return args != null && Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0;
+        }
+
+        private void PrepareCharacterSelectCaptureSeed()
+        {
+            Array.Clear(_characterSelectCharacters, 0, _characterSelectCharacters.Length);
+            _characterSelectCharacters[0] = new CharacterResponse
+            {
+                slot = 1, characterId = "capture.character.1", accountId = "capture.account.review",
+                name = "KiếmTu", classId = "class.sword", entityId = 1001
+            };
+            _characterSelectCharacters[2] = new CharacterResponse
+            {
+                slot = 3, characterId = "capture.character.3", accountId = "capture.account.review",
+                name = "VõGia", classId = "class.martial", entityId = 1003
+            };
+            _selectedProductCharacter = _characterSelectCharacters[0];
+            RefreshCharacterSelectSlots();
+            RefreshCharacterSelectContent();
+            SetCharacterSelectStatus("KiếmTu đang được chọn.");
+        }
+
+        private void SelectCharacterSlot(int slotNumber)
+        {
+            if (slotNumber < 1 || slotNumber > _characterSelectCharacters.Length) return;
+            var character = _characterSelectCharacters[slotNumber - 1];
+            if (character == null)
+            {
+                SetCharacterSelectStatus("Slot " + slotNumber + " chưa có nhân vật. Hãy dùng Tạo nhân vật.");
+                return;
+            }
+            _selectedProductCharacter = character;
+            RefreshCharacterSelectContent();
+            RefreshCharacterSelectSlots();
+            SetCharacterSelectStatus(character.name + " đã chọn · S1 Đông Lâm.");
+        }
+
+        private void BindCharacterSelectSlot(int slotNumber)
+        {
+            var button = _characterSelectSlotButtons[slotNumber - 1];
+            if (button == null) return;
+            var character = _characterSelectCharacters[slotNumber - 1];
+            button.RemoveFromClassList(LgoCharacterSelectProfileClass);
+            button.RemoveFromClassList(LgoCharacterSelectEmptySlotClass);
+            button.Clear();
+            if (character == null)
+            {
+                button.text = "Chưa có nhân vật\nSlot " + slotNumber;
+                ApplyLgoCharacterSelectEmptySlot(button);
+                AddCharacterSelectProfileIcon(button, _scene.GetMap01AHudIconSprite("crest"), "Slot " + slotNumber, 48);
+                return;
+            }
+            button.text = character.name;
+            ApplyLgoCharacterSelectProfile(button, ReferenceEquals(character, _selectedProductCharacter));
+            AddCharacterSelectProfileIcon(button, _scene.GetCharacterAvatarThumbnailSprite(), "Slot " + slotNumber);
+            var meta = LgoSubtitleLabel("Slot " + slotNumber + " · " + character.classId, 12);
+            meta.name = "Map01A Character Slot " + slotNumber + " Meta";
+            meta.style.position = Position.Absolute;
+            meta.style.left = 92;
+            meta.style.right = 12;
+            meta.style.top = 46;
+            button.Add(meta);
+        }
+
+        private void RefreshCharacterSelectSlots()
+        {
+            for (var slotNumber = 1; slotNumber <= _characterSelectSlotButtons.Length; slotNumber++)
+                BindCharacterSelectSlot(slotNumber);
         }
 
         private void SetCharacterSelectStatus(string message)
@@ -292,14 +349,17 @@ namespace LinhGioi.UI
             var preview = _scene.GetCharacterAvatarThumbnailSprite();
             if (_characterSelectPreview != null)
                 _characterSelectPreview.style.backgroundImage = preview == null ? StyleKeyword.None : new StyleBackground(preview);
-            if (_characterSelectProfileMeta != null)
-                _characterSelectProfileMeta.text = "Lv." + _scene.CharacterLevel + " · " + _scene.ActiveEquipmentClassLabel + " · S1 Đông Lâm";
+            if (_characterSelectStageName != null)
+                _characterSelectStageName.text = _selectedProductCharacter == null ? "Chưa chọn nhân vật" : _selectedProductCharacter.name;
             if (_characterSelectDetailMeta != null)
-                _characterSelectDetailMeta.text = _scene.ActiveEquipmentClassLabel + " · Lv." + _scene.CharacterLevel
-                    + "\nHP " + _scene.PlayerHealth + "/100  •  MP " + _scene.PlayerMana + "/100";
+                _characterSelectDetailMeta.text = _selectedProductCharacter == null
+                    ? "Chưa có hồ sơ được chọn."
+                    : _selectedProductCharacter.classId + " · Slot " + _selectedProductCharacter.slot + "\nS1 Đông Lâm";
+            if (_characterSelectEnterButton != null)
+                _characterSelectEnterButton.SetEnabled(!_characterSelectLoading && _selectedProductCharacter != null);
         }
 
-        private void OpenCharacterSelect()
+        private async void OpenCharacterSelect()
         {
             if (_scene.InventoryOpen) _scene.ToggleInventory();
             if (_scene.DialogueOpen) _scene.CloseNpcDialogue();
@@ -308,6 +368,93 @@ namespace LinhGioi.UI
             _characterSelectOpen = true;
             RefreshCharacterSelectContent();
             UpdateCharacterSelectScreen();
+            await RefreshProductCharacterSlotsAsync();
+        }
+
+        private async System.Threading.Tasks.Task RefreshProductCharacterSlotsAsync()
+        {
+            Array.Clear(_characterSelectCharacters, 0, _characterSelectCharacters.Length);
+            _selectedProductCharacter = null;
+            RefreshCharacterSelectSlots();
+            RefreshCharacterSelectContent();
+            if (_productAuthSession == null || !_productAuthSession.IsAuthenticated)
+            {
+                SetCharacterSelectStatus("Đăng nhập để tải danh sách nhân vật.");
+                return;
+            }
+            _characterSelectLoading = true;
+            RefreshCharacterSelectContent();
+            SetCharacterSelectStatus("Đang tải danh sách nhân vật…");
+            try
+            {
+                EnsureProductCharacterClient();
+                var listed = await _productCharacterClient.ListProductCharactersAsync(
+                    _productAuthSession.AccessToken, ProductAuthCancellationToken);
+                foreach (var character in listed ?? Array.Empty<CharacterResponse>())
+                {
+                    if (character == null || character.slot < 1 || character.slot > 3)
+                        throw new InvalidOperationException("Character slot payload is invalid.");
+                    if (_characterSelectCharacters[character.slot - 1] != null)
+                        throw new InvalidOperationException("Character slot payload is duplicated.");
+                    _characterSelectCharacters[character.slot - 1] = character;
+                }
+                for (var i = 0; i < _characterSelectCharacters.Length; i++)
+                    if (_characterSelectCharacters[i] != null) { _selectedProductCharacter = _characterSelectCharacters[i]; break; }
+                RefreshCharacterSelectSlots();
+                RefreshCharacterSelectContent();
+                SetCharacterSelectStatus(_selectedProductCharacter == null
+                    ? "Chưa có nhân vật. Hãy dùng Tạo nhân vật."
+                    : _selectedProductCharacter.name + " đang được chọn.");
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception)
+            {
+                SetCharacterSelectStatus("Không thể tải danh sách nhân vật. Vui lòng thử lại.");
+            }
+            finally
+            {
+                _characterSelectLoading = false;
+                RefreshCharacterSelectContent();
+            }
+        }
+
+        private async void EnterSelectedCharacter()
+        {
+            if (_characterSelectLoading || _selectedProductCharacter == null)
+            {
+                SetCharacterSelectStatus("Hãy chọn một nhân vật trước khi vào game.");
+                return;
+            }
+            if (_productAuthSession == null || !_productAuthSession.IsAuthenticated)
+            {
+                SetCharacterSelectStatus("Phiên đăng nhập không còn hợp lệ.");
+                return;
+            }
+            _characterSelectLoading = true;
+            RefreshCharacterSelectContent();
+            SetCharacterSelectStatus("Đang tải nhân vật…");
+            try
+            {
+                EnsureProductCharacterClient();
+                var loaded = await _productCharacterClient.LoadProductCharacterAsync(
+                    _productAuthSession.AccessToken, _selectedProductCharacter.characterId, ProductAuthCancellationToken);
+                if (loaded == null || loaded.characterId != _selectedProductCharacter.characterId)
+                    throw new InvalidOperationException("Loaded character does not match selection.");
+                _selectedProductCharacter = loaded;
+                _loadedProductCharacterName = loaded.name;
+                if (_vitalsName != null) _vitalsName.text = loaded.name;
+                CloseCharacterSelect();
+            }
+            catch (OperationCanceledException) { }
+            catch (Exception)
+            {
+                SetCharacterSelectStatus("Không thể tải nhân vật. Vui lòng thử lại.");
+            }
+            finally
+            {
+                _characterSelectLoading = false;
+                RefreshCharacterSelectContent();
+            }
         }
 
         private void OpenEntryFromCharacterSelect()
