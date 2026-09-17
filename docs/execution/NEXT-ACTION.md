@@ -97,3 +97,11 @@
 `build/character-hub-skill-paint-v45/`: `runtime-review.json`, `source-comparison-final.png` (nguồn, không phải Player), `final-sources/`, `artwork-registry-final.json`, `import-final-proof.json`, `full-editmode.xml`, `runtime-reviewed/{cleanse,fireline}/`, `player-reviewed/LinhGioiOnline.app`.
 `lgo-skill-paint-v45-authoring.zip` cùng `.zip.sha256` và `package-proof.json`: nguồn tích lũy gồm cả Linh Thuẫn v44; raw được chọn, mask, recipe và registry portable. Không import ZIP/reference board vào Resources; không có font/model/Player trong gói.
 `CONTINUE / PARTIAL_SKILL_PAINT_ALIGNMENT / VISUAL_FIX_REQUIRED` — không nghiệm thu toàn class, Character Hub hoặc thiết bị mobile/tablet thật.
+
+# NEXT ACTION — after five-class schema + Map01A runtime-entry migration
+
+1. Current slice is closed at runtime/evidence HEAD `105f5fe672aa95ecd5c1a5519cfa6711ad743708`: persistence/API/client/Character Select→Map01A entry are five-class-compatible without rewriting legacy XYZ/yaw or breaking account isolation.
+2. Next independent product-visible subproject: establish **production five-class renderer authority** for `kiem/phap/co/linh` using approved `runtimeEligible` packs and the existing canonical modular actor contract. Do not promote `TwoDSourcePoseReview` because it is explicitly `REVIEW_ONLY/runtimeEligible=false`; do not redesign class art/pose/wardrobe unless concrete owner-approved runtime assets require it.
+3. Separately plan the **live-save lifecycle** for `SaveMap01AStateAsync`: choose an approved checkpoint/autosave/logout/map-transition trigger and its retry/error semantics before wiring writes in live play. Do not invent a Save button or arbitrary autosave cadence.
+4. Create Character remains `DESIGN_GATED`; do not open its product UI/create endpoint as part of renderer or save-lifecycle work.
+5. Preserve Entry v5→v9, Character Hub V59 chrome, bearer account isolation, raw legacy data compatibility, and frozen protocol/GameData/ADR/design-token surfaces. Visual/rejected evidence stays under ignored `build/`; no PNG/JPG review spam in Git.
