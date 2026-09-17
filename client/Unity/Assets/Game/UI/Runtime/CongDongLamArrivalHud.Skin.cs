@@ -30,6 +30,9 @@ namespace LinhGioi.UI
         private const string LgoStatusCardClass = "lgo-status-card";
         private const string LgoDetailCardClass = "lgo-detail-card";
         private const string LgoInventoryMainTabClass = "lgo-inventory-main-tab";
+        private const string LgoCharacterHubMainTabsClass = "lgo-character-hub-main-tabs";
+        private const string LgoCharacterHubInspectorColumnClass = "lgo-character-hub-inspector-column";
+        private const string LgoCharacterHubActionRowClass = "lgo-character-hub-action-row";
         private const string LgoInventoryFilterChipClass = "lgo-inventory-filter-chip";
         private const string LgoInventoryToolbarActionClass = "lgo-inventory-toolbar-action";
         private const string LgoInventoryGridCellClass = "lgo-inventory-grid-cell";

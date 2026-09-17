@@ -899,6 +899,8 @@ namespace LinhGioi.Tests.EditMode
                 var modal = root.Q("Map01A Inventory");
                 var backdrop = root.Q("Map01A Character Hub Backdrop");
                 var modalTitle = root.Q<Label>("Map01A Inventory Modal Title");
+                Assert.That(modalTitle.text, Is.EqualTo("RƯƠNG ĐỒ"),
+                    "The default Bag tab must use the approved Rương đồ screen title instead of the generic legacy Hành trang label.");
                 var close = root.Q<Button>("LGO Inventory Close");
                 Assert.That(modalTitle.style.fontSize.value.value, Is.EqualTo(30).Within(1),
                     "The five-tab shell title must match the canonical visual hierarchy.");
@@ -1193,6 +1195,52 @@ namespace LinhGioi.Tests.EditMode
                 StringAssert.DoesNotContain("Màn này", hubDetailBody.SourceText);
                 StringAssert.DoesNotContain("state", hubDetailBody.SourceText);
                 StringAssert.DoesNotContain("chính thức", hubDetailStatus.text);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void CharacterHubFiveTabsUseSharedLayoutOwnershipRoles()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character hub shared layout ownership test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                scene.ToggleInventory();
+
+                Assert.That(root.Q("Map01A Inventory Main Tabs").ClassListContains(
+                    "lgo-character-hub-main-tabs"), Is.True,
+                    "The approved five-tab rail must have one named layout owner instead of inline screen geometry.");
+                Assert.That(root.Q("Map01A Inventory Detail Panel").ClassListContains(
+                    "lgo-character-hub-inspector-column"), Is.True,
+                    "Character/Bag and preview tabs must reuse one inspector-column recipe.");
+
+                hud.OpenInventoryReviewMode("skills");
+                Assert.That(root.Q("Map01A Hub Preview Detail Panel").ClassListContains(
+                    "lgo-character-hub-inspector-column"), Is.True);
+                foreach (var rowName in new[]
+                {
+                    "Map01A Skill Detail Actions",
+                    "Map01A Potential Detail Actions",
+                    "Map01A Spirit Pet Detail Actions"
+                })
+                    Assert.That(root.Q(rowName).ClassListContains("lgo-character-hub-action-row"), Is.True, rowName);
+
+                Assert.That(root.Q<Button>("Map01A Skill Upgrade Action").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Skill Equip Action").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Potential Add Point").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Potential Reset").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Spirit Pet Deploy Action").enabledSelf, Is.False);
+                Assert.That(root.Q<Button>("Map01A Spirit Pet Develop Action").enabledSelf, Is.False,
+                    "Consolidating layout ownership must not turn unavailable progression actions into dead enabled controls.");
             }
             finally
             {
@@ -3009,7 +3057,7 @@ namespace LinhGioi.Tests.EditMode
                 var expected = new[]
                 {
                     ("character-info", "Map01A Inventory Character Panel", "THÔNG TIN NHÂN VẬT"),
-                    ("bag", "Map01A Inventory Grid Panel", "HÀNH TRANG"),
+                    ("bag", "Map01A Inventory Grid Panel", "RƯƠNG ĐỒ"),
                     ("skills", "Map01A Skills Panel", "KỸ NĂNG"),
                     ("potential", "Map01A Potential Panel", "TIỀM NĂNG"),
                     ("spirit-pet", "Map01A Spirit Pet Panel", "LINH THÚ")

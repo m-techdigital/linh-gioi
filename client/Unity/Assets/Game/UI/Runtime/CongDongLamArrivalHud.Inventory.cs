@@ -156,7 +156,7 @@ namespace LinhGioi.UI
             var titleGroup = new VisualElement();
             titleGroup.style.flexGrow = 1;
             titleGroup.style.marginLeft = 34;
-            _inventoryModalTitle = LgoTitleLabel("HÀNH TRANG", 26);
+            _inventoryModalTitle = LgoTitleLabel("RƯƠNG ĐỒ", 26);
             _inventoryModalTitle.name = "Map01A Inventory Modal Title";
             ApplyLgoCharacterHubTitle(_inventoryModalTitle);
             _inventoryModalSubtitle = LgoSubtitleLabel("Túi đồ và thông tin nhân vật dùng chung chi tiết món", 13);
@@ -181,9 +181,7 @@ namespace LinhGioi.UI
             _inventory.Add(topOrnament);
 
             var mainTabs = InventoryRow("Map01A Inventory Main Tabs");
-            mainTabs.style.width = 992;
-            mainTabs.style.alignSelf = Align.FlexStart;
-            mainTabs.style.marginLeft = 20;
+            ApplyLgoCharacterHubMainTabs(mainTabs);
             _characterInfoTab = InventoryButton(() => ShowInventoryMode(true), "Map01A Character Info Main Tab", "Nhân vật");
             _bagTab = InventoryButton(() => ShowInventoryMode(false), "Map01A Bag Main Tab", "Rương đồ");
             _skillsTab = InventoryButton(() => ShowCharacterHubPreviewMode(CharacterHubMode.Skills), "Map01A Skills Main Tab", "Kỹ năng");
@@ -217,11 +215,7 @@ namespace LinhGioi.UI
             _inventory.Add(bottomOrnament);
 
             _inventoryDetailPanel = InventoryPanel("Map01A Inventory Detail Panel");
-            _inventoryDetailPanel.style.flexGrow = 0;
-            _inventoryDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth;
-            _inventoryDetailPanel.style.marginLeft = InventoryDesktopColumnGap;
-            ApplyLgoCharacterHubDetailCard(_inventoryDetailPanel);
-            ApplyLgoCharacterHubInspectorFrame(_inventoryDetailPanel);
+            ApplyLgoCharacterHubInspectorColumn(_inventoryDetailPanel);
             _inventoryFooter = new VisualElement { name = "Map01A Inventory Footer" };
             _inventoryFooter.style.flexGrow = 0;
             _inventoryFooter.style.flexShrink = 0;
@@ -822,7 +816,7 @@ namespace LinhGioi.UI
             }
             else
             {
-                _inventoryModalTitle.text = "HÀNH TRANG";
+                _inventoryModalTitle.text = "RƯƠNG ĐỒ";
                 _inventoryModalSubtitle.text = "Vật phẩm đang mang theo, phân loại và thông tin chi tiết";
             }
         }

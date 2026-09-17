@@ -547,11 +547,7 @@ namespace LinhGioi.UI
         private void InitializeHubInspector(VisualElement body)
         {
             _hubPreviewDetailPanel = InventoryPanel("Map01A Hub Preview Detail Panel");
-            _hubPreviewDetailPanel.style.flexGrow = 0;
-            _hubPreviewDetailPanel.style.flexBasis = InventoryDesktopDetailColumnWidth;
-            _hubPreviewDetailPanel.style.marginLeft = InventoryDesktopColumnGap;
-            ApplyLgoCharacterHubDetailCard(_hubPreviewDetailPanel);
-            ApplyLgoCharacterHubInspectorFrame(_hubPreviewDetailPanel);
+            ApplyLgoCharacterHubInspectorColumn(_hubPreviewDetailPanel);
             _hubDetailHeader = LgoLabel("CHI TIẾT", 14, UiSubText, true);
             _hubDetailHeader.name = "Map01A Hub Detail Header";
             _hubDetailHeader.style.display = DisplayStyle.None;
@@ -688,43 +684,19 @@ namespace LinhGioi.UI
             detailScroll.Add(_hubDetailStatus);
 
             _hubSkillActionRow = InventoryRow("Map01A Skill Detail Actions");
-            _hubSkillActionRow.style.marginTop = 6;
             _hubSkillUpgradeAction = InventoryButton(() => { }, "Map01A Skill Upgrade Action", "Nâng cấp");
             _hubSkillEquipAction = InventoryButton(() => { }, "Map01A Skill Equip Action", "Trang bị");
-            foreach (var action in new[] { _hubSkillUpgradeAction, _hubSkillEquipAction })
-            {
-                action.style.flexGrow = 1;
-                action.style.flexBasis = 0;
-                action.style.marginRight = 6;
-                ApplyLgoCharacterHubLockedAction(action, action == _hubSkillUpgradeAction);
-                _hubSkillActionRow.Add(action);
-            }
+            ApplyLgoCharacterHubActionRow(_hubSkillActionRow, _hubSkillUpgradeAction, _hubSkillEquipAction);
             _hubPreviewDetailPanel.Add(_hubSkillActionRow);
             _hubPotentialActionRow = InventoryRow("Map01A Potential Detail Actions");
-            _hubPotentialActionRow.style.marginTop = 6;
             _potentialAddPointAction = InventoryButton(() => { }, "Map01A Potential Add Point", "Cộng 1 điểm");
             _potentialResetAction = InventoryButton(() => { }, "Map01A Potential Reset", "Đặt lại");
-            foreach (var action in new[] { _potentialAddPointAction, _potentialResetAction })
-            {
-                action.style.flexGrow = 1;
-                action.style.flexBasis = 0;
-                action.style.marginRight = 6;
-                ApplyLgoCharacterHubLockedAction(action, action == _potentialAddPointAction);
-                _hubPotentialActionRow.Add(action);
-            }
+            ApplyLgoCharacterHubActionRow(_hubPotentialActionRow, _potentialAddPointAction, _potentialResetAction);
             _hubPreviewDetailPanel.Add(_hubPotentialActionRow);
             _hubSpiritPetActionRow = InventoryRow("Map01A Spirit Pet Detail Actions");
-            _hubSpiritPetActionRow.style.marginTop = 6;
             _spiritPetDeployAction = InventoryButton(() => { }, "Map01A Spirit Pet Deploy Action", "Đang xuất chiến");
             _spiritPetDevelopAction = InventoryButton(() => { }, "Map01A Spirit Pet Develop Action", "Bồi dưỡng");
-            foreach (var action in new[] { _spiritPetDeployAction, _spiritPetDevelopAction })
-            {
-                action.style.flexGrow = 1;
-                action.style.flexBasis = 0;
-                action.style.marginRight = 6;
-                ApplyLgoCharacterHubLockedAction(action, action == _spiritPetDeployAction);
-                _hubSpiritPetActionRow.Add(action);
-            }
+            ApplyLgoCharacterHubActionRow(_hubSpiritPetActionRow, _spiritPetDeployAction, _spiritPetDevelopAction);
             _hubPreviewDetailPanel.Add(_hubSpiritPetActionRow);
             body.Add(_hubPreviewDetailPanel);
         }
