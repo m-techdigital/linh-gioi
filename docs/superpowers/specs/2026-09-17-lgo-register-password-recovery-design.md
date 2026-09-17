@@ -1,7 +1,7 @@
 # LGO Register + Password Recovery 3-step — Design
 
 Date: 2026-09-17
-Status: VISUAL_REVIEW_PENDING
+Status: OWNER_APPROVED / RUNTIME_IMPLEMENTATION_AUTHORIZED
 
 ## Purpose
 
@@ -170,7 +170,9 @@ It does not redesign the Entry scene, Character Hub, class artwork, world HUD, c
 
 ## Approval and implementation gate
 
-Architecture in this spec is ready for owner review, but runtime implementation must not start until the visual proposal is approved because two required screens have no prior canonical design and two existing screens need capability-copy adjustments.
+Owner approval was granted on 2026-09-17 for the deterministic owner-derived proposal v3 package (owner-source comparison, full-size Verify Code/New Password and mobile 1600×720 checks). Proposal v3 is the visual authority for this implementation. Later Hub-sync/audit boards are implementation guidance only and do not replace or redesign the approved v3 composition.
+
+Runtime implementation is authorized. It must preserve the approved v3 Entry-family art direction while reusing the already-shipping Character Hub shared shell/panel/action/input helpers where they match the proposal; no parallel procedural/auth skin may be invented.
 
 The review package must show:
 
@@ -180,4 +182,4 @@ The review package must show:
 - proposed New Password screen;
 - at least one mobile-landscape check proving the new screens keep the Entry composition.
 
-After owner approval, mark this spec `APPROVED`, write a separate TDD implementation plan, and execute without another routine confirmation unless a new design change or genuine blocker appears.
+Implementation now proceeds through the separate TDD plan. Routine technical checkpoints do not require another owner confirmation unless a new design change or genuine blocker appears.
