@@ -2317,3 +2317,16 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - Eye audit V59: đủ năm tab × ba viewport, không stack/crop/overflow/hierarchy drift; Spirit locked/density/actions đọc rõ, tablet không còn avoidable detail scroll; search-empty inspector trung thực và không còn badge dash thừa.
 - Evidence authoritative cho slice này: `build/character-hub-whole-polish-v59/`. V58 là intermediate P4/P5 evidence, không dùng thay V59 cho closure.
 - Trạng thái: `READY_REVIEW` cho whole-screen polish slice. Chỉ mở lại khi có concrete Player defect hoặc owner design change; không tự mở gameplay/progression/pet/item scope mới.
+
+## Whole-flow P0 — Player baseline + product control integrity CLOSED — 2026-09-17
+
+- Owner approved `docs/superpowers/specs/2026-09-17-lgo-whole-flow-p0-controls-design.md`; implementation plan: `docs/superpowers/plans/2026-09-17-lgo-whole-flow-p0-controls.md`. Character Hub V59 remained authoritative and was not redesigned.
+- Product input integrity: normal play keeps A/D or arrows, Shift, W/J/Up, Z, X, E and I. Review/debug mutations `C/L/G/V/M/B/F` are now inert unless explicit `--lgo-map01a-review-hotkeys` is present. Foreground blocker semantics remain unchanged.
+- Menu help now matches runtime input. Pointer profile shows movement/run/jump/basic/skill/interact/inventory bindings; tablet/mobile show touch-oriented joystick/action guidance instead of PC keys.
+- Evidence-only auth capture adds default + local-validation frames for Login, Register and Password Recovery Request without claiming backend success or changing normal Player behavior.
+- Fresh source regression: baseline before P0 `315/315`; final Unity EditMode `317/317`, failed/skipped 0. Shared UI tests `26/26`; capture tooling after viewport fix `20/20`; shared-skin, no-source-image, no-3D and package hygiene all PASS.
+- First Player build attempt failed because the worktree Unity cache exhausted disk (`No space left on device`). Only regenerable cache in this worktree was removed; retry from the same source succeeded with `errors=0`, `warnings=24`, output `build/whole-flow-p0-v1/player/LinhGioiOnline.app`. Failed and successful logs are both preserved.
+- Whole-flow current-run capture is `build/whole-flow-p0-v1/{pc,tablet,mobile}/`: 71 PNG/profile, 213 total. Independent audit proves every PNG is non-empty, newer than its profile run start and exactly 1600x900 / 1024x768 / 1600x720.
+- Before/after evidence is kept under `build/whole-flow-p0-v1/task-evidence/`; Menu PC visibly changes from incorrect `Di chuyển: Shift` to the real bindings, while world HUD before/after remains visually stable as expected for the hotkey-only behavior change.
+- Visual audit: Login/Register/Recovery, world HUD/touch controls, NPC Dialogue, combat and representative five-tab Character Hub states show no P0-caused crop/stack/overflow regression. One pre-existing debt was found: Character Select mobile partially obscures the left secondary motto with the stage backdrop; core actions remain usable. Carry this into the Character persistence/create-character subproject rather than widening P0.
+- P0 source commit: `4f74faba0d26eeac46f9a7bae9f07cd630f991e9`; evidence viewport correction commit: `1243ca3f4b91db0ffcd09aa27819b76a41fb194e`. Next independently scoped subproject is Product Auth Foundation (login/session/token/logout).

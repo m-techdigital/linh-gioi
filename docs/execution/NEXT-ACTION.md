@@ -1,9 +1,10 @@
-# NEXT ACTION — Character Hub / after v59 whole-screen polish closure
+# NEXT ACTION — Whole Product / after P0 control-integrity closure
 
-1. V59 closes the planned P0→P5 implementation plus final five-tab regression/Player audit for this Character Hub polish slice; do not reopen it without a concrete new Player defect or owner design change.
-2. Preserve the verified contracts: `LvN` equipment semantics, no zero-count owned inventory items, truthful empty inspector with no dash-only level badge, shared unavailable controls, Spirit locked-roster semantics, and compact Spirit detail density.
-3. Preserve Skill artwork/runtime, actor/renderer, gameplay state, canonical five-tab hierarchy and frozen surfaces; no branch/worktree reset or speculative progression/pet/item data.
-4. Next work is owner/reviewer acceptance or a separately scoped task. Reuse `build/character-hub-whole-polish-v59/` as evidence unless runtime source changes.
+1. P0 is closed from current-run Player evidence. Preserve review-hotkey gating, truthful pointer/touch Menu help, foreground input blocking and Character Hub V59; do not reopen those without a concrete regression.
+2. Next subproject: **Product Auth Foundation**. Replace the presentation-only login path with a real product auth/session boundary while keeping `/dev/auth/login` development-only and without leaking secrets into PlayerPrefs/logs.
+3. Product Auth scope for the next design/plan: login credential contract, session/token lifecycle, logout, expiry/unauthorized handling, client secure session state, Java API endpoints/storage boundary, deterministic tests and Player-visible error/loading states. Register and password-recovery remain the following independent subproject; do not fold them into the first auth slice.
+4. Carry forward visual debt: Character Select mobile landscape partially hides the left secondary motto behind the stage. Fix it with the Character persistence/create-character work, not inside auth.
+5. Every visible task from now on must preserve before/after screenshots plus intermediate defect evidence under its task evidence directory.
 
 # NEXT ACTION — Character Hub / after v55
 
