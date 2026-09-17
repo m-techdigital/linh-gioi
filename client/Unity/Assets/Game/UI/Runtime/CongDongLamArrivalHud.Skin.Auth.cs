@@ -293,7 +293,17 @@ namespace LinhGioi.UI
         private static void ApplyLgoRegisterPanel(VisualElement panel)
         {
             panel.AddToClassList(LgoRegisterPanelClass);
-            ApplyLgoAuthFlowPanel(panel, 492);
+            ApplyLgoAuthFlowPanel(panel, 0);
+        }
+
+        private static void ApplyLgoRegisterHeader(VisualElement header)
+        {
+            header.AddToClassList(LgoRegisterHeaderClass);
+        }
+
+        private static void ApplyLgoRegisterSubtitleRow(VisualElement row)
+        {
+            row.AddToClassList(LgoRegisterSubtitleRowClass);
         }
 
         private static void ApplyLgoAuthFlowPanel(VisualElement panel, float minHeight)
@@ -303,19 +313,35 @@ namespace LinhGioi.UI
             ApplyLgoCharacterHubSurface(panel, ref _characterHubSurface, "character-hub-surface");
             RemoveLgoOuterBorder(panel);
             ApplyLgoCharacterHubFiligreeFrame(panel);
-            panel.style.minHeight = minHeight;
-            panel.style.paddingLeft = panel.style.paddingRight = 28;
-            panel.style.paddingTop = 20;
-            panel.style.paddingBottom = 18;
+            if (minHeight > 0f) panel.style.minHeight = minHeight;
         }
 
         private static void ApplyLgoRegisterAgreement(Button button)
         {
             button.AddToClassList(LgoRegisterAgreementClass);
             ApplyLgoEntryRememberAction(button);
-            button.style.flexGrow = 0;
-            button.style.minHeight = 44;
-            button.style.marginRight = 0;
+            button.style.flexGrow = StyleKeyword.Null;
+            button.style.flexBasis = StyleKeyword.Null;
+            button.style.minHeight = StyleKeyword.Null;
+            button.style.marginRight = StyleKeyword.Null;
+        }
+
+        private static void ApplyLgoRegisterAgreementCheckFrame(VisualElement box)
+        {
+            box.AddToClassList("lgo-register-agreement-box");
+            ApplyLgoFrame(box, new Color(.025f, .075f, .080f, .92f), new Color(.86f, .78f, .48f, .88f));
+        }
+
+        private static void ApplyLgoRegisterAgreementMark(VisualElement mark)
+        {
+            mark.AddToClassList("lgo-register-agreement-mark");
+            mark.style.backgroundColor = UiGold;
+        }
+
+        private static void ApplyLgoRegisterTerms(Label label)
+        {
+            label.AddToClassList(LgoRegisterTermsClass);
+            label.style.color = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.spirit, .96f);
         }
 
         private static void ApplyLgoRegisterPrimary(Button button)
@@ -328,11 +354,12 @@ namespace LinhGioi.UI
         {
             button.AddToClassList(LgoAuthFlowPrimaryClass);
             ApplyLgoCharacterHubGoldAction(button);
-            button.style.flexGrow = 0;
-            button.style.height = 58;
-            button.style.fontSize = 20;
-            button.style.marginTop = 4;
-            button.style.whiteSpace = WhiteSpace.NoWrap;
+            button.style.flexGrow = StyleKeyword.Null;
+            button.style.height = StyleKeyword.Null;
+            button.style.minHeight = StyleKeyword.Null;
+            button.style.fontSize = StyleKeyword.Null;
+            button.style.marginTop = StyleKeyword.Null;
+            button.style.whiteSpace = StyleKeyword.Null;
         }
 
         private static void ApplyLgoRegisterBack(Button button)
@@ -345,16 +372,16 @@ namespace LinhGioi.UI
         {
             button.AddToClassList(LgoAuthFlowBackClass);
             ApplyLgoButton(button);
-            button.style.flexGrow = 0;
-            button.style.alignSelf = Align.Center;
-            button.style.minHeight = 40;
-            button.style.marginTop = 8;
-            button.style.paddingLeft = button.style.paddingRight = 18;
+            button.style.flexGrow = StyleKeyword.Null;
+            button.style.alignSelf = StyleKeyword.Null;
+            button.style.minHeight = StyleKeyword.Null;
+            button.style.marginTop = StyleKeyword.Null;
+            button.style.paddingLeft = button.style.paddingRight = StyleKeyword.Null;
+            button.style.whiteSpace = StyleKeyword.Null;
             button.style.backgroundColor = Color.clear;
             button.style.borderTopWidth = button.style.borderRightWidth = 0;
             button.style.borderBottomWidth = button.style.borderLeftWidth = 0;
             button.style.color = new Color(.72f, .88f, 1f, .96f);
-            button.style.whiteSpace = WhiteSpace.NoWrap;
         }
 
         private static void ApplyLgoRegisterPasswordReveal(Button button, Sprite sprite)

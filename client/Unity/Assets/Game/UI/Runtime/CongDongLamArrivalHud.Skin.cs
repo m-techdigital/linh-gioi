@@ -82,7 +82,10 @@ namespace LinhGioi.UI
         private const string LgoServerSelectStatusRowClass = "lgo-server-select-status-row";
         private const string LgoServerSelectActionClass = "lgo-server-select-action";
         private const string LgoRegisterPanelClass = "lgo-register-panel";
+        private const string LgoRegisterHeaderClass = "lgo-register-header";
+        private const string LgoRegisterSubtitleRowClass = "lgo-register-subtitle-row";
         private const string LgoRegisterAgreementClass = "lgo-register-agreement";
+        private const string LgoRegisterTermsClass = "lgo-register-terms";
         private const string LgoRegisterPrimaryClass = "lgo-register-primary";
         private const string LgoRegisterBackClass = "lgo-register-back";
         private const string LgoRegisterPasswordRevealClass = "lgo-register-password-reveal";

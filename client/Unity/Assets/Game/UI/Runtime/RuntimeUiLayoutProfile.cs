@@ -47,7 +47,7 @@ namespace LinhGioi.UI
         internal float EntrySloganLeft => Mathf.Clamp(Width * 0.13f, 64f, 218f);
         internal float EntrySloganTop => 28f;
         internal float EntrySloganWidth => IsTablet ? 300f : 340f;
-        internal float EntryNoticeWidth => IsTablet ? 500f : 545f;
+        internal float EntryNoticeWidth => IsTablet ? 300f : 545f;
         internal float EntryNoticeBottom => 30f;
         internal float EntryUtilityTop => 58f;
         internal float EntryUtilityRight => 24f;

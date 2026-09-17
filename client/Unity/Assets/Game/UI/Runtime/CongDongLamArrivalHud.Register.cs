@@ -22,16 +22,26 @@ namespace LinhGioi.UI
             _registerOverlay = new VisualElement { name = "Map01A Register Overlay" };
             ApplyLgoRegisterPanel(_registerOverlay);
 
-            var title = LgoTitleLabel("ĐĂNG KÝ TÀI KHOẢN", 25, TextAnchor.MiddleCenter);
+            var header = new VisualElement { name = "Map01A Register Header", pickingMode = PickingMode.Ignore };
+            ApplyLgoRegisterHeader(header);
+            var title = LgoTitleLabel("ĐĂNG KÝ TÀI KHOẢN", 28, TextAnchor.MiddleCenter);
             title.name = "Map01A Register Title";
             title.style.whiteSpace = WhiteSpace.NoWrap;
-            _registerOverlay.Add(title);
+            header.Add(title);
 
+            var subtitleRow = new VisualElement { name = "Map01A Register Subtitle Row", pickingMode = PickingMode.Ignore };
+            ApplyLgoRegisterSubtitleRow(subtitleRow);
+            var subtitleOrnamentLeft = new VisualElement { name = "Map01A Register Subtitle Ornament Left", pickingMode = PickingMode.Ignore };
+            ApplyLgoOrnamentRail(subtitleOrnamentLeft);
             var subtitle = LgoSubtitleLabel("Bắt đầu hành trình tại Đông Lâm", 14, TextAnchor.MiddleCenter);
             subtitle.name = "Map01A Register Subtitle";
-            subtitle.style.marginTop = 3;
-            subtitle.style.marginBottom = 14;
-            _registerOverlay.Add(subtitle);
+            var subtitleOrnamentRight = new VisualElement { name = "Map01A Register Subtitle Ornament Right", pickingMode = PickingMode.Ignore };
+            ApplyLgoOrnamentRail(subtitleOrnamentRight);
+            subtitleRow.Add(subtitleOrnamentLeft);
+            subtitleRow.Add(subtitle);
+            subtitleRow.Add(subtitleOrnamentRight);
+            header.Add(subtitleRow);
+            _registerOverlay.Add(header);
 
             _registerAccountField = MakeRegisterField(
                 "Map01A Register Account Field", "Email đăng nhập", "account", false, string.Empty);
@@ -52,17 +62,19 @@ namespace LinhGioi.UI
             };
             ApplyLgoRegisterAgreement(agreement);
             var box = new VisualElement { name = "Map01A Register Agreement Box", pickingMode = PickingMode.Ignore };
-            box.style.width = box.style.height = 18;
-            box.style.marginRight = 10;
-            ApplyLgoFrame(box, new Color(.025f, .075f, .080f, .92f), new Color(.86f, .78f, .48f, .88f));
+            ApplyLgoRegisterAgreementCheckFrame(box);
             _registerAgreementMark = new VisualElement { name = "Map01A Register Agreement Mark", pickingMode = PickingMode.Ignore };
-            _registerAgreementMark.style.width = _registerAgreementMark.style.height = 10;
-            _registerAgreementMark.style.marginLeft = _registerAgreementMark.style.marginTop = 3;
-            _registerAgreementMark.style.backgroundColor = UiGold;
+            ApplyLgoRegisterAgreementMark(_registerAgreementMark);
             _registerAgreementMark.style.display = DisplayStyle.None;
             box.Add(_registerAgreementMark);
             agreement.Add(box);
-            agreement.Add(LgoLabel("Tôi đồng ý Điều khoản sử dụng", 14, new Color(.88f, .93f, .95f, .96f)));
+            var agreementCopy = LgoLabel("Tôi đồng ý", 14, UiText);
+            agreementCopy.name = "Map01A Register Agreement Copy";
+            agreement.Add(agreementCopy);
+            var agreementTerms = LgoLabel("Điều khoản sử dụng", 14, UiText);
+            agreementTerms.name = "Map01A Register Agreement Terms";
+            ApplyLgoRegisterTerms(agreementTerms);
+            agreement.Add(agreementTerms);
             _registerOverlay.Add(agreement);
 
             _registerStatus = LgoSubtitleLabel("", 13, TextAnchor.MiddleCenter);

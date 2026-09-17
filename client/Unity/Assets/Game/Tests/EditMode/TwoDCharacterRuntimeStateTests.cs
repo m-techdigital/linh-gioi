@@ -2251,6 +2251,43 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void RegisterScreenUsesCanonicalHeaderAgreementAndSharedActionHierarchy()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("register canonical hierarchy test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene, FakeProductAuthClient.ProductAccountFlowSuccess(), new ProductAuthSessionState());
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Register Button"));
+
+                var overlay = root.Q("Map01A Register Overlay");
+                var header = root.Q("Map01A Register Header");
+                var subtitleRow = root.Q("Map01A Register Subtitle Row");
+                var agreement = root.Q<Button>("Map01A Register Agreement");
+                Assert.That(overlay.ClassListContains("lgo-register-panel"), Is.True);
+                Assert.That(header, Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Register Title").parent, Is.SameAs(header));
+                Assert.That(subtitleRow, Is.Not.Null);
+                Assert.That(subtitleRow.Q("Map01A Register Subtitle Ornament Left"), Is.Not.Null);
+                Assert.That(subtitleRow.Q("Map01A Register Subtitle Ornament Right"), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Register Subtitle").parent, Is.SameAs(subtitleRow));
+                Assert.That(agreement.ClassListContains("lgo-register-agreement"), Is.True);
+                Assert.That(agreement.Q<Label>("Map01A Register Agreement Copy").text, Is.EqualTo("Tôi đồng ý"));
+                Assert.That(agreement.Q<Label>("Map01A Register Agreement Terms").text, Is.EqualTo("Điều khoản sử dụng"));
+                Assert.That(agreement.Q<Label>("Map01A Register Agreement Terms").ClassListContains("lgo-register-terms"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Register Submit").ClassListContains("lgo-register-primary"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Register Back").ClassListContains("lgo-register-back"), Is.True);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void PasswordRecoveryRequestValidatesLocallyAndReturnsToEntry()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

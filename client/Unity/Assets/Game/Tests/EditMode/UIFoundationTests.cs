@@ -307,6 +307,36 @@ namespace LinhGioi.Tests
             Assert.That(source, Does.Contain(".lgo-server-select-action"));
             Assert.That(source, Does.Contain("min-height: 58px"),
                 "Canonical Server Select action height belongs to shared USS.");
+            Assert.That(source, Does.Contain(".lgo-register-panel"));
+            Assert.That(source, Does.Contain("min-height: 492px"),
+                "Canonical Register panel height belongs to shared USS.");
+            Assert.That(source, Does.Contain(".lgo-register-agreement"));
+            Assert.That(source, Does.Contain(".lgo-register-agreement {\n    flex-direction: row;"),
+                "Register agreement must keep checkbox and copy in one canonical row.");
+            Assert.That(source, Does.Contain("min-height: 44px"),
+                "Register agreement touch target belongs to shared USS.");
+            Assert.That(source, Does.Contain(".lgo-register-primary"));
+            Assert.That(source, Does.Contain(".lgo-register-back"));
+        }
+
+        [Test]
+        public void TabletEntryNoticeDoesNotOverlapCenteredAuthPanel()
+        {
+            const int screenWidth = 1024;
+            const int screenHeight = 768;
+            const int panelWidth = 1255;
+            const int panelHeight = 941;
+            var layoutType = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeUiLayoutProfile");
+            var fromScreen = layoutType.GetMethod("FromScreen", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            var layout = fromScreen.Invoke(null, new object[] { "tablet", screenWidth, screenHeight, panelWidth, panelHeight });
+            var cardWidth = GetMember<float>(layout, "LoginCardWidth");
+            var noticeWidth = GetMember<float>(layout, "EntryNoticeWidth");
+            var scale = (float)screenHeight / panelHeight;
+            var panelLeft = (screenWidth - cardWidth * scale) * .5f;
+            var noticeRight = (24f + noticeWidth) * scale;
+            Assert.That(noticeRight, Is.LessThanOrEqualTo(panelLeft - 8f),
+                "Tablet notification must not sit underneath the centered Entry/Auth panel.");
         }
 
         [Test]
