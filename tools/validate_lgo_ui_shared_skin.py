@@ -501,6 +501,7 @@ def validate_root(root: Path = ROOT) -> list[str]:
     root = root.resolve()
     ui_dir = root / "client/Unity/Assets/Game/UI/Runtime"
     skin = ui_dir / "CongDongLamArrivalHud.Skin.cs"
+    skin_parts = sorted(ui_dir.glob("CongDongLamArrivalHud.Skin*.cs"))
     partials = sorted(ui_dir.glob("CongDongLamArrivalHud*.cs"))
     violations: list[str] = []
 
@@ -523,10 +524,10 @@ def validate_root(root: Path = ROOT) -> list[str]:
     if not skin.is_file():
         violations.append("client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs: missing shared skin")
     else:
-        skin_text = skin.read_text(encoding="utf-8", errors="replace")
+        skin_text = "\n".join(path.read_text(encoding="utf-8", errors="replace") for path in skin_parts)
         missing = [marker for marker in REQUIRED_SKIN_MARKERS if marker not in skin_text]
         for marker in missing:
-            violations.append(f"{skin.relative_to(root)}: skin missing marker {marker}")
+            violations.append(f"client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin*.cs: skin missing marker {marker}")
         noisy_selection = (
             "private static void ApplyLgoCharacterHubSelectionState(VisualElement element, bool selected)\n"
             "        {\n"
@@ -549,7 +550,7 @@ def validate_root(root: Path = ROOT) -> list[str]:
     for path in partials:
         text = path.read_text(encoding="utf-8", errors="replace")
         rel = str(path.relative_to(root))
-        if path == skin:
+        if path in skin_parts:
             continue
         for snippet in FORBIDDEN_SNIPPETS:
             if snippet in text:

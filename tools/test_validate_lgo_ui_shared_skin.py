@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import shutil
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -37,6 +38,35 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
         shutil.copy2(tests_src, tests_dst)
         shutil.copy2(ROOT / "AGENTS.md", dst / "AGENTS.md")
         return temp
+
+    def _skin_part_containing(self, root: Path, marker: str) -> Path:
+        ui_dir = root / "client/Unity/Assets/Game/UI/Runtime"
+        parts = list(ui_dir.glob("CongDongLamArrivalHud.Skin*.cs"))
+        definition = re.compile(r"private\s+static\s+[^\n{;]*\b" + re.escape(marker) + r"\s*\(")
+        owners = [path for path in parts if definition.search(path.read_text(encoding="utf-8"))]
+        if len(owners) == 1:
+            return owners[0]
+        matches = [path for path in parts if marker in path.read_text(encoding="utf-8")]
+        self.assertEqual(1, len(matches), f"Expected exactly one skin owner for {marker}: {matches}")
+        return matches[0]
+
+    def _replace_skin_marker(self, root: Path, marker: str, replacement: str) -> None:
+        ui_dir = root / "client/Unity/Assets/Game/UI/Runtime"
+        replaced = 0
+        for path in ui_dir.glob("CongDongLamArrivalHud.Skin*.cs"):
+            text = path.read_text(encoding="utf-8")
+            count = text.count(marker)
+            if count:
+                path.write_text(text.replace(marker, replacement), encoding="utf-8")
+                replaced += count
+        self.assertGreater(replaced, 0, f"Expected shared skin marker {marker}")
+
+    def test_split_skin_partials_form_one_shared_skin_owner(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            root = Path(temp)
+            skin_parts = sorted((root / "client/Unity/Assets/Game/UI/Runtime").glob("CongDongLamArrivalHud.Skin*.cs"))
+            self.assertGreater(len(skin_parts), 1)
+            self.assertEqual([], validator.validate_root(root))
 
     def test_all_equipment_surfaces_keep_shared_content_and_missing_state(self) -> None:
         markers = (
@@ -142,14 +172,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
     def test_rejects_spirit_pet_screen_that_skips_shared_roster_base(self) -> None:
         with self._copy_minimal_repo() as temp:
-            skin = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
-            skin.write_text(
-                skin.read_text(encoding="utf-8").replace(
-                    "ApplyLgoSpiritPetRoster",
-                    "ApplyLegacySpiritPetRoster",
-                ),
-                encoding="utf-8",
-            )
+            self._replace_skin_marker(Path(temp), "ApplyLgoSpiritPetRoster", "ApplyLegacySpiritPetRoster")
 
             violations = validator.validate_root(Path(temp))
 
@@ -283,11 +306,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
     def test_rejects_character_hub_that_drops_shared_chrome_or_motion(self) -> None:
         with self._copy_minimal_repo() as temp:
-            skin = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
-            skin.write_text(
-                skin.read_text(encoding="utf-8").replace("ApplyLgoCharacterHubPanelSurface", "ApplyFlatPanelSurface"),
-                encoding="utf-8",
-            )
+            self._replace_skin_marker(Path(temp), "ApplyLgoCharacterHubPanelSurface", "ApplyFlatPanelSurface")
 
             violations = validator.validate_root(Path(temp))
 
@@ -295,13 +314,8 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
     def test_rejects_character_hub_that_drops_shared_depth_or_interaction(self) -> None:
         with self._copy_minimal_repo() as temp:
-            skin = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
-            skin.write_text(
-                skin.read_text(encoding="utf-8")
-                .replace("ApplyLgoCharacterHubSelectionState", "ApplyFlatSelectionState")
-                .replace("ApplyLgoCharacterHubInteractiveMotion", "ApplyStaticButton"),
-                encoding="utf-8",
-            )
+            self._replace_skin_marker(Path(temp), "ApplyLgoCharacterHubSelectionState", "ApplyFlatSelectionState")
+            self._replace_skin_marker(Path(temp), "ApplyLgoCharacterHubInteractiveMotion", "ApplyStaticButton")
 
             violations = validator.validate_root(Path(temp))
 
@@ -310,12 +324,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
     def test_rejects_character_hub_that_drops_shared_vector_frame(self) -> None:
         with self._copy_minimal_repo() as temp:
-            skin = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
-            skin.write_text(
-                skin.read_text(encoding="utf-8")
-                .replace("RuntimeUiSkin.ApplyOrnamentedShellFrame", "ApplyPlainFrame"),
-                encoding="utf-8",
-            )
+            self._replace_skin_marker(Path(temp), "RuntimeUiSkin.ApplyOrnamentedShellFrame", "ApplyPlainFrame")
 
             violations = validator.validate_root(Path(temp))
 
