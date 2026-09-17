@@ -44,10 +44,14 @@ namespace LinhGioi.UI
         private bool _touch;
         private bool _reviewHotkeysEnabled;
         private IProductAuthClient _productAuthClient;
+        private IProductAccountClient _productAccountClient;
         private ProductAuthSessionState _productAuthSession;
+        private ProductAccountRecoveryState _productRecoveryState;
         private CancellationTokenSource _productAuthCts;
         private bool _ownsProductAuthClient;
         private bool _productLoginInFlight;
+        private bool _productRegisterInFlight;
+        private bool _productRecoveryInFlight;
 
         public static void Attach(CongDongLamMap01AArtPreview scene,
             IProductAuthClient productAuthClient = null, ProductAuthSessionState authSession = null)
@@ -57,7 +61,9 @@ namespace LinhGioi.UI
             var hud = host.AddComponent<CongDongLamArrivalHud>();
             hud._scene = scene;
             hud._productAuthClient = productAuthClient;
+            hud._productAccountClient = productAuthClient as IProductAccountClient;
             hud._productAuthSession = authSession ?? new ProductAuthSessionState();
+            hud._productRecoveryState = new ProductAccountRecoveryState();
             hud._productAuthCts = new CancellationTokenSource();
             var document = host.AddComponent<UIDocument>();
             hud._ownedPanel = Instantiate(RuntimePanelSettingsProvider.LoadOrCreate());
@@ -494,6 +500,7 @@ namespace LinhGioi.UI
             if (_scene == null || _root == null) return;
             var metrics = RuntimeViewportMetrics.FromRoot(_root);
             if (!_metrics.LayoutEquals(metrics)) Layout();
+            UpdatePasswordRecoveryCooldown();
             if (!_scene.IsCapturing)
             {
                 if (Input.GetKeyDown(KeyCode.Escape))
@@ -684,8 +691,19 @@ namespace LinhGioi.UI
         private void EnsureProductAuthClient()
         {
             if (_productAuthClient != null) return;
-            _productAuthClient = new AccountApiClient(ClientRuntimeConfig.LoadStreamingAssets());
+            var client = new AccountApiClient(ClientRuntimeConfig.LoadStreamingAssets());
+            _productAuthClient = client;
+            _productAccountClient = client;
             _ownsProductAuthClient = true;
+        }
+
+        private void EnsureProductAccountClient()
+        {
+            if (_productAccountClient != null) return;
+            EnsureProductAuthClient();
+            _productAccountClient = _productAuthClient as IProductAccountClient;
+            if (_productAccountClient == null)
+                throw new InvalidOperationException("Product account client is unavailable.");
         }
 
         private CancellationToken ProductAuthCancellationToken => _productAuthCts?.Token ?? CancellationToken.None;

@@ -1,4 +1,5 @@
 using System;
+using LinhGioi.Account;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -12,6 +13,7 @@ namespace LinhGioi.UI
         private TextField _registerConfirmPasswordField;
         private VisualElement _registerAgreementMark;
         private Label _registerStatus;
+        private Button _registerSubmitButton;
         private bool _registerAgreementAccepted;
         private bool _registerOpen;
 
@@ -32,7 +34,7 @@ namespace LinhGioi.UI
             _registerOverlay.Add(subtitle);
 
             _registerAccountField = MakeRegisterField(
-                "Map01A Register Account Field", "Tài khoản / Email", "account", false, string.Empty);
+                "Map01A Register Account Field", "Email đăng nhập", "account", false, string.Empty);
             _registerPasswordField = MakeRegisterField(
                 "Map01A Register Password Field", "Mật khẩu", "lock", true, "Map01A Register Password Reveal");
             _registerConfirmPasswordField = MakeRegisterField(
@@ -69,13 +71,13 @@ namespace LinhGioi.UI
             _registerStatus.style.whiteSpace = WhiteSpace.NoWrap;
             _registerOverlay.Add(_registerStatus);
 
-            var submit = new Button(SubmitRegister)
+            _registerSubmitButton = new Button(SubmitRegister)
             {
                 name = "Map01A Register Submit",
                 text = "Tạo tài khoản"
             };
-            ApplyLgoRegisterPrimary(submit);
-            _registerOverlay.Add(submit);
+            ApplyLgoRegisterPrimary(_registerSubmitButton);
+            _registerOverlay.Add(_registerSubmitButton);
 
             var back = new Button(CloseRegister)
             {
@@ -118,13 +120,19 @@ namespace LinhGioi.UI
                 _registerAgreementMark.style.display = _registerAgreementAccepted ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        private void SubmitRegister()
+        private async void SubmitRegister()
         {
-            if (string.IsNullOrWhiteSpace(_registerAccountField?.value)
-                || string.IsNullOrWhiteSpace(_registerPasswordField?.value)
+            if (_productRegisterInFlight) return;
+            var email = NormalizeProductEmail(_registerAccountField?.value);
+            if (email == null || string.IsNullOrWhiteSpace(_registerPasswordField?.value)
                 || string.IsNullOrWhiteSpace(_registerConfirmPasswordField?.value))
             {
-                _registerStatus.text = "Nhập đủ tài khoản và hai lần mật khẩu.";
+                _registerStatus.text = "Nhập email hợp lệ và hai lần mật khẩu.";
+                return;
+            }
+            if (_registerPasswordField.value.Length < 8 || _registerPasswordField.value.Length > 128)
+            {
+                _registerStatus.text = "Mật khẩu phải từ 8 đến 128 ký tự.";
                 return;
             }
             if (_registerPasswordField.value != _registerConfirmPasswordField.value)
@@ -137,7 +145,51 @@ namespace LinhGioi.UI
                 _registerStatus.text = "Bạn cần đồng ý Điều khoản sử dụng.";
                 return;
             }
-            _registerStatus.text = "Dịch vụ đăng ký chưa kết nối. Vui lòng thử lại sau.";
+
+            _productRegisterInFlight = true;
+            _registerSubmitButton?.SetEnabled(false);
+            _registerStatus.text = "Đang tạo tài khoản…";
+            try
+            {
+                EnsureProductAccountClient();
+                await _productAccountClient.RegisterAsync(email, _registerPasswordField.value, true,
+                    ProductAuthCancellationToken);
+                _registerPasswordField.SetValueWithoutNotify(string.Empty);
+                _registerConfirmPasswordField.SetValueWithoutNotify(string.Empty);
+                _registerOpen = false;
+                _entryOpen = true;
+                _entryAccountField?.SetValueWithoutNotify(email);
+                if (_entryStatus != null) _entryStatus.text = "Tạo tài khoản thành công. Hãy đăng nhập.";
+                UpdateRegisterScreen();
+                UpdateEntryScreen();
+            }
+            catch (OperationCanceledException) { }
+            catch (AccountApiException exception) when (exception.StatusCode == 409)
+            {
+                _registerStatus.text = "Email này đã được đăng ký.";
+            }
+            catch (AccountApiException exception) when (exception.StatusCode == 400)
+            {
+                _registerStatus.text = "Thông tin đăng ký chưa hợp lệ.";
+            }
+            catch (Exception)
+            {
+                _registerStatus.text = "Không thể kết nối dịch vụ đăng ký. Vui lòng thử lại.";
+            }
+            finally
+            {
+                _productRegisterInFlight = false;
+                _registerSubmitButton?.SetEnabled(true);
+            }
+        }
+
+        private static string NormalizeProductEmail(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value)) return null;
+            var normalized = value.Trim().ToLowerInvariant();
+            if (normalized.Length < 3 || normalized.Length > 254) return null;
+            var at = normalized.IndexOf('@');
+            return at > 0 && at == normalized.LastIndexOf('@') && at < normalized.Length - 1 ? normalized : null;
         }
 
         private void OpenRegister()
@@ -156,6 +208,7 @@ namespace LinhGioi.UI
             UpdateServerSelectScreen();
             UpdateEntryScreen();
             UpdateRegisterScreen();
+            AnimateLgoCharacterHubSwap(_registerOverlay);
         }
 
         private void CloseRegister()

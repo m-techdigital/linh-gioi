@@ -1542,6 +1542,9 @@ namespace LinhGioi.UI
         {
             panel.AddToClassList(LgoAuthFlowPanelClass);
             ApplyLgoEntryControlCard(panel);
+            ApplyLgoCharacterHubSurface(panel, ref _characterHubSurface, "character-hub-surface");
+            RemoveLgoOuterBorder(panel);
+            ApplyLgoCharacterHubFiligreeFrame(panel);
             panel.style.minHeight = minHeight;
             panel.style.paddingLeft = panel.style.paddingRight = 28;
             panel.style.paddingTop = 20;
@@ -1566,7 +1569,7 @@ namespace LinhGioi.UI
         private static void ApplyLgoAuthFlowPrimary(Button button)
         {
             button.AddToClassList(LgoAuthFlowPrimaryClass);
-            ApplyLgoButton(button, true);
+            ApplyLgoCharacterHubGoldAction(button);
             button.style.flexGrow = 0;
             button.style.height = 58;
             button.style.fontSize = 20;

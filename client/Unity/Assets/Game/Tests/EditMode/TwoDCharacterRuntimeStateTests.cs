@@ -2148,7 +2148,8 @@ namespace LinhGioi.Tests.EditMode
             {
                 var host = new GameObject("canonical register screen test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
-                CongDongLamArrivalHud.Attach(scene);
+                var fake = FakeProductAuthClient.ProductAccountFlowSuccess();
+                CongDongLamArrivalHud.Attach(scene, fake, new ProductAuthSessionState());
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 var classBefore = scene.ActiveEquipmentClassId;
 
@@ -2164,7 +2165,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(password.isPasswordField, Is.True);
                 Assert.That(confirmation.isPasswordField, Is.True);
                 Assert.That(root.Query<Button>(className: "lgo-register-primary").ToList().Count, Is.EqualTo(1));
-                Assert.That(root.Query<Button>(className: "lgo-register-password-reveal").ToList().Count, Is.EqualTo(2));
+                Assert.That(overlay.Query<Button>(className: "lgo-register-password-reveal").ToList().Count, Is.EqualTo(2));
                 InvokeBoundButton(root.Q<Button>("Map01A Register Password Reveal"));
                 Assert.That(password.isPasswordField, Is.False);
                 Assert.That(confirmation.isPasswordField, Is.True, "Password reveal actions must remain independent.");
@@ -2173,7 +2174,7 @@ namespace LinhGioi.Tests.EditMode
                 var submit = root.Q<Button>("Map01A Register Submit");
                 var status = root.Q<Label>("Map01A Register Status");
                 InvokeBoundButton(submit);
-                Assert.That(status.text, Is.EqualTo("Nhập đủ tài khoản và hai lần mật khẩu."));
+                Assert.That(status.text, Is.EqualTo("Nhập email hợp lệ và hai lần mật khẩu."));
 
                 account.value = "luc-thien@example.test";
                 password.value = "mat-khau-1";
@@ -2187,12 +2188,12 @@ namespace LinhGioi.Tests.EditMode
 
                 InvokeBoundButton(root.Q<Button>("Map01A Register Agreement"));
                 InvokeBoundButton(submit);
-                Assert.That(status.text, Is.EqualTo("Dịch vụ đăng ký chưa kết nối. Vui lòng thử lại sau."));
+                Assert.That(fake.RegisterCallCount, Is.EqualTo(1));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text,
+                    Is.EqualTo("Tạo tài khoản thành công. Hãy đăng nhập."));
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
 
-                InvokeBoundButton(root.Q<Button>("Map01A Register Back"));
-                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
-                Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 InvokeBoundButton(root.Q<Button>("Map01A Entry Register Button"));
                 Assert.That(password.value, Is.Empty);
                 Assert.That(confirmation.value, Is.Empty, "Register must not retain either password after reopening.");
@@ -2214,7 +2215,8 @@ namespace LinhGioi.Tests.EditMode
             {
                 var host = new GameObject("canonical password recovery request screen test");
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
-                CongDongLamArrivalHud.Attach(scene);
+                var fake = FakeProductAuthClient.ProductAccountFlowSuccess();
+                CongDongLamArrivalHud.Attach(scene, fake, new ProductAuthSessionState());
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 var classBefore = scene.ActiveEquipmentClassId;
 
@@ -2232,19 +2234,29 @@ namespace LinhGioi.Tests.EditMode
                 var status = root.Q<Label>("Map01A Password Recovery Status");
                 Assert.That(account, Is.Not.Null);
                 Assert.That(account.value, Is.EqualTo("luc-thien@example.test"));
-                Assert.That(overlay.Query<Button>(className: "lgo-auth-flow-primary").ToList().Count, Is.EqualTo(1));
-                Assert.That(root.Q<TextField>("Map01A Password Recovery Code Field"), Is.Null,
-                    "Request screen must not absorb the later verification-code screen.");
+                var recoveryPrimaryActions = overlay.Query<Button>(className: "lgo-auth-flow-primary").ToList();
+                Assert.That(recoveryPrimaryActions.Count, Is.EqualTo(3),
+                    "Request, Verify and New Password share one recovery overlay tree.");
+                Assert.That(recoveryPrimaryActions.Count(button => button.style.display.value == DisplayStyle.Flex), Is.EqualTo(1),
+                    "Exactly one recovery primary action must be visible for the active stage.");
+                var code = root.Q<TextField>("Map01A Password Recovery Code Field");
+                Assert.That(code, Is.Not.Null);
+                Assert.That(code.style.display.value, Is.EqualTo(DisplayStyle.None),
+                    "Verify controls must exist in the shared tree but stay hidden during Request.");
 
                 account.value = string.Empty;
                 InvokeBoundButton(submit);
-                Assert.That(status.text, Is.EqualTo("Nhập tài khoản hoặc email để nhận hướng dẫn."));
+                Assert.That(status.text, Is.EqualTo("Nhập email đăng ký hợp lệ."));
                 account.value = "luc-thien@example.test";
                 InvokeBoundButton(submit);
-                Assert.That(status.text, Is.EqualTo(
-                    "Dịch vụ khôi phục mật khẩu chưa kết nối. Vui lòng thử lại sau."));
+                Assert.That(fake.RecoveryRequestCallCount, Is.EqualTo(1));
+                Assert.That(status.text, Is.EqualTo("Nếu email hợp lệ, mã xác minh đã được gửi."));
+                Assert.That(code.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
 
+                InvokeBoundButton(root.Q<Button>("Map01A Password Recovery Back"));
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(code.style.display.value, Is.EqualTo(DisplayStyle.None));
                 InvokeBoundButton(root.Q<Button>("Map01A Password Recovery Back"));
                 Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(root.Q("Map01A Entry Control Card").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -3188,16 +3200,23 @@ namespace LinhGioi.Tests.EditMode
             }
         }
 
-        private sealed class FakeProductAuthClient : IProductAuthClient
+        private sealed class FakeProductAuthClient : IProductAuthClient, IProductAccountClient
         {
             private readonly Task<ProductLoginResponse> _loginTask;
             private readonly TaskCompletionSource<ProductLoginResponse> _pending;
+            private readonly bool _accountFlowEnabled;
             public int LoginCallCount { get; private set; }
+            public int RegisterCallCount { get; private set; }
+            public int RecoveryRequestCallCount { get; private set; }
+            public int RecoveryVerifyCallCount { get; private set; }
+            public int RecoveryResetCallCount { get; private set; }
 
-            private FakeProductAuthClient(Task<ProductLoginResponse> loginTask, TaskCompletionSource<ProductLoginResponse> pending = null)
+            private FakeProductAuthClient(Task<ProductLoginResponse> loginTask,
+                TaskCompletionSource<ProductLoginResponse> pending = null, bool accountFlowEnabled = false)
             {
                 _loginTask = loginTask;
                 _pending = pending;
+                _accountFlowEnabled = accountFlowEnabled;
             }
 
             public static FakeProductAuthClient Pending()
@@ -3222,11 +3241,53 @@ namespace LinhGioi.Tests.EditMode
                 }));
             }
 
+            public static FakeProductAuthClient ProductAccountFlowSuccess()
+            {
+                return new FakeProductAuthClient(Task.FromException<ProductLoginResponse>(new System.NotSupportedException()),
+                    accountFlowEnabled: true);
+            }
+
             public Task<ProductLoginResponse> LoginAsync(string identifier, string password, CancellationToken cancellationToken)
             {
                 LoginCallCount++;
                 if (_pending != null) cancellationToken.Register(() => _pending.TrySetCanceled());
                 return _loginTask;
+            }
+
+            public Task<ProductRegisterResponse> RegisterAsync(string email, string password, bool acceptedTerms,
+                CancellationToken cancellationToken)
+            {
+                RegisterCallCount++;
+                if (!_accountFlowEnabled) return Task.FromException<ProductRegisterResponse>(new System.NotSupportedException());
+                return Task.FromResult(new ProductRegisterResponse
+                {
+                    account = new AccountResponse { accountId = "account.product.abc", displayName = email.Trim().ToLowerInvariant() }
+                });
+            }
+
+            public Task<PasswordRecoveryRequestResponse> RequestPasswordRecoveryAsync(string email,
+                CancellationToken cancellationToken)
+            {
+                RecoveryRequestCallCount++;
+                if (!_accountFlowEnabled) return Task.FromException<PasswordRecoveryRequestResponse>(new System.NotSupportedException());
+                return Task.FromResult(new PasswordRecoveryRequestResponse
+                {
+                    challengeId = "challenge.1", expiresAtUnixMs = 9_999_999_999_999L, resendAvailableAtUnixMs = 1
+                });
+            }
+
+            public Task<PasswordRecoveryVerifyResponse> VerifyPasswordRecoveryAsync(string challengeId, string code,
+                CancellationToken cancellationToken)
+            {
+                RecoveryVerifyCallCount++;
+                if (!_accountFlowEnabled) return Task.FromException<PasswordRecoveryVerifyResponse>(new System.NotSupportedException());
+                return Task.FromResult(new PasswordRecoveryVerifyResponse { resetToken = "reset-secret", expiresAtUnixMs = 9_999_999_999_999L });
+            }
+
+            public Task ResetPasswordAsync(string resetToken, string newPassword, CancellationToken cancellationToken)
+            {
+                RecoveryResetCallCount++;
+                return _accountFlowEnabled ? Task.CompletedTask : Task.FromException(new System.NotSupportedException());
             }
 
             public Task<ProductSessionResponse> ValidateSessionAsync(string accessToken, CancellationToken cancellationToken)
