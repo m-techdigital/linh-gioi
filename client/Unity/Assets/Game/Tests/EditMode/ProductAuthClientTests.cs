@@ -77,6 +77,21 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void ProductCharacterRuntimeStateDtosAndSaveRouteMatchServerContract()
+        {
+            var character = JsonUtility.FromJson<CharacterResponse>(
+                "{\"characterId\":\"character.1\",\"accountId\":\"account.product.1\",\"name\":\"KiemTu\",\"classId\":\"class.sword\",\"runtimeClassId\":\"kiem\",\"runtimeState\":{\"mapId\":\"map-01a-cong-dong-lam\",\"laneX\":18.5,\"facing\":-1,\"updatedAtUnixMs\":1700000000000},\"slot\":1}");
+
+            Assert.That(character.runtimeClassId, Is.EqualTo("kiem"));
+            Assert.That(character.runtimeState, Is.Not.Null);
+            Assert.That(character.runtimeState.mapId, Is.EqualTo("map-01a-cong-dong-lam"));
+            Assert.That(character.runtimeState.laneX, Is.EqualTo(18.5f).Within(.0001f));
+            Assert.That(character.runtimeState.facing, Is.EqualTo(-1));
+            Assert.That(ProductCharacterRoutes.Map01AStateSuffix, Is.EqualTo("/map01a-state"));
+            Assert.That(typeof(AccountApiClient).GetMethod("SaveMap01AStateAsync"), Is.Not.Null);
+        }
+
+        [Test]
         public void RecoveryStateTransitionsAndClearRemovesTransientSecrets()
         {
             var state = new ProductAccountRecoveryState();

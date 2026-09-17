@@ -87,6 +87,14 @@ namespace LinhGioi.Account
                 null, 200, cancellationToken, accessToken);
         }
 
+        public Task<CharacterResponse> SaveMap01AStateAsync(string accessToken, string characterId, float laneX,
+            int facing, CancellationToken cancellationToken)
+        {
+            return SendJsonAsync<CharacterResponse>("POST",
+                ProductCharacterRoutes.LoadPrefix + EscapePath(characterId) + ProductCharacterRoutes.Map01AStateSuffix,
+                new SaveMap01AStateRequest(laneX, facing), 200, cancellationToken, accessToken);
+        }
+
         public async Task<CharacterResponse[]> ListCharactersAsync(string accountId, CancellationToken cancellationToken)
         {
             var body = await SendJsonRawAsync("GET", "/accounts/" + EscapePath(accountId) + "/characters", null, 200, cancellationToken);

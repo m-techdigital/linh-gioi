@@ -70,6 +70,28 @@ namespace LinhGioi.Account
     }
 
     [Serializable]
+    public sealed class SaveMap01AStateRequest
+    {
+        public float laneX;
+        public int facing;
+
+        public SaveMap01AStateRequest(float laneX, int facing)
+        {
+            this.laneX = laneX;
+            this.facing = facing;
+        }
+    }
+
+    [Serializable]
+    public sealed class CharacterRuntimeStateResponse
+    {
+        public string mapId;
+        public float laneX;
+        public int facing;
+        public long updatedAtUnixMs;
+    }
+
+    [Serializable]
     public sealed class AccountResponse
     {
         public string accountId;
@@ -86,6 +108,8 @@ namespace LinhGioi.Account
         public string accountId;
         public string name;
         public string classId;
+        public string runtimeClassId;
+        public CharacterRuntimeStateResponse runtimeState;
         public long entityId;
         public float x;
         public float y;

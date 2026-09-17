@@ -196,6 +196,10 @@ namespace LinhGioi.Tests.EditMode
                 return Task.FromException<CharacterResponse>(new AccountApiException(404, "safe missing"));
             }
 
+            public Task<CharacterResponse> SaveMap01AStateAsync(string accessToken, string characterId,
+                float laneX, int facing, CancellationToken cancellationToken)
+                => Task.FromException<CharacterResponse>(new System.NotSupportedException());
+
             public Task<ProductLoginResponse> LoginAsync(string identifier, string password,
                 CancellationToken cancellationToken)
                 => Task.FromException<ProductLoginResponse>(new System.NotSupportedException());
