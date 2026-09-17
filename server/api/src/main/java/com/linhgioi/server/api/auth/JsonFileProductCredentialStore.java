@@ -69,6 +69,24 @@ public final class JsonFileProductCredentialStore implements ProductCredentialSt
         }
     }
 
+    @Override
+    public synchronized ProductCredential replacePasswordHash(
+            String normalizedIdentifier, String passwordHash, long nowUnixMs) {
+        requireCanonicalIdentifier(normalizedIdentifier);
+        ProductCredential existing = snapshot.credentialsByIdentifier.get(normalizedIdentifier);
+        if (existing == null) throw new IllegalArgumentException("product identifier does not exist");
+        ProductCredential updated = new ProductCredential(existing.accountId(), normalizedIdentifier,
+                passwordHash, existing.createdAtUnixMs(), nowUnixMs);
+        snapshot.credentialsByIdentifier.put(normalizedIdentifier, updated);
+        try {
+            persist();
+            return updated;
+        } catch (RuntimeException failure) {
+            snapshot.credentialsByIdentifier.put(normalizedIdentifier, existing);
+            throw failure;
+        }
+    }
+
     private Snapshot loadOrCreate() {
         try {
             Files.createDirectories(storeFile.getParent());

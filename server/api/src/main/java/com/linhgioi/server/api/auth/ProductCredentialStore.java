@@ -6,4 +6,5 @@ public interface ProductCredentialStore {
     ProductCredential create(String accountId, String normalizedIdentifier, String passwordHash, long nowUnixMs);
     Optional<ProductCredential> findByIdentifier(String normalizedIdentifier);
     boolean deleteByIdentifier(String normalizedIdentifier);
+    ProductCredential replacePasswordHash(String normalizedIdentifier, String passwordHash, long nowUnixMs);
 }

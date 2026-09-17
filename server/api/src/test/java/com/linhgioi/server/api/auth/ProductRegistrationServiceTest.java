@@ -62,6 +62,9 @@ class ProductRegistrationServiceTest {
             }
             @Override public java.util.Optional<ProductCredential> findByIdentifier(String id) { return java.util.Optional.empty(); }
             @Override public boolean deleteByIdentifier(String id) { return false; }
+            @Override public ProductCredential replacePasswordHash(String id, String hash, long now) {
+                throw new UnsupportedOperationException();
+            }
         };
         var rollbackService = service(failing, rollbackPlayers);
         assertThrows(IllegalStateException.class,

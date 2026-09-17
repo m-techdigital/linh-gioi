@@ -50,6 +50,15 @@ public final class AuthSessionRegistry {
         return sessionsByTokenHash.remove(tokenHash(rawToken)) != null;
     }
 
+    public int invalidateAccount(String accountId) {
+        if (accountId == null || accountId.isBlank()) return 0;
+        int[] removed = { 0 };
+        sessionsByTokenHash.forEach((hash, session) -> {
+            if (accountId.equals(session.accountId()) && sessionsByTokenHash.remove(hash, session)) removed[0]++;
+        });
+        return removed[0];
+    }
+
     private static String tokenHash(String token) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
