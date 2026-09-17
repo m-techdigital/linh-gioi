@@ -2305,3 +2305,15 @@ Dialogue dùng một portrait frame chung và lấy đúng sprite từ `npcs-atl
 - TDD đã chứng minh các lỗi trước khi sửa: catalog không cùng reference, thiếu value/add/glyph trong template và graph rộng `650 px`; tất cả targeted test đạt `1/1` sau sửa. Full EditMode `287 total / 286 passed / 0 failed / 1 ignored`; shared governance, pose/capture, no-3D và no-source-images đều pass.
 - Player cuối: `build/map01a-character-hub-potential-template-player-v3/LinhGioiOnline.app`, build `Succeeded`, `errors=0`, `warnings=48`. Evidence `build/map01a-character-hub-potential-template-runtime-v3/{pc,mobile,tablet}/`; đã xem trực tiếp default/selected trên ba viewport, đủ năm node/value/add/glyph, không wrap/cắt/chồng.
 - Trạng thái `NEED_HUMAN_VISUAL_REVIEW`. Batch này không đổi source art, class/pose/wardrobe, camera, scale, renderer hay frozen surfaces; không dùng evidence v1/v2 đã bị thay thế.
+
+## Character Hub — whole-screen polish V59 final checkpoint — 2026-09-17
+
+- Task `T-69b4b27c4b39` tiếp tục từ V57 trên `codex/character-hub-v22`, canonical `redesign-v4-five-tabs`; không đổi actor/renderer/gameplay/Skill art/frozen surfaces.
+- P4 Linh thú: locked roster dùng semantic class `lgo-spirit-pet-locked-roster` + shared unavailable control; stat row 22px, skill row 64px. Root cause density bind đã sửa bằng reapply shared stat-row style sau `CharacterHubFactRow.Bind()`.
+- P5/final: empty inventory inspector không còn badge level `—`; shared chip helper ẩn chip khi không có level và tự hiện lại cho `LvN/xN`. Không breakpoint/hierarchy riêng.
+- TDD: P4 targeted GREEN 1/1; empty-inspector RED xác nhận `Expected <empty>, But was "—"`, sau fix targeted GREEN 1/1. Final full EditMode graphics-capable `315/315`, failed/skipped 0.
+- Python final: shared UI 26/26, capture tests 10/10; shared-skin validator, no-source-image, no-3D đều PASS. Change budget trước docs PASS: 4 source files / 32 changed lines (limit 18/700).
+- Final Player V59 build `errors=0`, `warnings=46`; không báo sai warnings=0. Capture `build/character-hub-whole-polish-v59/runtime-final/` đủ 132 frame: PC 1600×900, tablet 1024×768, mobile landscape 1600×720.
+- Eye audit V59: đủ năm tab × ba viewport, không stack/crop/overflow/hierarchy drift; Spirit locked/density/actions đọc rõ, tablet không còn avoidable detail scroll; search-empty inspector trung thực và không còn badge dash thừa.
+- Evidence authoritative cho slice này: `build/character-hub-whole-polish-v59/`. V58 là intermediate P4/P5 evidence, không dùng thay V59 cho closure.
+- Trạng thái: `READY_REVIEW` cho whole-screen polish slice. Chỉ mở lại khi có concrete Player defect hoặc owner design change; không tự mở gameplay/progression/pet/item scope mới.

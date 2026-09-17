@@ -721,8 +721,12 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Q<Label>("Map01A Supplies Empty State").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q<Label>("Map01A Inventory Detail Item Name").text, Is.EqualTo("Chưa có vật phẩm"),
                     "An empty supply category must not fabricate a selected x0 potion in the inspector.");
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Level Chip").text, Is.Empty,
+                    "An empty inspector must not render a meaningless dash-only level badge.");
                 Assert.That(root.Q<Button>("Map01A Inventory Detail Primary Action").enabledSelf, Is.False);
                 InvokeBoundButton(root.Q<Button>("Map01A All Items Category"));
+                Assert.That(root.Q<Label>("Map01A Inventory Detail Level Chip").text, Is.EqualTo("Lv1"),
+                    "Returning to owned equipment must restore the meaningful level badge.");
                 Assert.That(root.Query<VisualElement>(className: "lgo-inventory-bag-grid-cell").ToList().Count, Is.EqualTo(25),
                     "The approved storage workspace keeps a stable five-by-five grid, including honest empty slots.");
                 Assert.That(root.Q<Button>("Map01A All Items Category").style.minHeight.value.value, Is.EqualTo(100),
@@ -1142,6 +1146,16 @@ namespace LinhGioi.Tests.EditMode
                     / (float)root.Q("Map01A Spirit Pet Preview Art").style.backgroundImage.value.texture.height,
                     Is.GreaterThanOrEqualTo(1.45f), "The main hero must retain the approved wide source.");
                 Assert.That(root.Q("Map01A Spirit Pet Locked Roster 1"), Is.Not.Null);
+                var lockedPetCard = root.Q<Button>("Map01A Spirit Pet Card Locked 1");
+                Assert.That(lockedPetCard.enabledSelf, Is.False,
+                    "Locked spirit-pet roster slots must not keep a dead detail callback.");
+                Assert.That(lockedPetCard.ClassListContains("lgo-spirit-pet-locked-roster"), Is.True);
+                Assert.That(lockedPetCard.tooltip, Does.Contain("Chưa thức tỉnh"));
+                Assert.That(root.Q<Button>("Map01A Spirit Pet Card Selected").enabledSelf, Is.True);
+                Assert.That(root.Q("Map01A Spirit Pet Stat Row 0").style.minHeight.value.value, Is.LessThanOrEqualTo(22),
+                    "Shared Spirit stat rows must stay compact enough for the tablet detail column.");
+                Assert.That(root.Q("Map01A Spirit Pet Skill Row 0").style.minHeight.value.value, Is.LessThanOrEqualTo(64),
+                    "Shared Spirit skill rows must not force avoidable tablet scrolling.");
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Spirit Pet Intimacy").value, Is.EqualTo(320));
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Spirit Pet Growth").value, Is.EqualTo(180));
                 var spiritBadges = root.Q("Map01A Spirit Pet Detail Badges");
@@ -1939,7 +1953,7 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(root.Query<VisualElement>(className: "lgo-spirit-pet-stat-row").ToList().Count,
                     Is.EqualTo(5), "Five stat rows must be created once; profiles only bind their values.");
                 Assert.That(root.Q("Map01A Spirit Pet Skill Row 0").style.minHeight.value.value,
-                    Is.EqualTo(88).Within(1));
+                    Is.LessThanOrEqualTo(64), "Shared Spirit skill rows must preserve the compact density contract.");
                 Assert.That(root.Q<Label>("Map01A Spirit Pet Skill Row 0 Name").style.fontSize.value.value,
                     Is.GreaterThanOrEqualTo(16));
                 Assert.That(root.Q<Label>("Map01A Hub Detail Status").style.display.value,

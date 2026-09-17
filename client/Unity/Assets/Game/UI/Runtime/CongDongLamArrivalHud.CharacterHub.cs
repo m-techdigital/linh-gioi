@@ -787,7 +787,10 @@ namespace LinhGioi.UI
             _spiritPetRoleBadge.text = pet.Role;
             _spiritPetStateBadge.text = pet.State;
             for (var index = 0; index < _hubSpiritPetStatValues.Count; index++)
+            {
                 _hubSpiritPetStatValues[index].Bind(pet.Stats[index]);
+                ApplyLgoSpiritPetStatRow(_hubSpiritPetStatValues[index]);
+            }
             for (var index = 0; index < _hubSpiritPetSkillIcons.Count; index++)
             {
                 CharacterHubSpiritPetPreview.SkillPreview skill = pet.Skills[index];

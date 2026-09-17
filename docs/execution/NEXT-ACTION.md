@@ -1,9 +1,9 @@
-# NEXT ACTION — Character Hub / after v57 whole-screen polish batch
+# NEXT ACTION — Character Hub / after v59 whole-screen polish closure
 
-1. P3/P4: audit Potential + Spirit Pet interaction/density on tablet/mobile; keep gameplay read-only, improve locked roster/action semantics and reduce avoidable scroll.
-2. Character/Bag P0-P2 are regression-locked: keep `LvN`, hide zero-count owned items, keep truthful empty-supply inspector, shared unavailable style.
-3. Preserve Skill art/runtime, actor/renderer/frozen surfaces; only touch shared UI/layout/data presentation.
-4. After P3/P4, run responsive pass and one final five-tab Player audit across PC/mobile/tablet.
+1. V59 closes the planned P0→P5 implementation plus final five-tab regression/Player audit for this Character Hub polish slice; do not reopen it without a concrete new Player defect or owner design change.
+2. Preserve the verified contracts: `LvN` equipment semantics, no zero-count owned inventory items, truthful empty inspector with no dash-only level badge, shared unavailable controls, Spirit locked-roster semantics, and compact Spirit detail density.
+3. Preserve Skill artwork/runtime, actor/renderer, gameplay state, canonical five-tab hierarchy and frozen surfaces; no branch/worktree reset or speculative progression/pet/item data.
+4. Next work is owner/reviewer acceptance or a separately scoped task. Reuse `build/character-hub-whole-polish-v59/` as evidence unless runtime source changes.
 
 # NEXT ACTION — Character Hub / after v55
 

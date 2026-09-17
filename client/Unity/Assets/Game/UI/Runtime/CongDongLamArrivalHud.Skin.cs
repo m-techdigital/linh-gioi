@@ -1249,6 +1249,7 @@ namespace LinhGioi.UI
             card.style.alignItems = Align.Center;
             card.style.justifyContent = Justify.Center;
             ApplyLgoCharacterHubSelectionState(card, selected);
+            card.EnableInClassList("lgo-spirit-pet-locked-roster", !selected);
         }
 
         private static void ApplyLgoSpiritPetStatRow(VisualElement row)
@@ -1256,7 +1257,7 @@ namespace LinhGioi.UI
             row.AddToClassList("lgo-spirit-pet-stat-row");
             row.style.alignItems = Align.Center;
             row.style.height = StyleKeyword.Auto;
-            row.style.minHeight = 26;
+            row.style.minHeight = 22;
             row.style.flexShrink = 0;
             row.style.marginBottom = 0;
         }
@@ -1265,7 +1266,7 @@ namespace LinhGioi.UI
         {
             row.AddToClassList("lgo-spirit-pet-skill-row");
             row.style.alignItems = Align.Center;
-            row.style.minHeight = 88;
+            row.style.minHeight = 64;
             row.style.flexShrink = 0;
             row.style.paddingTop = row.style.paddingBottom = 2;
             row.style.marginBottom = 0;

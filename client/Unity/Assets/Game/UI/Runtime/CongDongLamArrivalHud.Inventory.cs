@@ -1026,7 +1026,11 @@ namespace LinhGioi.UI
 
         private void RefreshInventoryDetailChips(string level, string fit)
         {
-            if (_inventoryDetailLevelChip != null) _inventoryDetailLevelChip.text = level;
+            if (_inventoryDetailLevelChip != null)
+            {
+                _inventoryDetailLevelChip.text = level;
+                _inventoryDetailLevelChip.style.display = string.IsNullOrEmpty(level) ? DisplayStyle.None : DisplayStyle.Flex;
+            }
             if (_inventoryDetailFitChip != null) _inventoryDetailFitChip.text = fit;
         }
 
@@ -1059,7 +1063,7 @@ namespace LinhGioi.UI
             _inventoryDetailSetHeader.text = "TÌNH TRẠNG";
             _inventoryDetailStatPrimary.text = "Chưa có vật phẩm trong nhóm này.";
             _inventoryDetailStatFit.text = "Nhận vật phẩm để xem chi tiết và thao tác.";
-            RefreshInventoryDetailChips("—", "Không có vật phẩm sở hữu");
+            RefreshInventoryDetailChips(string.Empty, "Không có vật phẩm sở hữu");
             _inventoryDetailPrimaryAction.text = "Không khả dụng";
             _inventoryDetailPrimaryAction.SetEnabled(false);
         }
