@@ -13,9 +13,26 @@ import org.springframework.web.server.ResponseStatusException;
 @RestController
 public final class ProductAuthController {
     private final ProductAuthService auth;
+    private final ProductRegistrationService registration;
 
-    public ProductAuthController(ProductAuthService auth) {
+    public ProductAuthController(ProductAuthService auth, ProductRegistrationService registration) {
         this.auth = auth;
+        this.registration = registration;
+    }
+
+    @PostMapping(path = "/auth/register", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.CREATED)
+    public ProductRegisterResponse register(@RequestBody ProductRegisterRequest request) {
+        if (request == null) throw badRegistrationRequest();
+        try {
+            return ProductRegisterResponse.from(
+                    registration.register(request.email(), request.password(), request.acceptedTerms()));
+        } catch (ProductRegistrationService.DuplicateIdentifierException exception) {
+            throw registrationConflict();
+        } catch (IllegalArgumentException exception) {
+            throw badRegistrationRequest();
+        }
     }
 
     @PostMapping(path = "/auth/login", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -61,6 +78,14 @@ public final class ProductAuthController {
         String token = authorization.substring(7).trim();
         if (token.isEmpty()) throw unauthorizedSession();
         return token;
+    }
+
+    private static ResponseStatusException badRegistrationRequest() {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid registration request");
+    }
+
+    private static ResponseStatusException registrationConflict() {
+        return new ResponseStatusException(HttpStatus.CONFLICT, "identifier already registered");
     }
 
     private static ResponseStatusException badRequest() {

@@ -72,13 +72,39 @@ class ProductAuthControllerTest {
         }
     }
 
+
+    @Test
+    void registerReturnsAccountOnlyAndMapsDuplicateToConflict() throws Exception {
+        var players = new JsonFilePlayerProfileStore(tempDir, clock);
+        var credentials = new JsonFileProductCredentialStore(tempDir, clock);
+        var encoder = new BCryptPasswordEncoder(4);
+        var auth = new ProductAuthService(credentials, players, encoder,
+                new AuthSessionRegistry(Duration.ofHours(12)), clock);
+        var registration = new ProductRegistrationService(credentials, players, encoder, clock);
+        var controller = new ProductAuthController(auth, registration);
+
+        ProductRegisterResponse created = controller.register(
+                new ProductRegisterRequest("Minh@Example.COM", "Secret#123", true));
+        assertEquals("minh@example.com", created.account().displayName());
+        assertFalse(created.toString().contains("Secret#123"));
+        var method = ProductAuthController.class.getMethod("register", ProductRegisterRequest.class);
+        assertEquals(HttpStatus.CREATED, method.getAnnotation(org.springframework.web.bind.annotation.ResponseStatus.class).value());
+
+        ResponseStatusException duplicate = assertThrows(ResponseStatusException.class,
+                () -> controller.register(new ProductRegisterRequest("minh@example.com", "Other#123", true)));
+        assertEquals(HttpStatus.CONFLICT, duplicate.getStatusCode());
+        assertEquals("identifier already registered", duplicate.getReason());
+    }
+
     private ProductAuthController fixtureController() {
         var players = new JsonFilePlayerProfileStore(tempDir, clock);
         var account = players.loginDev("fixture-dev-key", "Minh").account();
+        var credentials = new JsonFileProductCredentialStore(tempDir, clock);
+        var encoder = new BCryptPasswordEncoder(4);
         var service = new ProductAuthService(
-                new JsonFileProductCredentialStore(tempDir, clock), players,
-                new BCryptPasswordEncoder(4), new AuthSessionRegistry(Duration.ofHours(12)), clock);
+                credentials, players, encoder, new AuthSessionRegistry(Duration.ofHours(12)), clock);
         service.provisionCredential(account.accountId(), "minh@example.test", "Secret#123");
-        return new ProductAuthController(service);
+        return new ProductAuthController(service,
+                new ProductRegistrationService(credentials, players, encoder, clock));
     }
 }

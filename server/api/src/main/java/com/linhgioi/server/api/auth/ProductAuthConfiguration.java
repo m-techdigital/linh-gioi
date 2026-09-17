@@ -37,6 +37,12 @@ public class ProductAuthConfiguration {
     }
 
     @Bean
+    ProductRegistrationService productRegistrationService(ProductCredentialStore credentials, PlayerProfileStore players,
+            PasswordEncoder productPasswordEncoder, Clock productAuthClock) {
+        return new ProductRegistrationService(credentials, players, productPasswordEncoder, productAuthClock);
+    }
+
+    @Bean
     ProductAuthService productAuthService(ProductCredentialStore credentials, PlayerProfileStore players,
             PasswordEncoder productPasswordEncoder, AuthSessionRegistry sessions, Clock productAuthClock) {
         return new ProductAuthService(credentials, players, productPasswordEncoder, sessions, productAuthClock);

@@ -40,14 +40,33 @@ public final class JsonFileProductCredentialStore implements ProductCredentialSt
         ProductCredential credential = new ProductCredential(
                 accountId, normalizedIdentifier, passwordHash, nowUnixMs, nowUnixMs);
         snapshot.credentialsByIdentifier.put(normalizedIdentifier, credential);
-        persist();
-        return credential;
+        try {
+            persist();
+            return credential;
+        } catch (RuntimeException failure) {
+            snapshot.credentialsByIdentifier.remove(normalizedIdentifier);
+            throw failure;
+        }
     }
 
     @Override
     public synchronized Optional<ProductCredential> findByIdentifier(String normalizedIdentifier) {
         if (normalizedIdentifier == null || normalizedIdentifier.isBlank()) return Optional.empty();
         return Optional.ofNullable(snapshot.credentialsByIdentifier.get(normalizedIdentifier));
+    }
+
+    @Override
+    public synchronized boolean deleteByIdentifier(String normalizedIdentifier) {
+        if (normalizedIdentifier == null || normalizedIdentifier.isBlank()) return false;
+        ProductCredential removed = snapshot.credentialsByIdentifier.remove(normalizedIdentifier);
+        if (removed == null) return false;
+        try {
+            persist();
+            return true;
+        } catch (RuntimeException failure) {
+            snapshot.credentialsByIdentifier.put(normalizedIdentifier, removed);
+            throw failure;
+        }
     }
 
     private Snapshot loadOrCreate() {
