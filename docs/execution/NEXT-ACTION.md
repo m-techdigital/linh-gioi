@@ -1,10 +1,10 @@
-# NEXT ACTION — UI Fidelity / after UIF-04 Character Select closure
+# NEXT ACTION — UI Fidelity / after UIF-05 Character Hub closure
 
-1. Preserve closed UIF-03 Entry/Auth and UIF-04 Character Select visual hierarchy unless a concrete regression is proven. Keep bearer/account isolation, three-slot list/load semantics and Map01A entry behavior unchanged.
-2. Next scoped task is **LGO-UIF-05 Character Hub five-tab fidelity and component consolidation** against approved `redesign-v4-five-tabs` authority. Start with a fresh five-tab BEFORE matrix and component-ownership audit; do not reopen already-accepted skill artwork without a concrete defect.
-3. Reuse UIF-01/02 foundation and the dedicated `Skin.CharacterSelect` split pattern: ThemeTokens → shared USS/primitives → screen composition. Any repeated Hub recipe must have one shared owner instead of five tab-local copies.
-4. Preserve truthful states and product scope. Do not fabricate stats/progression, pet/item behavior or unapproved art; Create Character remains `DESIGN_GATED`; production five-class renderer authority remains a separate gate.
-5. Keep evidence truthful: PC/tablet/mobile macOS captures prove aspect/profile behavior only; Android/iOS physical sizing/touch proof remains an explicit separate open gate.
+1. Preserve the closed UIF-03 Entry/Auth, UIF-04 Character Select and UIF-05 Character Hub behavior/presentation unless a concrete Player regression is proven. Do not reopen auth, persistence, account binding or Map01A world-entry semantics from this closure.
+2. UIF-05 authoritative runtime source is `3fd986ef7226b552aad9ed441c884a8ffbe37844`: shared Character Hub layout ownership is consolidated, the Bag title is aligned to `RƯƠNG ĐỒ`, and the verified five-tab layout remains faithful to approved `redesign-v4-five-tabs` without a broad redesign.
+3. UIF-05 closure evidence is `build/ui-fidelity-foundation-v1/uif05-hub-closure-v1/`: Unity EditMode 372/372, macOS Player build errors=0 warnings=44, 44 frames/profile across PC/tablet/mobile-landscape, and owner/before/after visual audit PASS. Tablet/mobile remain macOS aspect simulations, not physical-device proof.
+4. Incidental Unity `.meta`, `GraphicsSettings.asset` and `QualitySettings.asset` rewrites are not part of UIF-05 and must not be reintroduced without exact-runtime evidence.
+5. Next program candidate is **LGO-UIF-06 Gameplay HUD fidelity**, but it remains separately scoped/proposed authority. Do not start UIF-06 from this closure alone; Create Character and production five-class renderer authority remain separately gated.
 
 # NEXT ACTION — Whole Product / after Register + Recovery 3-step closure
 
