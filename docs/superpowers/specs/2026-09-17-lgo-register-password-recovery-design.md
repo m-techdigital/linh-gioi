@@ -11,10 +11,18 @@ The product flow is `Register → Login` and `Recovery Request → Verify Code �
 
 ## Existing visual authority
 
-- Register layout remains the approved canonical structure from `LGO-MAP01A-REGISTER-SCREEN-CONTRACT-v1.0.md`.
-- Recovery Request keeps the current technical layout candidate from `LGO-MAP01A-PASSWORD-RECOVERY-REQUEST-SCREEN-CONTRACT-v1.0.md`.
-- Verify Code and New Password have no canonical design yet and must receive owner visual approval before runtime implementation.
-- All four screens inherit the Entry scene, brand, notification/utility context, shared dark-blue/gold auth-flow panel and landscape composition.
+The authoritative visual source is the owner-design pack under `/Users/minhdc/Projects/Design/LGO-2D-UI-Owner-Demos-2026-09-13/`, not the simplified runtime screenshots. Runtime evidence proves behavior/layout only and must be brought closer to owner-design fidelity rather than treated as a replacement art direction.
+
+- Entry/Login: `redesign-v5-entry/01-entry-login-CANONICAL.png`.
+- Character Select: `redesign-v6-character-select/01-character-select-CANONICAL.png`.
+- Server Select: `redesign-v7-server-select/01-server-select-CANONICAL.png`.
+- Register: `redesign-v8-register/01-register-account-CANONICAL.png`.
+- Recovery Request: `redesign-v9-password-recovery-request/01-password-recovery-request-CANONICAL-CANDIDATE.png`.
+- Historical visual reference: `preferred-v2/04-dang-nhap-may-chu-bat-dau-linh-gioi.png`.
+
+A repository/Design-root search and prior project-state audit found no separate owner artwork for Verify Code or New Password; historical docs explicitly state those gates had not been opened. Those two screens may therefore be newly designed, but only as direct extensions of v9's visual DNA and only after owner review.
+
+Any generated comparison/mockup that is not visibly derived from this owner pack is rejected and has no canonical/runtime authority.
 ## Product identity decision
 
 The first product-registration slice uses **email as the product login identifier and recovery contact**. This avoids creating accounts that cannot actually recover their password.
@@ -81,14 +89,14 @@ Raw password, verification code, bearer session token and reset token are forbid
 Malformed request → `400`; duplicate registration → `409`; resend cooldown → `429`; invalid, expired, exhausted or consumed verification/reset grant → one generic `401`, with no secret/token echo. A globally unavailable delivery provider returns `503`; the server never claims that a code was sent when delivery failed.
 ## Visual proposal — Register and Request
 
-Register keeps its locked geometry, three fields, agreement row, primary CTA and back action. Proposed semantic copy change only:
+Register must preserve the actual v8 owner composition, ornament, typography, panel treatment, background/character presentation, notice card and utility rail; the current simplified runtime is not the visual target. Geometry/state code may reuse the current implementation, but final Player fidelity is judged against the v8 owner PNG. Proposed product-capability changes are semantic only:
 
 - field 1: `Email đăng nhập`;
 - subtitle remains `Bắt đầu hành trình tại Đông Lâm`;
 - success status: `Tạo tài khoản thành công. Hãy đăng nhập.` and route back to Entry;
 - duplicate/validation/service errors stay in the existing reserved status line.
 
-Recovery Request keeps its current panel geometry. Proposed copy:
+Recovery Request must preserve and converge toward the actual v9 owner candidate, including the rich Entry scene, blue/gold ornament language, typography and single centered auth panel. Proposed capability copy changes are:
 
 - guidance: `Nhập email đã dùng để đăng ký tài khoản.`;
 - field: `Email đăng ký`;
@@ -97,7 +105,7 @@ Recovery Request keeps its current panel geometry. Proposed copy:
 - successful request advances to Verify Code using the returned challenge metadata without exposing account existence.
 ## Visual proposal — Verify Code
 
-New screen inherits the Recovery Request panel and Entry background instead of creating a second visual system.
+New screen must be designed as a direct v9 owner-design continuation, reusing the same Entry artwork/composition, blue/gold ornament system, title typography, field treatment, notification card and utility rail instead of creating a second visual system or using simplified runtime styling.
 
 Hierarchy:
 
@@ -112,7 +120,7 @@ Hierarchy:
 The panel remains one-column and approximately the same height as Recovery Request. PC 1600×900, tablet 1024×768 and mobile 1600×720 preserve one landscape composition with no reflow/stack variant.
 ## Visual proposal — New Password
 
-New Password reuses the Register field/reveal and shared auth-flow action bases.
+New Password must be visually derived from the v8/v9 owner artwork: v9 recovery panel/scene composition plus v8 password field/reveal treatment and gold primary CTA. Shared runtime helpers are implementation details, not substitutes for owner-design fidelity.
 
 Hierarchy:
 
@@ -166,8 +174,8 @@ Architecture in this spec is ready for owner review, but runtime implementation 
 
 The review package must show:
 
-- existing Register versus proposed same-layout email-specific Register copy;
-- existing Recovery Request versus proposed same-layout `Gửi mã xác minh` copy;
+- v8 owner Register source versus proposed email-specific variant that preserves the same art direction;
+- v9 owner Recovery Request source versus proposed `Gửi mã xác minh` variant preserving the same art direction;
 - proposed Verify Code screen;
 - proposed New Password screen;
 - at least one mobile-landscape check proving the new screens keep the Entry composition.
