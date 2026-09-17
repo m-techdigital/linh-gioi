@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace LinhGioi.Account
 {
-    public sealed class AccountApiClient : IProductAuthClient, IProductAccountClient, IDisposable
+    public sealed class AccountApiClient : IProductAuthClient, IProductAccountClient, IProductCharacterClient, IDisposable
     {
         private const int DefaultTimeoutSeconds = 10;
         private readonly string _apiBaseUrl;
@@ -73,6 +73,18 @@ namespace LinhGioi.Account
         {
             await SendJsonRawAsync("POST", ProductAccountRoutes.RecoveryReset,
                 new PasswordRecoveryResetRequest(resetToken, newPassword), 204, cancellationToken);
+        }
+
+        public async Task<CharacterResponse[]> ListProductCharactersAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            var body = await SendJsonRawAsync("GET", ProductCharacterRoutes.List, null, 200, cancellationToken, accessToken);
+            return ParseCharacterListJson(body);
+        }
+
+        public Task<CharacterResponse> LoadProductCharacterAsync(string accessToken, string characterId, CancellationToken cancellationToken)
+        {
+            return SendJsonAsync<CharacterResponse>("GET", ProductCharacterRoutes.LoadPrefix + EscapePath(characterId),
+                null, 200, cancellationToken, accessToken);
         }
 
         public async Task<CharacterResponse[]> ListCharactersAsync(string accountId, CancellationToken cancellationToken)

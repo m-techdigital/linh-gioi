@@ -67,6 +67,16 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void ProductCharacterRoutesUseBearerScopedEndpoints()
+        {
+            Assert.That(typeof(IProductCharacterClient).IsAssignableFrom(typeof(AccountApiClient)), Is.True);
+            Assert.That(ProductCharacterRoutes.List, Is.EqualTo("/auth/characters"));
+            Assert.That(ProductCharacterRoutes.LoadPrefix, Is.EqualTo("/auth/characters/"));
+            Assert.That(typeof(AccountApiClient).GetMethod("ListProductCharactersAsync"), Is.Not.Null);
+            Assert.That(typeof(AccountApiClient).GetMethod("LoadProductCharacterAsync"), Is.Not.Null);
+        }
+
+        [Test]
         public void RecoveryStateTransitionsAndClearRemovesTransientSecrets()
         {
             var state = new ProductAccountRecoveryState();
