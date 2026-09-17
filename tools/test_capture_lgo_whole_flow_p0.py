@@ -5,7 +5,10 @@ import time
 import unittest
 from pathlib import Path
 
-capture = importlib.import_module("tools.capture_lgo_whole_flow_p0")
+try:
+    capture = importlib.import_module("tools.capture_lgo_whole_flow_p0")
+except ModuleNotFoundError:
+    capture = importlib.import_module("capture_lgo_whole_flow_p0")
 
 
 class WholeFlowP0CaptureTests(unittest.TestCase):
@@ -69,6 +72,19 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
                 capture.validate_required_frames(root, ("menu.png",), started),
                 ["STALE_FRAME:menu.png"],
             )
+    def test_quest_command_uses_p0_viewport_instead_of_legacy_pc_size(self):
+        player = Path("/tmp/LinhGioiOnline.app/Contents/MacOS/Unity")
+        out = Path("/tmp/quest")
+        for profile, (width, height) in capture.PROFILES.items():
+            with self.subTest(profile=profile):
+                command = capture.build_quest_command(player, out, profile)
+                self.assertEqual(command[command.index("-screen-width") + 1], str(width))
+                self.assertEqual(command[command.index("-screen-height") + 1], str(height))
+                self.assertIn("--lgo-map01a-art-capture", command)
+                self.assertIn("--lgo-map01a-quest-only", command)
+                self.assertIn("--lgo-map01a-device", command)
+                self.assertNotIn("capture_lgo_map01a_art.py", " ".join(command))
+
     def test_screen_contract_requires_default_and_validation_auth_frames(self):
         self.assertEqual(capture.SCREEN_CAPTURES["entry"].frames,
                          ("entry-login.png", "entry-login-validation.png"))
@@ -77,9 +93,6 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
         self.assertEqual(capture.SCREEN_CAPTURES["password-recovery"].frames,
                          ("password-recovery-request.png", "password-recovery-validation.png"))
 
-
-if __name__ == "__main__":
-    unittest.main()
 
 # PNG header validation is intentionally independent from Unity manifest claims.
 class WholeFlowP0PngTests(unittest.TestCase):
@@ -91,3 +104,7 @@ class WholeFlowP0PngTests(unittest.TestCase):
                 b"\x89PNG\r\n\x1a\n" + b"\x00\x00\x00\x0d" + b"IHDR" + struct.pack(">II", 1600, 900)
             )
             self.assertEqual(capture.png_dimensions(frame), (1600, 900))
+
+
+if __name__ == "__main__":
+    unittest.main()

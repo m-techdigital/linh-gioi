@@ -46,6 +46,13 @@ SCREEN_CAPTURES = {
         "--lgo-map01a-menu-capture", "map01a-menu", ("menu.png",)),
 }
 
+QUEST_FRAMES = (
+    "01-arrival-q01", "02-ha-van-dialogue", "03-q01-complete", "04-q02-grand-gate",
+    "05-quan-thu-dialogue", "06-q03-complete", "07-q04-inventory-open", "08-q04-tong-phu-dialogue",
+    "09-q04-starter-supplies", "10-q04-health-potion-used", "11-q05-thanh-nhi",
+    "12-q05-spirit-herb", "13-q08-hidden-chest", "14-q06-lao-tran", "15-q06-combat",
+    "16-q07-class-loot", "17-q07-class-item-equipped", "18-q09-portal-open",
+)
 REPRESENTATIVE_QUEST_FRAMES = (
     "01-arrival-q01.png", "02-ha-van-dialogue.png", "15-q06-combat.png",
 )
@@ -121,26 +128,51 @@ def capture_screen(player: Path, profile_dir: Path, profile: str, screen: str, t
         raise RuntimeError(f"{profile}/{screen}: validation frame contract missing")
     _validate_png_sizes(out, spec.frames, (width, height))
     return manifest
+def build_quest_command(player: Path, out: Path, profile: str) -> list[str]:
+    if profile not in PROFILES:
+        raise ValueError("Unknown profile: " + profile)
+    width, height = PROFILES[profile]
+    return [
+        str(player), "-logFile", str(out / "player.log"),
+        "-screen-fullscreen", "0", "-screen-width", str(width), "-screen-height", str(height),
+        "--lgo-map01a-device", profile, "--lgo-map01a-art-capture",
+        "--lgo-map01a-art-dir", str(out), "--lgo-map01a-quest-only",
+    ]
+
+
 def capture_quest_flow(player: Path, profile_dir: Path, profile: str, timeout: int,
                        started_ns: int) -> None:
     out = profile_dir / "quest"
-    command = [
-        sys.executable, str(ROOT / "tools/capture_lgo_map01a_art.py"),
-        "--player", str(player), "--out-dir", str(out),
-        "--timeout", str(timeout), "--profile", profile, "--quest-only",
-    ]
-    with (profile_dir / "quest-launch.log").open("w", encoding="utf-8") as log:
-        result = subprocess.run(command, cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
-                                timeout=timeout + 30, check=False)
+    out.mkdir()
+    command = build_quest_command(player, out, profile)
+    with (out / "launch.log").open("w", encoding="utf-8") as log:
+        result = subprocess.run(command, cwd=player.parent, stdout=log, stderr=subprocess.STDOUT,
+                                timeout=timeout, check=False)
     if result.returncode != 0:
-        raise RuntimeError(f"{profile}/quest: capture failed with {result.returncode}")
+        raise RuntimeError(f"{profile}/quest: Player exited {result.returncode}")
     manifest = _read_manifest(out / "manifest.json")
-    if manifest.get("status") != "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" or manifest.get("frames") != 18:
+    width, height = PROFILES[profile]
+    required_true = (
+        "mapQuestFlowVerified", "functionalUiVerified", "dialogueOpened", "greetingCompleted",
+        "dialogueRevisitsVerified", "questWorldFramesUnobstructed",
+    )
+    if (manifest.get("status") != "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED"
+            or manifest.get("captureScope") != "map-quests-q01-q09"
+            or manifest.get("frames") != 18
+            or (manifest.get("width"), manifest.get("height")) != (width, height)
+            or not all(manifest.get(key) for key in required_true)):
         raise RuntimeError(f"{profile}/quest: manifest contract failed")
-    errors = validate_required_frames(out, REPRESENTATIVE_QUEST_FRAMES, started_ns)
+    for frame in QUEST_FRAMES:
+        bmp = out / (frame + ".bmp")
+        png = out / (frame + ".png")
+        if not bmp.is_file() or bmp.stat().st_size == 0:
+            raise RuntimeError(f"{profile}/quest: missing BMP {frame}")
+        subprocess.run(["sips", "-s", "format", "png", str(bmp), "--out", str(png)],
+                       check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    errors = validate_required_frames(out, tuple(frame + ".png" for frame in QUEST_FRAMES), started_ns)
     if errors:
         raise RuntimeError(f"{profile}/quest: " + ", ".join(errors))
-    _validate_png_sizes(out, REPRESENTATIVE_QUEST_FRAMES, PROFILES[profile])
+    _validate_png_sizes(out, tuple(frame + ".png" for frame in QUEST_FRAMES), (width, height))
 
 
 def capture_character_hub(player: Path, profile_dir: Path, profile: str, timeout: int,
