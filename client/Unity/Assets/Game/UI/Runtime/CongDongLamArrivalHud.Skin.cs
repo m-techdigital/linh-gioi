@@ -97,8 +97,17 @@ namespace LinhGioi.UI
         private const string LgoPasswordRecoveryPanelClass = "lgo-password-recovery-panel";
         private const string LgoPasswordRecoveryRuleClass = "lgo-password-recovery-rule";
         private const string LgoPasswordRecoveryVerifyFooterClass = "lgo-password-recovery-verify-footer";
+        private const string LgoCharacterSelectOverlayClass = "lgo-character-select-overlay";
+        private const string LgoCharacterSelectBrandClass = "lgo-character-select-brand";
+        private const string LgoCharacterSelectStageClass = "lgo-character-select-stage";
+        private const string LgoCharacterSelectPanelClass = "lgo-character-select-panel";
         private const string LgoCharacterSelectProfileClass = "lgo-character-select-profile";
         private const string LgoCharacterSelectEmptySlotClass = "lgo-character-select-empty-slot";
+        private const string LgoCharacterSelectDetailClass = "lgo-character-select-detail";
+        private const string LgoCharacterSelectActionsClass = "lgo-character-select-actions";
+        private const string LgoCharacterSelectUtilityClass = "lgo-character-select-utility";
+        private const string LgoCharacterSelectEnterClass = "lgo-character-select-enter";
+        private const string LgoCharacterSelectServerRowClass = "lgo-character-select-server-row";
         private const string LgoMenuActionClass = "lgo-menu-action";
         private const string LgoActionButtonClass = "lgo-action-button";
         private const string LgoActionPrimaryClass = "lgo-action-primary";

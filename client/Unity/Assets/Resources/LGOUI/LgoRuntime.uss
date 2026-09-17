@@ -346,3 +346,71 @@
     padding-left: 8px;
     padding-right: 8px;
 }
+
+.lgo-character-select-overlay {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+}
+
+.lgo-character-select-brand {
+    position: absolute;
+    left: 2.6%;
+    top: 3.2%;
+    width: 33%;
+}
+
+.lgo-character-select-stage {
+    position: absolute;
+    left: 4%;
+    top: 14%;
+    bottom: 8%;
+    width: 70%;
+}
+
+.lgo-character-select-panel {
+    position: absolute;
+    right: 2.2%;
+    top: 4.2%;
+    bottom: 23%;
+    width: 29.5%;
+}
+
+.lgo-character-select-detail {
+    flex-grow: 0;
+    min-height: 116px;
+    max-height: 132px;
+    margin-top: 7px;
+}
+
+.lgo-character-select-actions {
+    flex-direction: row;
+    align-items: center;
+    flex-grow: 0;
+    min-height: 48px;
+    margin-top: 6px;
+}
+
+.lgo-character-select-utility {
+    min-width: 82px;
+}
+
+.lgo-character-select-enter {
+    min-height: 46px;
+}
+
+.lgo-character-select-server-row {
+    position: absolute;
+    left: 36%;
+    bottom: 2.3%;
+    width: 35%;
+    margin-top: 0;
+}
+
+.lgo-character-select-back {
+    position: absolute;
+    left: 2.6%;
+    bottom: 2.3%;
+}

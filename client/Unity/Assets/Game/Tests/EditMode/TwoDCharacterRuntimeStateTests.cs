@@ -2098,6 +2098,57 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void CharacterSelectUsesCanonicalV6PresentationHierarchyAndPrimaryAction()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("character select v6 presentation hierarchy test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var open = typeof(CongDongLamArrivalHud).GetMethod(
+                    "OpenCharacterSelect", BindingFlags.Instance | BindingFlags.NonPublic);
+                Assert.That(open, Is.Not.Null);
+                open.Invoke(hud, null);
+
+                var overlay = root.Q("Map01A Character Select Overlay");
+                var brand = root.Q("Map01A Character Select Brand");
+                var stage = root.Q("Map01A Character Select Stage");
+                var panel = root.Q("Map01A Character Select Account Panel");
+                var detail = root.Q("Map01A Character Select Detail");
+                var actions = root.Q("Map01A Character Select Actions");
+                var server = root.Q("Map01A Character Select Server Row");
+                Assert.That(overlay.ClassListContains("lgo-character-select-overlay"), Is.True);
+                Assert.That(brand.ClassListContains("lgo-character-select-brand"), Is.True);
+                Assert.That(stage.ClassListContains("lgo-character-select-stage"), Is.True);
+                Assert.That(root.Q("Map01A Character Select Stage Backdrop"), Is.Null,
+                    "Owner v6 keeps the full scene visible behind the hero instead of a second rectangular scene card.");
+                Assert.That(panel.ClassListContains("lgo-character-select-panel"), Is.True);
+                Assert.That(detail.ClassListContains("lgo-character-select-detail"), Is.True);
+                Assert.That(actions.ClassListContains("lgo-character-select-actions"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Character Select Edit").ClassListContains(
+                    "lgo-character-select-utility"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Character Select Delete").ClassListContains(
+                    "lgo-character-select-utility"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Character Select Enter Game").ClassListContains(
+                    "lgo-character-select-enter"), Is.True);
+                Assert.That(server.parent, Is.SameAs(overlay),
+                    "The v6 server strip is a bottom navigation landmark, not content inside the account card.");
+                Assert.That(root.Q<Label>("Map01A Character Select Stage Name").style.display.value,
+                    Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q<Label>("Map01A Character Select Stage Title").style.display.value,
+                    Is.EqualTo(DisplayStyle.None));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void ServerSelectUsesOneRealServerAndReturnsToItsOpeningScreen()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

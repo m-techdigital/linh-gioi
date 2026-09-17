@@ -23,12 +23,8 @@ namespace LinhGioi.UI
         private void BuildCharacterSelect()
         {
             _characterSelectOverlay = new VisualElement { name = "Map01A Character Select Overlay" };
-            _characterSelectOverlay.style.position = Position.Absolute;
-            _characterSelectOverlay.style.left = 0;
-            _characterSelectOverlay.style.right = 0;
-            _characterSelectOverlay.style.top = 0;
-            _characterSelectOverlay.style.bottom = 0;
-            _characterSelectOverlay.style.backgroundColor = new Color(.006f, .020f, .040f, .42f);
+            ApplyLgoCharacterSelectOverlay(_characterSelectOverlay);
+            _characterSelectOverlay.style.backgroundColor = new Color(.006f, .020f, .040f, .12f);
 
             BuildCharacterSelectBrand();
             BuildCharacterSelectStage();
@@ -45,10 +41,7 @@ namespace LinhGioi.UI
         private void BuildCharacterSelectBrand()
         {
             var brand = new VisualElement { name = "Map01A Character Select Brand" };
-            brand.style.position = Position.Absolute;
-            brand.style.left = Length.Percent(3.2f);
-            brand.style.top = Length.Percent(4f);
-            brand.style.width = Length.Percent(37f);
+            ApplyLgoCharacterSelectBrand(brand);
 
             var logo = LgoTitleLabel("LINH GIỚI", 54, TextAnchor.MiddleLeft);
             logo.name = "Map01A Character Select Logo";
@@ -64,9 +57,10 @@ namespace LinhGioi.UI
             online.style.marginTop = -7;
             brand.Add(online);
 
-            var motto = LgoSubtitleLabel("Kiếm trong tay — Chính nghĩa trong lòng", 15);
+            var motto = LgoSubtitleLabel("Kiếm trong tay — Chính nghĩa trong lòng", 16);
             motto.name = "Map01A Character Select Motto";
             motto.style.marginTop = 6;
+            motto.style.color = new Color(.96f, .98f, 1f, .92f);
             brand.Add(motto);
             _characterSelectOverlay.Add(brand);
         }
@@ -74,56 +68,35 @@ namespace LinhGioi.UI
         private void BuildCharacterSelectStage()
         {
             var stage = new VisualElement { name = "Map01A Character Select Stage" };
-            stage.style.position = Position.Absolute;
-            stage.style.left = Length.Percent(3f);
-            stage.style.top = Length.Percent(17f);
-            stage.style.bottom = Length.Percent(7f);
-            stage.style.width = Length.Percent(62f);
+            ApplyLgoCharacterSelectStage(stage);
             stage.style.alignItems = Align.Center;
             stage.style.justifyContent = Justify.FlexEnd;
 
-            var backdrop = new VisualElement { name = "Map01A Character Select Stage Backdrop", pickingMode = PickingMode.Ignore };
-            backdrop.style.position = Position.Absolute;
-            backdrop.style.left = Length.Percent(9f);
-            backdrop.style.right = Length.Percent(9f);
-            backdrop.style.top = Length.Percent(2f);
-            backdrop.style.bottom = 34;
-            backdrop.style.backgroundColor = new Color(.006f, .022f, .040f, .985f);
-            var stageTexture = Resources.Load<Texture2D>("LGOMaps/CongDongLamMap01AArt/far-background");
-            backdrop.style.backgroundImage = stageTexture == null ? StyleKeyword.None : new StyleBackground(stageTexture);
-            backdrop.style.unityBackgroundScaleMode = ScaleMode.ScaleAndCrop;
-            backdrop.style.unityBackgroundImageTintColor = new Color(.42f, .52f, .60f, .78f);
-            backdrop.style.borderLeftWidth = backdrop.style.borderRightWidth = 1;
-            backdrop.style.borderTopWidth = backdrop.style.borderBottomWidth = 1;
-            backdrop.style.borderLeftColor = backdrop.style.borderRightColor = new Color(.32f, .48f, .58f, .34f);
-            backdrop.style.borderTopColor = backdrop.style.borderBottomColor = new Color(.32f, .48f, .58f, .34f);
-            stage.Add(backdrop);
-
             var glow = new VisualElement { name = "Map01A Character Select Stage Glow", pickingMode = PickingMode.Ignore };
             glow.style.position = Position.Absolute;
-            glow.style.left = Length.Percent(27f);
-            glow.style.right = Length.Percent(27f);
-            glow.style.bottom = 16;
-            glow.style.height = 54;
+            glow.style.left = Length.Percent(33f);
+            glow.style.right = Length.Percent(33f);
+            glow.style.bottom = 10;
+            glow.style.height = 48;
             ApplyLgoSoftGlow(glow, .34f);
             stage.Add(glow);
 
             _characterSelectPreview = new VisualElement { name = "Map01A Character Select Preview", pickingMode = PickingMode.Ignore };
             _characterSelectPreview.style.position = Position.Absolute;
-            _characterSelectPreview.style.left = Length.Percent(17f);
-            _characterSelectPreview.style.width = Length.Percent(66f);
-            _characterSelectPreview.style.top = Length.Percent(3f);
-            _characterSelectPreview.style.height = Length.Percent(82f);
+            _characterSelectPreview.style.left = Length.Percent(18f);
+            _characterSelectPreview.style.width = Length.Percent(78f);
+            _characterSelectPreview.style.top = Length.Percent(1f);
+            _characterSelectPreview.style.height = Length.Percent(94f);
             _characterSelectPreview.style.unityBackgroundScaleMode = ScaleMode.ScaleToFit;
             stage.Add(_characterSelectPreview);
 
             _characterSelectStageName = LgoTitleLabel("Chưa chọn nhân vật", 22, TextAnchor.MiddleCenter);
             _characterSelectStageName.name = "Map01A Character Select Stage Name";
-            _characterSelectStageName.style.alignSelf = Align.Center;
+            _characterSelectStageName.style.display = DisplayStyle.None;
             stage.Add(_characterSelectStageName);
             var title = LgoSubtitleLabel("Đệ tử Đông Lâm", 13, TextAnchor.MiddleCenter);
             title.name = "Map01A Character Select Stage Title";
-            title.style.alignSelf = Align.Center;
+            title.style.display = DisplayStyle.None;
             stage.Add(title);
             _characterSelectOverlay.Add(stage);
 
@@ -133,26 +106,19 @@ namespace LinhGioi.UI
                 text = "‹  Quay lại"
             };
             ApplyLgoCharacterSelectNavigationAction(back);
-            back.style.position = Position.Absolute;
-            back.style.left = Length.Percent(3f);
-            back.style.bottom = Length.Percent(2.5f);
+            back.AddToClassList("lgo-character-select-back");
             _characterSelectOverlay.Add(back);
         }
 
         private void BuildCharacterSelectAccountSurface()
         {
             var panel = new VisualElement { name = "Map01A Character Select Account Panel" };
-            panel.style.position = Position.Absolute;
-            panel.style.right = Length.Percent(3f);
-            panel.style.top = Length.Percent(5.5f);
-            panel.style.bottom = Length.Percent(5.5f);
-            panel.style.width = Length.Percent(33f);
             ApplyLgoCharacterSelectPanel(panel);
 
-            var title = LgoTitleLabel("CHỌN NHÂN VẬT", 25, TextAnchor.MiddleCenter);
+            var title = LgoTitleLabel("Chọn Nhân Vật", 28, TextAnchor.MiddleCenter);
             title.name = "Map01A Character Select Title";
             panel.Add(title);
-            var subtitle = LgoSubtitleLabel("Bước vào Linh Giới, viết tiếp truyền kỳ của bạn", 13, TextAnchor.MiddleCenter);
+            var subtitle = LgoSubtitleLabel("Chọn một nhân vật để tiếp tục hành trình", 13, TextAnchor.MiddleCenter);
             subtitle.name = "Map01A Character Select Subtitle";
             subtitle.style.marginBottom = 9;
             panel.Add(subtitle);
@@ -173,15 +139,14 @@ namespace LinhGioi.UI
             var create = new Button(() => SetCharacterSelectStatus("Màn Tạo nhân vật đang chờ canonical design riêng."))
             {
                 name = "Map01A Character Select Create",
-                text = "+  Tạo nhân vật"
+                text = "+  Tạo nhân vật\nBắt đầu hành trình mới"
             };
             ApplyLgoCharacterSelectSecondaryAction(create);
             panel.Add(create);
 
             var detail = new VisualElement { name = "Map01A Character Select Detail" };
             ApplyLgoDetailCard(detail, 14, 10);
-            detail.style.marginTop = 8;
-            detail.style.flexGrow = 1;
+            ApplyLgoCharacterSelectDetail(detail);
             var detailTitle = LgoTitleLabel("Lộ trình Đông Lâm", 17);
             detailTitle.name = "Map01A Character Select Detail Title";
             detail.Add(detailTitle);
@@ -201,8 +166,7 @@ namespace LinhGioi.UI
             panel.Add(_characterSelectStatus);
 
             var actions = new VisualElement { name = "Map01A Character Select Actions" };
-            actions.style.flexDirection = FlexDirection.Row;
-            actions.style.marginTop = 7;
+            ApplyLgoCharacterSelectActions(actions);
             var edit = new Button(() => SetCharacterSelectStatus("Chỉnh sửa nhân vật đang chờ screen design riêng."))
             {
                 name = "Map01A Character Select Edit",
@@ -222,7 +186,7 @@ namespace LinhGioi.UI
             ApplyLgoCharacterSelectAction(delete);
             ApplyLgoCharacterSelectAction(_characterSelectEnterButton, true);
             edit.style.marginRight = 6;
-            delete.style.marginRight = 6;
+            delete.style.marginRight = 10;
             actions.Add(edit);
             actions.Add(delete);
             actions.Add(_characterSelectEnterButton);
@@ -246,9 +210,9 @@ namespace LinhGioi.UI
             };
             ApplyLgoCharacterSelectServerAction(switchServer);
             server.Add(switchServer);
-            panel.Add(server);
 
             _characterSelectOverlay.Add(panel);
+            _characterSelectOverlay.Add(server);
             RefreshCharacterSelectContent();
         }
 
@@ -376,7 +340,7 @@ namespace LinhGioi.UI
             button.text = character.name;
             ApplyLgoCharacterSelectProfile(button, ReferenceEquals(character, _selectedProductCharacter));
             AddCharacterSelectProfileIcon(button, _scene.GetCharacterAvatarThumbnailSprite(), "Slot " + slotNumber);
-            var meta = LgoSubtitleLabel("Slot " + slotNumber + " · " + ProductCharacterClassLabel(character), 12);
+            var meta = LgoSubtitleLabel("Slot " + slotNumber + " · " + ProductCharacterClassLabel(character) + " · S1 Đông Lâm", 12);
             meta.name = "Map01A Character Slot " + slotNumber + " Meta";
             meta.style.position = Position.Absolute;
             meta.style.left = 92;
