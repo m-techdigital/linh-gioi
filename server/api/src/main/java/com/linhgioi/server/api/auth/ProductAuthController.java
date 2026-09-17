@@ -14,10 +14,13 @@ import org.springframework.web.server.ResponseStatusException;
 public final class ProductAuthController {
     private final ProductAuthService auth;
     private final ProductRegistrationService registration;
+    private final PasswordRecoveryService recovery;
 
-    public ProductAuthController(ProductAuthService auth, ProductRegistrationService registration) {
+    public ProductAuthController(ProductAuthService auth, ProductRegistrationService registration,
+            PasswordRecoveryService recovery) {
         this.auth = auth;
         this.registration = registration;
+        this.recovery = recovery;
     }
 
     @PostMapping(path = "/auth/register", consumes = MediaType.APPLICATION_JSON_VALUE,
@@ -32,6 +35,46 @@ public final class ProductAuthController {
             throw registrationConflict();
         } catch (IllegalArgumentException exception) {
             throw badRegistrationRequest();
+        }
+    }
+
+    @PostMapping(path = "/auth/recovery/request", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    public RecoveryRequestResponse requestRecovery(@RequestBody RecoveryRequest request) {
+        if (request == null) throw badRecoveryRequest();
+        try {
+            return RecoveryRequestResponse.from(recovery.request(request.email()));
+        } catch (PasswordRecoveryService.RecoveryCooldownException exception) {
+            throw recoveryRateLimited();
+        } catch (PasswordRecoveryService.DeliveryUnavailableException exception) {
+            throw recoveryUnavailable();
+        } catch (IllegalArgumentException exception) {
+            throw badRecoveryRequest();
+        }
+    }
+
+    @PostMapping(path = "/auth/recovery/verify", consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public RecoveryVerifyResponse verifyRecovery(@RequestBody RecoveryVerifyRequest request) {
+        if (request == null) throw badRecoveryRequest();
+        try {
+            return RecoveryVerifyResponse.from(recovery.verify(request.challengeId(), request.code()));
+        } catch (PasswordRecoveryService.InvalidRecoveryException exception) {
+            throw invalidRecoveryGrant();
+        }
+    }
+
+    @PostMapping(path = "/auth/recovery/reset", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void resetRecovery(@RequestBody RecoveryResetRequest request) {
+        if (request == null) throw badRecoveryRequest();
+        try {
+            recovery.reset(request.resetToken(), request.newPassword());
+        } catch (PasswordRecoveryService.InvalidRecoveryException exception) {
+            throw invalidRecoveryGrant();
+        } catch (IllegalArgumentException exception) {
+            throw badRecoveryRequest();
         }
     }
 
@@ -86,6 +129,22 @@ public final class ProductAuthController {
 
     private static ResponseStatusException registrationConflict() {
         return new ResponseStatusException(HttpStatus.CONFLICT, "identifier already registered");
+    }
+
+    private static ResponseStatusException badRecoveryRequest() {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, "invalid recovery request");
+    }
+
+    private static ResponseStatusException recoveryRateLimited() {
+        return new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "recovery request rate limited");
+    }
+
+    private static ResponseStatusException recoveryUnavailable() {
+        return new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "recovery service unavailable");
+    }
+
+    private static ResponseStatusException invalidRecoveryGrant() {
+        return new ResponseStatusException(HttpStatus.UNAUTHORIZED, "invalid or expired recovery grant");
     }
 
     private static ResponseStatusException badRequest() {
