@@ -22,6 +22,7 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
     def test_surface_matrix_covers_current_product_flow(self):
         self.assertEqual(tuple(capture.SCREEN_CAPTURES), (
             "entry", "server-select", "register", "password-recovery",
+            "password-recovery-verify", "password-recovery-new-password",
             "character-select", "menu",
         ))
         self.assertEqual(capture.FLOW_COMPONENTS, ("quest", "character-hub"))
@@ -40,6 +41,13 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
         recovery = capture.build_screen_command(player, out, "mobile", "password-recovery")
         self.assertIn("--lgo-map01a-password-recovery-capture", recovery)
         self.assertIn("--lgo-map01a-auth-validation-capture", recovery)
+
+        verify = capture.build_screen_command(player, out, "pc", "password-recovery-verify")
+        self.assertIn("--lgo-map01a-password-recovery-verify-capture", verify)
+        self.assertNotIn("--lgo-map01a-auth-validation-capture", verify)
+        new_password = capture.build_screen_command(player, out, "pc", "password-recovery-new-password")
+        self.assertIn("--lgo-map01a-password-recovery-new-password-capture", new_password)
+        self.assertNotIn("--lgo-map01a-auth-validation-capture", new_password)
 
     def test_non_auth_commands_do_not_request_validation_state(self):
         player = Path("/tmp/LinhGioiOnline.app/Contents/MacOS/Unity")
@@ -92,6 +100,10 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
                          ("register-account.png", "register-validation.png"))
         self.assertEqual(capture.SCREEN_CAPTURES["password-recovery"].frames,
                          ("password-recovery-request.png", "password-recovery-validation.png"))
+        self.assertEqual(capture.SCREEN_CAPTURES["password-recovery-verify"].frames,
+                         ("password-recovery-verify.png",))
+        self.assertEqual(capture.SCREEN_CAPTURES["password-recovery-new-password"].frames,
+                         ("password-recovery-new-password.png",))
 
 
 # PNG header validation is intentionally independent from Unity manifest claims.

@@ -64,7 +64,10 @@ namespace LinhGioi.World
         private bool CharacterSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
         private bool ServerSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-server-select-capture") >= 0;
         private bool RegisterCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-register-capture") >= 0;
-        private bool PasswordRecoveryCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-password-recovery-capture") >= 0;
+        private bool PasswordRecoveryCaptureRequested
+            => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-password-recovery-capture") >= 0
+            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-password-recovery-verify-capture") >= 0
+            || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-password-recovery-new-password-capture") >= 0;
         private bool InventoryTabsCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-inventory-tabs-capture") >= 0;
         private bool CharacterScreenCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-screen-capture") >= 0;
         private bool MenuCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-menu-capture") >= 0;
@@ -753,6 +756,8 @@ namespace LinhGioi.World
             || Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-register-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-password-recovery-capture") >= 0
+            || Array.IndexOf(args, "--lgo-map01a-password-recovery-verify-capture") >= 0
+            || Array.IndexOf(args, "--lgo-map01a-password-recovery-new-password-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-character-screen-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0;
@@ -1794,7 +1799,10 @@ namespace LinhGioi.World
                 yield return CaptureRegisterScreen(args);
                 yield break;
             }
-            if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-password-recovery-capture") >= 0)
+            if (Application.isPlaying && (
+                Array.IndexOf(args, "--lgo-map01a-password-recovery-capture") >= 0
+                || Array.IndexOf(args, "--lgo-map01a-password-recovery-verify-capture") >= 0
+                || Array.IndexOf(args, "--lgo-map01a-password-recovery-new-password-capture") >= 0))
             {
                 yield return CapturePasswordRecoveryScreen(args);
                 yield break;
@@ -2734,9 +2742,15 @@ namespace LinhGioi.World
             yield return null;
             yield return null;
             yield return new WaitForEndOfFrame();
-            var imagePath = Path.Combine(directory, "password-recovery-request.png");
+            var verifyCapture = Array.IndexOf(args, "--lgo-map01a-password-recovery-verify-capture") >= 0;
+            var newPasswordCapture = Array.IndexOf(args, "--lgo-map01a-password-recovery-new-password-capture") >= 0;
+            var frameName = verifyCapture ? "password-recovery-verify.png"
+                : newPasswordCapture ? "password-recovery-new-password.png" : "password-recovery-request.png";
+            var captureScope = verifyCapture ? "map01a-password-recovery-verify"
+                : newPasswordCapture ? "map01a-password-recovery-new-password" : "map01a-password-recovery-request";
+            var imagePath = Path.Combine(directory, frameName);
             CaptureScreenPng(imagePath);
-            var captureValidation = ShouldCaptureAuthValidationForArgs(args);
+            var captureValidation = !verifyCapture && !newPasswordCapture && ShouldCaptureAuthValidationForArgs(args);
             var validationPath = Path.Combine(directory, "password-recovery-validation.png");
             if (captureValidation)
             {
@@ -2754,12 +2768,12 @@ namespace LinhGioi.World
                 : string.Empty;
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
-                + "  \"captureScope\": \"map01a-password-recovery-request\",\n"
+                + "  \"captureScope\": \"" + captureScope + "\",\n"
                 + "  \"passwordRecoveryOverlayExpected\": true,\n"
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frame\": \"password-recovery-request.png\"" + validationManifest + "\n"
+                + "  \"frame\": \"" + frameName + "\"" + validationManifest + "\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);

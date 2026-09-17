@@ -89,10 +89,45 @@ namespace LinhGioi.UI
             _passwordRecoveryOverlay.Add(_passwordRecoveryBack);
 
             _entryPanel.Add(_passwordRecoveryOverlay);
-            if (Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-password-recovery-capture") >= 0)
+            var captureArgs = Environment.GetCommandLineArgs();
+            var captureRequested = Array.IndexOf(captureArgs, "--lgo-map01a-password-recovery-capture") >= 0
+                || Array.IndexOf(captureArgs, "--lgo-map01a-password-recovery-verify-capture") >= 0
+                || Array.IndexOf(captureArgs, "--lgo-map01a-password-recovery-new-password-capture") >= 0;
+            if (captureRequested)
+            {
                 OpenPasswordRecovery();
+                PreparePasswordRecoveryCaptureStage(captureArgs);
+            }
             else
                 _passwordRecoveryOverlay.style.display = DisplayStyle.None;
+            RefreshPasswordRecoveryStage();
+        }
+
+        private void PreparePasswordRecoveryCaptureStage(string[] args)
+        {
+            var verifyCapture = Array.IndexOf(args, "--lgo-map01a-password-recovery-verify-capture") >= 0;
+            var newPasswordCapture = Array.IndexOf(args, "--lgo-map01a-password-recovery-new-password-capture") >= 0;
+            if (!verifyCapture && !newPasswordCapture) return;
+            const string reviewEmail = "owner-review@example.test";
+            var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            _productRecoveryState.Begin(reviewEmail);
+            _passwordRecoveryAccountField?.SetValueWithoutNotify(reviewEmail);
+            _productRecoveryState.AcceptRequest(new PasswordRecoveryRequestResponse
+            {
+                challengeId = "capture-challenge",
+                expiresAtUnixMs = now + 600_000,
+                resendAvailableAtUnixMs = now + 45_000
+            });
+            if (newPasswordCapture)
+            {
+                _productRecoveryState.AcceptVerification(new PasswordRecoveryVerifyResponse
+                {
+                    resetToken = "capture-grant",
+                    expiresAtUnixMs = now + 600_000
+                });
+            }
+            ClearPasswordRecoverySecrets();
+            if (_passwordRecoveryStatus != null) _passwordRecoveryStatus.text = string.Empty;
             RefreshPasswordRecoveryStage();
         }
 

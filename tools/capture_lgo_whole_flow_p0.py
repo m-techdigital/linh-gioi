@@ -39,6 +39,12 @@ SCREEN_CAPTURES = {
     "password-recovery": ScreenCaptureSpec(
         "--lgo-map01a-password-recovery-capture", "map01a-password-recovery-request",
         ("password-recovery-request.png", "password-recovery-validation.png"), True),
+    "password-recovery-verify": ScreenCaptureSpec(
+        "--lgo-map01a-password-recovery-verify-capture", "map01a-password-recovery-verify",
+        ("password-recovery-verify.png",)),
+    "password-recovery-new-password": ScreenCaptureSpec(
+        "--lgo-map01a-password-recovery-new-password-capture", "map01a-password-recovery-new-password",
+        ("password-recovery-new-password.png",)),
     "character-select": ScreenCaptureSpec(
         "--lgo-map01a-character-select-capture", "map01a-character-select",
         ("character-select.png",)),

@@ -330,6 +330,8 @@ namespace LinhGioi.UI
             if (Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0) return true;
             if (Array.IndexOf(args, "--lgo-map01a-register-capture") >= 0) return true;
             if (Array.IndexOf(args, "--lgo-map01a-password-recovery-capture") >= 0) return true;
+            if (Array.IndexOf(args, "--lgo-map01a-password-recovery-verify-capture") >= 0) return true;
+            if (Array.IndexOf(args, "--lgo-map01a-password-recovery-new-password-capture") >= 0) return true;
             if (Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-inventory-tabs-capture") >= 0) return false;
             if (Array.IndexOf(args, "--lgo-map01a-menu-capture") >= 0) return false;
