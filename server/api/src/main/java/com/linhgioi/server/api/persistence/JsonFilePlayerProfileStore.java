@@ -63,6 +63,12 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     }
 
     @Override
+    public synchronized java.util.Optional<AccountProfile> findAccount(String accountId) {
+        if (accountId == null || accountId.isBlank()) return java.util.Optional.empty();
+        return java.util.Optional.ofNullable(snapshot.getAccountsById().get(accountId.trim()));
+    }
+
+    @Override
     public synchronized List<CharacterProfile> listCharacters(String accountId) {
         requireAccount(accountId);
         return snapshot.getCharactersById().values().stream()
