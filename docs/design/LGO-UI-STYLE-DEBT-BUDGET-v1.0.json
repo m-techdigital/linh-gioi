@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "program": "LGO Whole-game UI/UX Fidelity & Foundation Program",
+  "establishedAfter": "UIF-01 shared token/USS primitive migration",
+  "auditDirectStyleBaseline": 2255,
+  "directStyleAssignments": 2236,
+  "numericStyleAssignments": 1265,
+  "semanticPaletteDeclarations": 0,
+  "skinPartialMaxLoc": 843,
+  "skinPartialMaxMethods": 59,
+  "policy": [
+    "Budgets are non-increasing unless owner-approved architecture explicitly changes the metric contract.",
+    "Semantic product palette declarations must remain zero; design-tokens.json is the color authority.",
+    "Screen fidelity work should move repeated static recipes into shared USS/components rather than consume this budget.",
+    "Skin partials stay responsibility-bounded; a new giant partial is a regression even if total LOC is unchanged."
+  ]
+}

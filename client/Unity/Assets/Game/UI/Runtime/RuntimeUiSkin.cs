@@ -17,15 +17,15 @@ namespace LinhGioi.UI
     {
         internal const string FoundationMarker = "LGO Runtime UI Skin Foundation v1";
 
-        internal static readonly Color DeepGlass = new Color(0.035f, 0.040f, 0.046f, 0.82f);
-        internal static readonly Color DenseGlass = new Color(0.035f, 0.040f, 0.046f, 0.92f);
-        internal static readonly Color BlueGlass = new Color(0.055f, 0.063f, 0.074f, 0.90f);
-        internal static readonly Color IvoryText = new Color(0.89f, 0.87f, 0.82f, 1f);
-        internal static readonly Color SoftLoginGlass = new Color(0.005f, 0.018f, 0.040f, 0.36f);
-        internal static readonly Color LightGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.20f);
-        internal static readonly Color MediumGoldBorder = new Color(0.93f, 0.73f, 0.36f, 0.48f);
-        internal static readonly Color LightSpiritBorder = new Color(0.14f, 0.78f, 0.90f, 0.24f);
-        internal static readonly Color MediumSpiritBorder = new Color(0.14f, 0.78f, 0.90f, 0.46f);
+        internal static Color DeepGlass => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.bg, 0.82f);
+        internal static Color DenseGlass => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.bg, 0.92f);
+        internal static Color BlueGlass => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.surfaceRaised, 0.90f);
+        internal static Color IvoryText => RuntimeUiTheme.Current.text;
+        internal static Color SoftLoginGlass => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.bg, 0.36f);
+        internal static Color LightGoldBorder => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.gold, 0.20f);
+        internal static Color MediumGoldBorder => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.gold, 0.48f);
+        internal static Color LightSpiritBorder => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.spirit, 0.24f);
+        internal static Color MediumSpiritBorder => RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.spirit, 0.46f);
         internal const string SettingToggleStatePillName = "LGO Setting Row State Pill";
 
         internal static void ApplyRadius(VisualElement element, float radius)
