@@ -251,25 +251,19 @@ namespace LinhGioi.UI
         {
             panel.AddToClassList(LgoServerSelectPanelClass);
             ApplyLgoEntryControlCard(panel);
-            panel.style.minHeight = 360;
-            panel.style.paddingLeft = panel.style.paddingRight = 28;
-            panel.style.paddingTop = 22;
-            panel.style.paddingBottom = 20;
+        }
+
+        private static void ApplyLgoServerSelectTitleRow(VisualElement row)
+        {
+            row.AddToClassList(LgoServerSelectTitleRowClass);
         }
 
         private static void ApplyLgoServerSelectCard(Button card)
         {
             card.AddToClassList(LgoServerSelectCardClass);
+            card.AddToClassList(LgoServerSelectSelectedClass);
             ApplyLgoButton(card);
-            card.style.position = Position.Relative;
-            card.style.flexDirection = FlexDirection.Row;
-            card.style.alignItems = Align.Center;
-            card.style.flexGrow = 0;
-            card.style.height = 112;
-            card.style.marginTop = 18;
-            card.style.marginBottom = 12;
-            card.style.paddingLeft = 18;
-            card.style.paddingRight = 18;
+            ApplyLgoLayeredFrame(card);
             card.style.backgroundColor = new Color(.015f, .20f, .48f, .96f);
             card.style.borderTopWidth = card.style.borderBottomWidth = 2;
             card.style.borderLeftWidth = card.style.borderRightWidth = 2;
@@ -277,14 +271,17 @@ namespace LinhGioi.UI
             card.style.borderLeftColor = card.style.borderRightColor = UiGold;
         }
 
+        private static void ApplyLgoServerSelectStatusRow(VisualElement row)
+        {
+            row.AddToClassList(LgoServerSelectStatusRowClass);
+        }
+
         private static void ApplyLgoServerSelectAction(Button button, bool primary)
         {
             button.AddToClassList(LgoServerSelectActionClass);
             ApplyLgoEntryAuthAction(button, primary);
-            button.style.flexGrow = 1;
-            button.style.flexBasis = 0;
-            button.style.minWidth = 0;
-            button.style.whiteSpace = WhiteSpace.NoWrap;
+            button.style.minHeight = 58;
+            button.style.fontSize = 18;
             if (primary)
             {
                 button.style.backgroundColor = new Color(.84f, .58f, .18f, .98f);

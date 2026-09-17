@@ -22,10 +22,19 @@ namespace LinhGioi.UI
             _serverSelectOverlay = new VisualElement { name = "Map01A Server Select Overlay" };
             ApplyLgoServerSelectPanel(_serverSelectOverlay);
 
+            var titleRow = new VisualElement { name = "Map01A Server Select Title Row", pickingMode = PickingMode.Ignore };
+            ApplyLgoServerSelectTitleRow(titleRow);
+            var titleOrnamentLeft = new VisualElement { name = "Map01A Server Select Title Ornament Left", pickingMode = PickingMode.Ignore };
+            ApplyLgoOrnamentRail(titleOrnamentLeft);
             var title = LgoTitleLabel("CHỌN MÁY CHỦ", 27, TextAnchor.MiddleCenter);
             title.name = "Map01A Server Select Title";
             title.style.whiteSpace = WhiteSpace.NoWrap;
-            _serverSelectOverlay.Add(title);
+            var titleOrnamentRight = new VisualElement { name = "Map01A Server Select Title Ornament Right", pickingMode = PickingMode.Ignore };
+            ApplyLgoOrnamentRail(titleOrnamentRight);
+            titleRow.Add(titleOrnamentLeft);
+            titleRow.Add(title);
+            titleRow.Add(titleOrnamentRight);
+            _serverSelectOverlay.Add(titleRow);
 
             var subtitle = LgoSubtitleLabel("Chọn nơi bắt đầu hành trình", 14, TextAnchor.MiddleCenter);
             subtitle.name = "Map01A Server Select Subtitle";
@@ -67,14 +76,19 @@ namespace LinhGioi.UI
             server.Add(serverState);
             _serverSelectOverlay.Add(server);
 
+            var statusRow = new VisualElement { name = "Map01A Server Select Status Row", pickingMode = PickingMode.Ignore };
+            ApplyLgoServerSelectStatusRow(statusRow);
+            var statusIcon = LgoLabel("i", 12, UiSubText, true);
+            statusIcon.name = "Map01A Server Select Status Icon";
+            ApplyLgoEntryStatusIcon(statusIcon);
+            statusRow.Add(statusIcon);
             _serverSelectStatus = LgoSubtitleLabel("Sẵn sàng kết nối.", 14, TextAnchor.MiddleCenter);
             _serverSelectStatus.name = "Map01A Server Select Status";
-            _serverSelectStatus.style.minHeight = 28;
-            _serverSelectStatus.style.marginBottom = 12;
-            _serverSelectOverlay.Add(_serverSelectStatus);
+            statusRow.Add(_serverSelectStatus);
+            _serverSelectOverlay.Add(statusRow);
 
             var actions = new VisualElement { name = "Map01A Server Select Actions" };
-            actions.style.flexDirection = FlexDirection.Row;
+            actions.AddToClassList("lgo-server-select-actions");
             var back = new Button(() => CloseServerSelect(false))
             {
                 name = "Map01A Server Select Back",

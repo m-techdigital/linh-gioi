@@ -2147,6 +2147,43 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void ServerSelectUsesCanonicalTitleStatusAndSharedSelectedCardHierarchy()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            try
+            {
+                var host = new GameObject("server select canonical hierarchy test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Server Switch"));
+
+                var overlay = root.Q("Map01A Server Select Overlay");
+                var titleRow = root.Q("Map01A Server Select Title Row");
+                var statusRow = root.Q("Map01A Server Select Status Row");
+                var card = root.Q<Button>("Map01A Server Select Card");
+                Assert.That(overlay.ClassListContains("lgo-server-select-panel"), Is.True);
+                Assert.That(titleRow, Is.Not.Null);
+                Assert.That(titleRow.Q("Map01A Server Select Title Ornament Left"), Is.Not.Null);
+                Assert.That(titleRow.Q("Map01A Server Select Title Ornament Right"), Is.Not.Null);
+                Assert.That(root.Q<Label>("Map01A Server Select Title").parent, Is.SameAs(titleRow));
+                Assert.That(card.ClassListContains("lgo-server-select-card"), Is.True);
+                Assert.That(card.ClassListContains("lgo-server-select-selected"), Is.True);
+                Assert.That(statusRow, Is.Not.Null);
+                Assert.That(statusRow.ClassListContains("lgo-server-select-status-row"), Is.True);
+                Assert.That(statusRow.Q<Label>("Map01A Server Select Status Icon").text, Is.EqualTo("i"));
+                Assert.That(root.Q<Label>("Map01A Server Select Status").parent, Is.SameAs(statusRow));
+                Assert.That(root.Q<Button>("Map01A Server Select Back").ClassListContains("lgo-server-select-action"), Is.True);
+                Assert.That(root.Q<Button>("Map01A Server Select Confirm").ClassListContains("lgo-server-select-action"), Is.True);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void RegisterScreenValidatesLocallyAndReturnsToEntry()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

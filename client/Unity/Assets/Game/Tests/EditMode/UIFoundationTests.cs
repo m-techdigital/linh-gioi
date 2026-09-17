@@ -302,6 +302,11 @@ namespace LinhGioi.Tests
             Assert.That(source, Does.Contain(".lgo-entry-control-card"));
             Assert.That(source, Does.Contain("min-height: 420px"),
                 "Canonical Entry card min-height belongs to shared USS, not per-screen inline style.");
+            Assert.That(source, Does.Contain(".lgo-server-select-panel"));
+            Assert.That(source, Does.Contain("min-height: 420px"));
+            Assert.That(source, Does.Contain(".lgo-server-select-action"));
+            Assert.That(source, Does.Contain("min-height: 58px"),
+                "Canonical Server Select action height belongs to shared USS.");
         }
 
         [Test]
