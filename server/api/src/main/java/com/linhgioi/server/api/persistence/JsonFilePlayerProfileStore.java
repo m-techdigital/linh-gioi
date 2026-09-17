@@ -22,8 +22,8 @@ import java.util.UUID;
 public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     // v1 remains untouched as a rollback baseline; v2 owns persistent character slots.
     // Persistence hygiene: raw dev key values are never written to disk.
-    public static final int SCHEMA_VERSION = 3;
-    public static final String STORE_FILE_NAME = "players-v3.json";
+    public static final int SCHEMA_VERSION = 4;
+    public static final String STORE_FILE_NAME = "players-v4.json";
     private static final long INITIAL_ENTITY_ID = 1001L;
 
     private final Path storeFile;
@@ -158,6 +158,24 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     }
 
     @Override
+    public synchronized java.util.Optional<CharacterRuntimeState> findRuntimeState(String characterId) {
+        if (characterId == null || characterId.isBlank()) return java.util.Optional.empty();
+        return java.util.Optional.ofNullable(snapshot.getRuntimeStatesByCharacterId().get(characterId.trim()));
+    }
+
+    @Override
+    public synchronized CharacterRuntimeState saveMap01AState(SaveMap01AStateCommand command) {
+        Objects.requireNonNull(command, "command");
+        CharacterProfile character = findCharacter(command.characterId())
+                .orElseThrow(() -> new NoSuchElementException("character not found"));
+        CharacterRuntimeState state = new CharacterRuntimeState(
+                CharacterRuntimeState.MAP01A_ID, command.laneX(), command.facing(), clock.millis());
+        snapshot.getRuntimeStatesByCharacterId().put(character.characterId(), state);
+        persist();
+        return state;
+    }
+
+    @Override
     public synchronized CharacterProfile saveCharacterPosition(SaveCharacterPositionCommand command) {
         Objects.requireNonNull(command, "command");
         CharacterProfile existing = findCharacter(command.characterId())
@@ -179,6 +197,8 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
                 validateSnapshot(loaded);
                 return loaded;
             }
+            Path v3File = storeFile.resolveSibling("players-v3.json");
+            if (Files.exists(v3File)) return migrateLegacy(v3File, 3);
             Path v2File = storeFile.resolveSibling("players-v2.json");
             if (Files.exists(v2File)) return migrateLegacy(v2File, 2);
             Path v1File = storeFile.resolveSibling("players-v1.json");
@@ -257,10 +277,17 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
             }
         });
         loaded.getCharactersById().values().forEach(character -> {
-            if (character.slot() == null) throw new IllegalStateException("v3 character is missing slot");
+            if (character.slot() == null) throw new IllegalStateException("v4 character is missing slot");
             if (!loaded.getAccountsById().containsKey(character.accountId())) {
                 throw new IllegalStateException("character references missing account: " + character.characterId());
             }
+            CharacterClassCompatibility.toRuntimeClassId(character.classId());
+        });
+        loaded.getRuntimeStatesByCharacterId().forEach((characterId, state) -> {
+            if (!loaded.getCharactersById().containsKey(characterId)) {
+                throw new IllegalStateException("runtime state references missing character: " + characterId);
+            }
+            if (state == null) throw new IllegalStateException("runtime state must not be null: " + characterId);
         });
         for (String accountId : loaded.getAccountsById().keySet()) {
             var slots = loaded.getCharactersById().values().stream()
@@ -340,14 +367,8 @@ public final class JsonFilePlayerProfileStore implements PlayerProfileStore {
     }
 
     private static String normalizeClassId(String classId) {
-        if (classId == null || classId.isBlank()) {
-            return "class.sword";
-        }
-        String normalized = classId.trim();
-        if (!"class.sword".equals(normalized) && !"class.martial".equals(normalized)) {
-            throw new IllegalArgumentException("classId must be class.sword or class.martial");
-        }
-        return normalized;
+        if (classId == null || classId.isBlank()) return "class.sword";
+        return CharacterClassCompatibility.normalizeStoredClassId(classId);
     }
 
     private static String normalizeProductDisplayName(String displayName) {

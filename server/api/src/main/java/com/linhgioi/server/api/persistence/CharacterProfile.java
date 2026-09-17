@@ -30,9 +30,7 @@ public record CharacterProfile(
         if (!name.matches("[A-Za-z0-9_]+")) {
             throw new IllegalArgumentException("name may only contain letters, numbers, and underscore");
         }
-        if (!"class.sword".equals(classId) && !"class.martial".equals(classId)) {
-            throw new IllegalArgumentException("classId must be class.sword or class.martial");
-        }
+        classId = CharacterClassCompatibility.normalizeStoredClassId(classId);
         if (entityId <= 0) {
             throw new IllegalArgumentException("entityId must be positive");
         }

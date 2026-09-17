@@ -9,6 +9,7 @@ public final class PlayerPersistenceSnapshot {
     private Map<String, AccountProfile> accountsById = new LinkedHashMap<>();
     private Map<String, String> accountIdByDevKeyHash = new LinkedHashMap<>();
     private Map<String, CharacterProfile> charactersById = new LinkedHashMap<>();
+    private Map<String, CharacterRuntimeState> runtimeStatesByCharacterId = new LinkedHashMap<>();
 
     public int getSchemaVersion() {
         return schemaVersion;
@@ -48,5 +49,14 @@ public final class PlayerPersistenceSnapshot {
 
     public void setCharactersById(Map<String, CharacterProfile> charactersById) {
         this.charactersById = charactersById == null ? new LinkedHashMap<>() : new LinkedHashMap<>(charactersById);
+    }
+
+    public Map<String, CharacterRuntimeState> getRuntimeStatesByCharacterId() {
+        return runtimeStatesByCharacterId;
+    }
+
+    public void setRuntimeStatesByCharacterId(Map<String, CharacterRuntimeState> runtimeStatesByCharacterId) {
+        this.runtimeStatesByCharacterId = runtimeStatesByCharacterId == null
+                ? new LinkedHashMap<>() : new LinkedHashMap<>(runtimeStatesByCharacterId);
     }
 }

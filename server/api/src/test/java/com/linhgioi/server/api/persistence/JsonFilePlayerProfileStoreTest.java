@@ -163,7 +163,7 @@ class JsonFilePlayerProfileStoreTest {
         assertThrows(IllegalStateException.class, () -> new JsonFilePlayerProfileStore(tempDir, clock));
     }
     @Test
-    void migratesV2ToNeutralV3WithoutChangingV2FileAndKeepsDevLogin() throws Exception {
+    void migratesV2ThroughNeutralV4WithoutChangingV2FileAndKeepsDevLogin() throws Exception {
         String devKey = "v2-dev-key";
         String hash = sha256(devKey);
         String accountId = "account.dev." + hash.substring(0, 16);
@@ -178,12 +178,12 @@ class JsonFilePlayerProfileStoreTest {
         var store = new JsonFilePlayerProfileStore(tempDir, clock);
 
         assertEquals(v2, Files.readString(v2File, StandardCharsets.UTF_8));
-        assertEquals("players-v3.json", JsonFilePlayerProfileStore.STORE_FILE_NAME);
+        assertEquals("players-v4.json", JsonFilePlayerProfileStore.STORE_FILE_NAME);
         assertEquals(accountId, store.findAccount(accountId).orElseThrow().accountId());
         assertEquals(accountId, store.loginDev(devKey, "Ignored").account().accountId());
-        String v3 = Files.readString(tempDir.resolve("players-v3.json"), StandardCharsets.UTF_8);
-        assertFalse(v3.contains("devKeyHash"));
-        assertTrue(v3.contains(hash));
+        String v4 = Files.readString(tempDir.resolve("players-v4.json"), StandardCharsets.UTF_8);
+        assertFalse(v4.contains("devKeyHash"));
+        assertTrue(v4.contains(hash));
     }
 
     @Test
@@ -213,6 +213,89 @@ class JsonFilePlayerProfileStoreTest {
 
         AccountProfile dev = store.loginDev("dev-rollback-guard", "Dev").account();
         assertFalse(store.deleteEmptyProductAccount(dev.accountId()));
+    }
+
+    @Test
+    void classCompatibilityAcceptsFiveCanonicalIdsAndLegacyAliases() {
+        assertEquals("vo", CharacterClassCompatibility.toRuntimeClassId("vo"));
+        assertEquals("kiem", CharacterClassCompatibility.toRuntimeClassId("kiem"));
+        assertEquals("phap", CharacterClassCompatibility.toRuntimeClassId("phap"));
+        assertEquals("co", CharacterClassCompatibility.toRuntimeClassId("co"));
+        assertEquals("linh", CharacterClassCompatibility.toRuntimeClassId("linh"));
+        assertEquals("vo", CharacterClassCompatibility.toRuntimeClassId("class.martial"));
+        assertEquals("kiem", CharacterClassCompatibility.toRuntimeClassId("class.sword"));
+        assertThrows(IllegalArgumentException.class,
+                () -> CharacterClassCompatibility.toRuntimeClassId("class.unknown"));
+    }
+
+    @Test
+    void storesCanonicalClassesWithoutRewritingLegacyAliases() {
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+        String legacyAccount = store.loginDev("legacy-class", "Legacy").account().accountId();
+        String canonicalAccount = store.loginDev("canonical-class", "Canonical").account().accountId();
+        var legacy = store.createCharacter(new CreateCharacterCommand(legacyAccount, "LegacyHero", "class.sword"));
+        var canonical = store.createCharacter(new CreateCharacterCommand(canonicalAccount, "PhapHero", "phap"));
+        assertEquals("class.sword", legacy.classId());
+        assertEquals("phap", canonical.classId());
+    }
+
+    @Test
+    void migratesV3ToV4WithoutChangingV3BytesOrGuessingMapState() throws Exception {
+        String v3 = """
+                {"schemaVersion":3,"nextEntityId":1002,
+                 "accountsById":{"account.dev.legacy":{"accountId":"account.dev.legacy","displayName":"Legacy","createdAtUnixMs":1,"updatedAtUnixMs":1}},
+                 "accountIdByDevKeyHash":{},
+                 "charactersById":{"character.legacy":{"characterId":"character.legacy","accountId":"account.dev.legacy","name":"KiemTu","classId":"class.sword","entityId":1001,"positionX":12.5,"positionY":0.5,"positionZ":-7.0,"yawDegrees":270.0,"createdAtUnixMs":1,"updatedAtUnixMs":2,"slot":1}}}
+                """.trim();
+        Path v3File = tempDir.resolve("players-v3.json");
+        Files.writeString(v3File, v3, StandardCharsets.UTF_8);
+
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+
+        assertEquals(v3, Files.readString(v3File, StandardCharsets.UTF_8));
+        assertEquals("players-v4.json", JsonFilePlayerProfileStore.STORE_FILE_NAME);
+        var character = store.findCharacter("character.legacy").orElseThrow();
+        assertEquals("class.sword", character.classId());
+        assertEquals(12.5f, character.positionX(), 0.0001f);
+        assertEquals(-7.0f, character.positionZ(), 0.0001f);
+        assertEquals(270.0f, character.yawDegrees(), 0.0001f);
+        assertTrue(store.findRuntimeState(character.characterId()).isEmpty());
+    }
+
+    @Test
+    void persistsMap01AStateIndependentlyFromLegacyPosition() {
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+        String account = store.loginDev("map-state", "MapState").account().accountId();
+        var character = store.createCharacter(new CreateCharacterCommand(account, "MapHero", "vo"));
+        var moved = store.saveCharacterPosition(new SaveCharacterPositionCommand(
+                character.characterId(), 3.25f, 0.5f, -7.75f, 270.0f));
+
+        var state = store.saveMap01AState(new SaveMap01AStateCommand(character.characterId(), 18.5f, -1));
+        var reloaded = new JsonFilePlayerProfileStore(tempDir, clock);
+        var loadedCharacter = reloaded.findCharacter(character.characterId()).orElseThrow();
+        var loadedState = reloaded.findRuntimeState(character.characterId()).orElseThrow();
+
+        assertEquals("map-01a-cong-dong-lam", state.mapId());
+        assertEquals(18.5f, loadedState.laneX(), 0.0001f);
+        assertEquals(-1, loadedState.facing());
+        assertEquals(moved.positionX(), loadedCharacter.positionX(), 0.0001f);
+        assertEquals(moved.positionZ(), loadedCharacter.positionZ(), 0.0001f);
+        assertEquals(moved.yawDegrees(), loadedCharacter.yawDegrees(), 0.0001f);
+    }
+
+    @Test
+    void rejectsInvalidMap01AStateWithoutCorruptingCharacter() {
+        var store = new JsonFilePlayerProfileStore(tempDir, clock);
+        String account = store.loginDev("bad-map-state", "BadMapState").account().accountId();
+        var character = store.createCharacter(new CreateCharacterCommand(account, "SafeHero", "linh"));
+        assertThrows(IllegalArgumentException.class,
+                () -> store.saveMap01AState(new SaveMap01AStateCommand(character.characterId(), -3.81f, 1)));
+        assertThrows(IllegalArgumentException.class,
+                () -> store.saveMap01AState(new SaveMap01AStateCommand(character.characterId(), 44.41f, 1)));
+        assertThrows(IllegalArgumentException.class,
+                () -> store.saveMap01AState(new SaveMap01AStateCommand(character.characterId(), 0f, 0)));
+        assertTrue(store.findRuntimeState(character.characterId()).isEmpty());
+        assertEquals("linh", store.findCharacter(character.characterId()).orElseThrow().classId());
     }
 
     private static String sha256(String value) throws Exception {

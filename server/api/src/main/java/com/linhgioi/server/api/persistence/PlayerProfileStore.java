@@ -11,5 +11,7 @@ public interface PlayerProfileStore {
     List<CharacterProfile> listCharacters(String accountId);
     CharacterProfile createCharacter(CreateCharacterCommand command);
     Optional<CharacterProfile> findCharacter(String characterId);
+    Optional<CharacterRuntimeState> findRuntimeState(String characterId);
+    CharacterRuntimeState saveMap01AState(SaveMap01AStateCommand command);
     CharacterProfile saveCharacterPosition(SaveCharacterPositionCommand command);
 }
