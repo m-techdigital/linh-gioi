@@ -8,7 +8,7 @@ using UnityEngine.Networking;
 
 namespace LinhGioi.Account
 {
-    public sealed class AccountApiClient : IDisposable
+    public sealed class AccountApiClient : IProductAuthClient, IDisposable
     {
         private const int DefaultTimeoutSeconds = 10;
         private readonly string _apiBaseUrl;
@@ -30,6 +30,22 @@ namespace LinhGioi.Account
         public Task<DevLoginResponse> LoginDevAsync(string devKey, string displayName, CancellationToken cancellationToken)
         {
             return SendJsonAsync<DevLoginResponse>("POST", "/dev/auth/login", new DevLoginRequest(devKey, displayName), 200, cancellationToken);
+        }
+
+        public Task<ProductLoginResponse> LoginAsync(string identifier, string password, CancellationToken cancellationToken)
+        {
+            return SendJsonAsync<ProductLoginResponse>("POST", "/auth/login",
+                new ProductLoginRequest(identifier, password), 200, cancellationToken);
+        }
+
+        public Task<ProductSessionResponse> ValidateSessionAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            return SendJsonAsync<ProductSessionResponse>("GET", "/auth/session", null, 200, cancellationToken, accessToken);
+        }
+
+        public async Task LogoutAsync(string accessToken, CancellationToken cancellationToken)
+        {
+            await SendJsonRawAsync("POST", "/auth/logout", null, 204, cancellationToken, accessToken);
         }
 
         public async Task<CharacterResponse[]> ListCharactersAsync(string accountId, CancellationToken cancellationToken)
@@ -75,15 +91,15 @@ namespace LinhGioi.Account
             return normalized;
         }
 
-        private async Task<T> SendJsonAsync<T>(string method, string path, object payload, long expectedStatus, CancellationToken cancellationToken)
+        private async Task<T> SendJsonAsync<T>(string method, string path, object payload, long expectedStatus, CancellationToken cancellationToken, string bearerToken = null)
         {
-            var body = await SendJsonRawAsync(method, path, payload, expectedStatus, cancellationToken);
+            var body = await SendJsonRawAsync(method, path, payload, expectedStatus, cancellationToken, bearerToken);
             var parsed = JsonUtility.FromJson<T>(body);
             if (parsed == null) throw new InvalidOperationException("API response could not be parsed as " + typeof(T).Name + ".");
             return parsed;
         }
 
-        private async Task<string> SendJsonRawAsync(string method, string path, object payload, long expectedStatus, CancellationToken cancellationToken)
+        private async Task<string> SendJsonRawAsync(string method, string path, object payload, long expectedStatus, CancellationToken cancellationToken, string bearerToken = null)
         {
             ThrowIfDisposed();
             cancellationToken.ThrowIfCancellationRequested();
@@ -92,6 +108,11 @@ namespace LinhGioi.Account
                 request.downloadHandler = new DownloadHandlerBuffer();
                 request.timeout = _timeoutSeconds;
                 request.SetRequestHeader("Accept", "application/json");
+                if (bearerToken != null)
+                {
+                    if (string.IsNullOrWhiteSpace(bearerToken)) throw new ArgumentException("accessToken must not be blank", nameof(bearerToken));
+                    request.SetRequestHeader("Authorization", "Bearer " + bearerToken);
+                }
                 if (payload != null)
                 {
                     var json = JsonUtility.ToJson(payload);
@@ -108,7 +129,8 @@ namespace LinhGioi.Account
 
                 var responseBody = request.downloadHandler == null ? string.Empty : request.downloadHandler.text;
                 if (request.result != UnityWebRequest.Result.Success || request.responseCode != expectedStatus)
-                    throw new InvalidOperationException($"API {method} {path} expected HTTP {expectedStatus} but got {request.responseCode}: {request.error} {responseBody}");
+                    throw new AccountApiException(request.responseCode,
+                        $"API {method} {path} expected HTTP {expectedStatus} but got {request.responseCode}: {request.error} {responseBody}");
                 return responseBody;
             }
         }
