@@ -1,5 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using LinhGioi.Account;
+using LinhGioi.Foundation;
 using LinhGioi.World;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -40,12 +43,22 @@ namespace LinhGioi.UI
         private PanelSettings _ownedPanel;
         private bool _touch;
         private bool _reviewHotkeysEnabled;
-        public static void Attach(CongDongLamMap01AArtPreview scene)
+        private IProductAuthClient _productAuthClient;
+        private ProductAuthSessionState _productAuthSession;
+        private CancellationTokenSource _productAuthCts;
+        private bool _ownsProductAuthClient;
+        private bool _productLoginInFlight;
+
+        public static void Attach(CongDongLamMap01AArtPreview scene,
+            IProductAuthClient productAuthClient = null, ProductAuthSessionState authSession = null)
         {
             var host = new GameObject("Map01A Arrival HUD");
             host.transform.SetParent(scene.transform, false);
             var hud = host.AddComponent<CongDongLamArrivalHud>();
             hud._scene = scene;
+            hud._productAuthClient = productAuthClient;
+            hud._productAuthSession = authSession ?? new ProductAuthSessionState();
+            hud._productAuthCts = new CancellationTokenSource();
             var document = host.AddComponent<UIDocument>();
             hud._ownedPanel = Instantiate(RuntimePanelSettingsProvider.LoadOrCreate());
             hud._ownedPanel.scaleMode = PanelScaleMode.ScaleWithScreenSize;
@@ -668,7 +681,26 @@ namespace LinhGioi.UI
                 default: return EquipmentDisplayName(slot);
             }
         }
-        private void OnDestroy() { if (_ownedPanel != null) Destroy(_ownedPanel); }
+        private void EnsureProductAuthClient()
+        {
+            if (_productAuthClient != null) return;
+            _productAuthClient = new AccountApiClient(ClientRuntimeConfig.LoadStreamingAssets());
+            _ownsProductAuthClient = true;
+        }
+
+        private CancellationToken ProductAuthCancellationToken => _productAuthCts?.Token ?? CancellationToken.None;
+
+        private void OnDestroy()
+        {
+            if (_productAuthCts != null)
+            {
+                _productAuthCts.Cancel();
+                _productAuthCts.Dispose();
+                _productAuthCts = null;
+            }
+            if (_ownsProductAuthClient && _productAuthClient is IDisposable disposable) disposable.Dispose();
+            if (_ownedPanel != null) Destroy(_ownedPanel);
+        }
         private void OnDisable() { _pad?.ResetInput(); }
     }
 }

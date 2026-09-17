@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using NUnit.Framework;
+using LinhGioi.Account;
 using LinhGioi.UI;
 using LinhGioi.World;
 using UnityEngine;
@@ -2422,12 +2425,108 @@ namespace LinhGioi.Tests.EditMode
                 var status = root.Q<Label>("Map01A Entry Safety Note");
                 Assert.That(status.text, Does.Contain("Nhập tài khoản"));
 
-                account.value = "LụcThiên";
-                password.value = "demo-secret";
-                InvokeBoundButton(root.Q<Button>("Map01A Entry Login Button"));
-                Assert.That(status.text, Does.Contain("chưa kết nối"));
                 Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void EntryProductAuthShowsAuthenticatingStateAndPreventsDuplicateSubmit()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var fake = FakeProductAuthClient.Pending();
+            var session = new ProductAuthSessionState();
+            try
+            {
+                var host = new GameObject("entry product auth pending test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene, fake, session);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var account = root.Q<TextField>("Map01A Entry Account Field");
+                var password = root.Q<TextField>("Map01A Entry Password Field");
+                var login = root.Q<Button>("Map01A Entry Login Button");
+                var status = root.Q<Label>("Map01A Entry Safety Note");
+
+                account.value = "minh@example.test";
+                password.value = "Secret#123";
+                InvokeBoundButton(login);
+
+                Assert.That(fake.LoginCallCount, Is.EqualTo(1));
+                Assert.That(status.text, Is.EqualTo("Đang xác thực…"));
+                Assert.That(login.enabledSelf, Is.False);
+                InvokeBoundButton(login);
+                Assert.That(fake.LoginCallCount, Is.EqualTo(1), "In-flight auth must reject duplicate submit callbacks.");
+                Assert.That(session.IsAuthenticated, Is.False);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void EntryProductAuthUnauthorizedKeepsEntryOpenWithGenericCopy()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var session = new ProductAuthSessionState();
+            try
+            {
+                var host = new GameObject("entry product auth unauthorized test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene, FakeProductAuthClient.Unauthorized(), session);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var account = root.Q<TextField>("Map01A Entry Account Field");
+                var password = root.Q<TextField>("Map01A Entry Password Field");
+                var login = root.Q<Button>("Map01A Entry Login Button");
+                account.value = "minh@example.test";
+                password.value = "Secret#123";
+
+                InvokeBoundButton(login);
+
+                Assert.That(root.Q<Label>("Map01A Entry Safety Note").text,
+                    Is.EqualTo("Tài khoản hoặc mật khẩu không đúng."));
+                Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(password.value, Is.EqualTo("Secret#123"));
+                Assert.That(login.enabledSelf, Is.True);
+                Assert.That(session.IsAuthenticated, Is.False);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
+        public void EntryProductAuthSuccessStoresSessionClearsPasswordAndOpensCharacterSelect()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var session = new ProductAuthSessionState();
+            try
+            {
+                var host = new GameObject("entry product auth success test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene, FakeProductAuthClient.Success(), session);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var account = root.Q<TextField>("Map01A Entry Account Field");
+                var password = root.Q<TextField>("Map01A Entry Password Field");
+                account.value = "minh@example.test";
+                password.value = "Secret#123";
+
+                InvokeBoundButton(root.Q<Button>("Map01A Entry Login Button"));
+
+                Assert.That(session.IsAuthenticated, Is.True);
+                Assert.That(session.Account.accountId, Is.EqualTo("account.dev.abc"));
+                Assert.That(session.AccessToken, Is.EqualTo("opaque-token"));
+                Assert.That(password.value, Is.Empty);
+                Assert.That(root.Q("Map01A Entry Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.Flex));
             }
             finally
             {
@@ -2545,10 +2644,6 @@ namespace LinhGioi.Tests.EditMode
                     "The canonical card reserves a stable inline status line to avoid layout jumps.");
                 InvokeBoundButton(loginButton);
                 Assert.That(status.text, Does.Contain("Nhập tài khoản"));
-                accountField.value = "LụcThiên";
-                passwordField.value = "demo-secret";
-                InvokeBoundButton(loginButton);
-                Assert.That(status.text, Does.Contain("chưa kết nối"));
                 Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.ActiveQuestId, Is.EqualTo("Q01"));
 
@@ -3087,6 +3182,58 @@ namespace LinhGioi.Tests.EditMode
             {
                 foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
                     if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        private sealed class FakeProductAuthClient : IProductAuthClient
+        {
+            private readonly Task<ProductLoginResponse> _loginTask;
+            private readonly TaskCompletionSource<ProductLoginResponse> _pending;
+            public int LoginCallCount { get; private set; }
+
+            private FakeProductAuthClient(Task<ProductLoginResponse> loginTask, TaskCompletionSource<ProductLoginResponse> pending = null)
+            {
+                _loginTask = loginTask;
+                _pending = pending;
+            }
+
+            public static FakeProductAuthClient Pending()
+            {
+                var pending = new TaskCompletionSource<ProductLoginResponse>();
+                return new FakeProductAuthClient(pending.Task, pending);
+            }
+
+            public static FakeProductAuthClient Unauthorized()
+            {
+                return new FakeProductAuthClient(Task.FromException<ProductLoginResponse>(
+                    new AccountApiException(401, "safe unauthorized")));
+            }
+
+            public static FakeProductAuthClient Success()
+            {
+                return new FakeProductAuthClient(Task.FromResult(new ProductLoginResponse
+                {
+                    account = new AccountResponse { accountId = "account.dev.abc", displayName = "Minh" },
+                    accessToken = "opaque-token",
+                    expiresAtUnixMs = 9_999_999_999_999L
+                }));
+            }
+
+            public Task<ProductLoginResponse> LoginAsync(string identifier, string password, CancellationToken cancellationToken)
+            {
+                LoginCallCount++;
+                if (_pending != null) cancellationToken.Register(() => _pending.TrySetCanceled());
+                return _loginTask;
+            }
+
+            public Task<ProductSessionResponse> ValidateSessionAsync(string accessToken, CancellationToken cancellationToken)
+            {
+                return Task.FromException<ProductSessionResponse>(new System.NotSupportedException());
+            }
+
+            public Task LogoutAsync(string accessToken, CancellationToken cancellationToken)
+            {
+                return Task.CompletedTask;
             }
         }
 

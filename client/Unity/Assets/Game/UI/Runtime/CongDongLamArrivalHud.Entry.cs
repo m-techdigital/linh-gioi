@@ -1,4 +1,5 @@
 using System;
+using LinhGioi.Account;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -11,6 +12,7 @@ namespace LinhGioi.UI
         private VisualElement _entryControlCard;
         private Label _entryStatus;
         private TextField _entryAccountField, _entryPasswordField;
+        private Button _entryLoginButton;
         private VisualElement _entryRememberMark;
         private bool _entryRememberAccount;
         private bool _entryOpen;
@@ -125,20 +127,14 @@ namespace LinhGioi.UI
             var authActions = new VisualElement { name = "Map01A Entry Auth Actions" };
             authActions.style.flexDirection = FlexDirection.Row;
             authActions.style.marginBottom = 14;
-            var login = new Button(() =>
-            {
-                _entryStatus.text = string.IsNullOrWhiteSpace(_entryAccountField?.value)
-                    || string.IsNullOrWhiteSpace(_entryPasswordField?.value)
-                    ? "Nhập tài khoản và mật khẩu để đăng nhập."
-                    : "Dịch vụ đăng nhập chưa kết nối. Vui lòng thử lại sau.";
-            })
+            _entryLoginButton = new Button(SubmitProductLogin)
             {
                 name = "Map01A Entry Login Button",
                 text = "Đăng nhập"
             };
-            ApplyLgoEntryAuthAction(login, true);
-            login.style.flexGrow = 1;
-            login.style.marginRight = 10;
+            ApplyLgoEntryAuthAction(_entryLoginButton, true);
+            _entryLoginButton.style.flexGrow = 1;
+            _entryLoginButton.style.marginRight = 10;
             var register = new Button(OpenRegister)
             {
                 name = "Map01A Entry Register Button",
@@ -146,7 +142,7 @@ namespace LinhGioi.UI
             };
             ApplyLgoEntryAuthAction(register, false);
             register.style.flexGrow = 1;
-            authActions.Add(login);
+            authActions.Add(_entryLoginButton);
             authActions.Add(register);
             _entryControlCard.Add(authActions);
 
@@ -183,6 +179,43 @@ namespace LinhGioi.UI
 
             _root.Add(_entryOverlay);
             UpdateEntryScreen();
+        }
+
+        private async void SubmitProductLogin()
+        {
+            if (_productLoginInFlight) return;
+            if (string.IsNullOrWhiteSpace(_entryAccountField?.value) || string.IsNullOrWhiteSpace(_entryPasswordField?.value))
+            {
+                _entryStatus.text = "Nhập tài khoản và mật khẩu để đăng nhập.";
+                return;
+            }
+
+            _productLoginInFlight = true;
+            _entryLoginButton?.SetEnabled(false);
+            _entryStatus.text = "Đang xác thực…";
+            try
+            {
+                EnsureProductAuthClient();
+                var response = await _productAuthClient.LoginAsync(
+                    _entryAccountField.value.Trim(), _entryPasswordField.value, ProductAuthCancellationToken);
+                _productAuthSession.Set(response);
+                _entryPasswordField.SetValueWithoutNotify(string.Empty);
+                OpenCharacterSelect();
+            }
+            catch (OperationCanceledException) { }
+            catch (AccountApiException exception) when (exception.StatusCode == 401)
+            {
+                _entryStatus.text = "Tài khoản hoặc mật khẩu không đúng.";
+            }
+            catch (Exception)
+            {
+                _entryStatus.text = "Không thể kết nối máy chủ đăng nhập. Vui lòng thử lại.";
+            }
+            finally
+            {
+                _productLoginInFlight = false;
+                _entryLoginButton?.SetEnabled(true);
+            }
         }
 
         private void AddEntrySideAction(VisualElement parent, string text, string status, string iconId)
