@@ -23,7 +23,7 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
         self.assertEqual(tuple(capture.SCREEN_CAPTURES), (
             "entry", "server-select", "register", "password-recovery",
             "password-recovery-verify", "password-recovery-new-password",
-            "character-select", "menu",
+            "character-select", "character-entry", "menu",
         ))
         self.assertEqual(capture.FLOW_COMPONENTS, ("quest", "character-hub"))
     def test_auth_commands_request_validation_evidence_without_os_input(self):
@@ -52,6 +52,18 @@ class WholeFlowP0CaptureTests(unittest.TestCase):
         self.assertIn("--lgo-map01a-password-recovery-new-password-capture", new_password)
         self.assertNotIn("--lgo-map01a-auth-validation-capture", new_password)
         self.assertIn("--lgo-product-account-states-capture", new_password)
+
+    def test_character_entry_capture_uses_internal_loaded_state_without_auth_network(self):
+        player = Path("/tmp/LinhGioiOnline.app/Contents/MacOS/Unity")
+        out = Path("/tmp/evidence")
+        self.assertIn("character-entry", capture.SCREEN_CAPTURES)
+        spec = capture.SCREEN_CAPTURES["character-entry"]
+        self.assertEqual(spec.frames, ("character-select.png", "map01a-entry.png"))
+        command = capture.build_screen_command(player, out, "pc", "character-entry")
+        self.assertIn("--lgo-map01a-character-entry-capture", command)
+        self.assertNotIn("--lgo-map01a-auth-validation-capture", command)
+        self.assertNotIn("--lgo-product-account-states-capture", command)
+        self.assertNotIn("osascript", command)
 
     def test_non_auth_commands_do_not_request_validation_state(self):
         player = Path("/tmp/LinhGioiOnline.app/Contents/MacOS/Unity")

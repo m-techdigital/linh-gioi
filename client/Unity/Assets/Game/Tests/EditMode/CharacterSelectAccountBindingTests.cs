@@ -139,12 +139,41 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void CharacterSelectLabelsCanonicalFiveClassWithoutRawIds()
+        {
+            var before = Roots();
+            try
+            {
+                var character = Character(1, "character.linh", "LinhTu", "linh");
+                character.runtimeClassId = "linh";
+                var fake = FakeCharacterClient.Success(character);
+                var host = new GameObject("canonical character class label test");
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene, fake, AuthenticatedSession("account.product.abc"));
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                OpenCharacterSelect(host);
+                var meta = root.Q<Label>("Map01A Character Slot 1 Meta").text;
+                Assert.That(meta, Does.Contain("Linh"));
+                Assert.That(meta, Does.Not.Contain("linh"));
+            }
+            finally { DestroyNewRoots(before); }
+        }
+
+        [Test]
         public void CharacterSelectCaptureFlagUsesDeterministicInternalSeedOnly()
         {
             Assert.That(CongDongLamArrivalHud.ShouldSeedCharacterSelectCaptureForArgs(
                 new[] { "LinhGioiOnline", "--lgo-map01a-character-select-capture" }), Is.True);
             Assert.That(CongDongLamArrivalHud.ShouldSeedCharacterSelectCaptureForArgs(
                 new[] { "LinhGioiOnline" }), Is.False);
+        }
+
+        [Test]
+        public void CharacterEntryCaptureFlagUsesDeterministicInternalLoadedState()
+        {
+            var args = new[] { "LinhGioiOnline", "--lgo-map01a-character-entry-capture" };
+            Assert.That(CongDongLamArrivalHud.ShouldSeedCharacterSelectCaptureForArgs(args), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(args), Is.True);
         }
 
         [Test]

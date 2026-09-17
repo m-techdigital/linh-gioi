@@ -269,26 +269,78 @@ namespace LinhGioi.UI
 
         public static bool ShouldSeedCharacterSelectCaptureForArgs(string[] args)
         {
-            return args != null && Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0;
+            return args != null && (Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0
+                || Array.IndexOf(args, "--lgo-map01a-character-entry-capture") >= 0);
         }
+
+        private static bool ShouldCaptureCharacterEntryForArgs(string[] args)
+            => args != null && Array.IndexOf(args, "--lgo-map01a-character-entry-capture") >= 0;
 
         private void PrepareCharacterSelectCaptureSeed()
         {
+            var entryCapture = ShouldCaptureCharacterEntryForArgs(Environment.GetCommandLineArgs());
             Array.Clear(_characterSelectCharacters, 0, _characterSelectCharacters.Length);
-            _characterSelectCharacters[0] = new CharacterResponse
-            {
-                slot = 1, characterId = "capture.character.1", accountId = "capture.account.review",
-                name = "KiếmTu", classId = "class.sword", entityId = 1001
-            };
+            _characterSelectCharacters[0] = entryCapture
+                ? new CharacterResponse
+                {
+                    slot = 1, characterId = "capture.character.entry", accountId = "capture.account.review",
+                    name = "LinhTu", classId = "linh", runtimeClassId = "linh", entityId = 1001,
+                    runtimeState = new CharacterRuntimeStateResponse
+                    {
+                        mapId = Map01ACharacterEntryMapper.MapId, laneX = 18.5f, facing = -1,
+                        updatedAtUnixMs = 1_700_000_000_000L
+                    }
+                }
+                : new CharacterResponse
+                {
+                    slot = 1, characterId = "capture.character.1", accountId = "capture.account.review",
+                    name = "KiếmTu", classId = "class.sword", runtimeClassId = "kiem", entityId = 1001
+                };
             _characterSelectCharacters[2] = new CharacterResponse
             {
                 slot = 3, characterId = "capture.character.3", accountId = "capture.account.review",
-                name = "VõGia", classId = "class.martial", entityId = 1003
+                name = "VõGia", classId = "class.martial", runtimeClassId = "vo", entityId = 1003
             };
             _selectedProductCharacter = _characterSelectCharacters[0];
+            if (entryCapture)
+            {
+                _productAuthSession.Set(new ProductLoginResponse
+                {
+                    account = new AccountResponse
+                    {
+                        accountId = "capture.account.review", displayName = "capture@example.invalid"
+                    },
+                    accessToken = "capture-internal-token", expiresAtUnixMs = long.MaxValue
+                });
+                _productCharacterClient = new CharacterEntryCaptureClient(_selectedProductCharacter);
+            }
             RefreshCharacterSelectSlots();
             RefreshCharacterSelectContent();
-            SetCharacterSelectStatus("KiếmTu đang được chọn.");
+            SetCharacterSelectStatus(_selectedProductCharacter.name + " đang được chọn.");
+        }
+
+        private sealed class CharacterEntryCaptureClient : IProductCharacterClient
+        {
+            private readonly CharacterResponse _character;
+            public CharacterEntryCaptureClient(CharacterResponse character)
+                => _character = character ?? throw new ArgumentNullException(nameof(character));
+
+            public System.Threading.Tasks.Task<CharacterResponse[]> ListProductCharactersAsync(
+                string accessToken, System.Threading.CancellationToken cancellationToken)
+                => System.Threading.Tasks.Task.FromResult(new[] { _character });
+
+            public System.Threading.Tasks.Task<CharacterResponse> LoadProductCharacterAsync(
+                string accessToken, string characterId, System.Threading.CancellationToken cancellationToken)
+                => characterId == _character.characterId
+                    ? System.Threading.Tasks.Task.FromResult(_character)
+                    : System.Threading.Tasks.Task.FromException<CharacterResponse>(
+                        new InvalidOperationException("Capture character id mismatch."));
+
+            public System.Threading.Tasks.Task<CharacterResponse> SaveMap01AStateAsync(
+                string accessToken, string characterId, float laneX, int facing,
+                System.Threading.CancellationToken cancellationToken)
+                => System.Threading.Tasks.Task.FromException<CharacterResponse>(
+                    new NotSupportedException("Capture harness never persists runtime state."));
         }
 
         private void SelectCharacterSlot(int slotNumber)
@@ -324,7 +376,7 @@ namespace LinhGioi.UI
             button.text = character.name;
             ApplyLgoCharacterSelectProfile(button, ReferenceEquals(character, _selectedProductCharacter));
             AddCharacterSelectProfileIcon(button, _scene.GetCharacterAvatarThumbnailSprite(), "Slot " + slotNumber);
-            var meta = LgoSubtitleLabel("Slot " + slotNumber + " · " + ProductCharacterClassLabel(character.classId), 12);
+            var meta = LgoSubtitleLabel("Slot " + slotNumber + " · " + ProductCharacterClassLabel(character), 12);
             meta.name = "Map01A Character Slot " + slotNumber + " Meta";
             meta.style.position = Position.Absolute;
             meta.style.left = 92;
@@ -344,12 +396,18 @@ namespace LinhGioi.UI
             if (_characterSelectStatus != null) _characterSelectStatus.text = message;
         }
 
-        private static string ProductCharacterClassLabel(string classId)
+        private static string ProductCharacterClassLabel(CharacterResponse character)
         {
+            if (character == null) return "Nhân vật";
+            var classId = string.IsNullOrWhiteSpace(character.runtimeClassId)
+                ? character.classId : character.runtimeClassId;
             switch (classId)
             {
-                case "class.sword": return "Kiếm";
-                case "class.martial": return "Võ";
+                case "vo": case "class.martial": return "Võ";
+                case "kiem": case "class.sword": return "Kiếm";
+                case "phap": return "Pháp";
+                case "co": return "Cơ";
+                case "linh": return "Linh";
                 default: return "Nhân vật";
             }
         }
@@ -365,7 +423,7 @@ namespace LinhGioi.UI
             if (_characterSelectDetailMeta != null)
                 _characterSelectDetailMeta.text = _selectedProductCharacter == null
                     ? "Chưa có hồ sơ được chọn."
-                    : ProductCharacterClassLabel(_selectedProductCharacter.classId) + " · Slot " + _selectedProductCharacter.slot + "\nS1 Đông Lâm";
+                    : ProductCharacterClassLabel(_selectedProductCharacter) + " · Slot " + _selectedProductCharacter.slot + "\nS1 Đông Lâm";
             if (_characterSelectEnterButton != null)
                 _characterSelectEnterButton.SetEnabled(!_characterSelectLoading && _selectedProductCharacter != null);
         }

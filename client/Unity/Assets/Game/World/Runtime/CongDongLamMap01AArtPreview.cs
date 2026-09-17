@@ -62,6 +62,7 @@ namespace LinhGioi.World
         public bool VoSomersaultEnabled => _registeredOutfit != null;
         private bool RegisteredRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered") >= 0 || Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-vo-registered-equipment") >= 0;
         private bool CharacterSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-select-capture") >= 0;
+        private bool CharacterEntryCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-entry-capture") >= 0;
         private bool ServerSelectCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-server-select-capture") >= 0;
         private bool RegisterCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-register-capture") >= 0;
         private bool PasswordRecoveryCaptureRequested
@@ -72,7 +73,7 @@ namespace LinhGioi.World
         private bool CharacterScreenCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-character-screen-capture") >= 0;
         private bool MenuCaptureRequested => Array.IndexOf(Environment.GetCommandLineArgs(), "--lgo-map01a-menu-capture") >= 0;
         public bool IsCapturing => _registeredCapturing || _poseLoopCapturing
-            || CharacterSelectCaptureRequested || ServerSelectCaptureRequested || RegisterCaptureRequested || PasswordRecoveryCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
+            || CharacterSelectCaptureRequested || CharacterEntryCaptureRequested || ServerSelectCaptureRequested || RegisterCaptureRequested || PasswordRecoveryCaptureRequested || InventoryTabsCaptureRequested || CharacterScreenCaptureRequested
             || MenuCaptureRequested || IsMapQuestCaptureForArgs(Environment.GetCommandLineArgs());
 
         public static bool HasRendererAuthorityConflict(IReadOnlyList<string> args)
@@ -775,6 +776,7 @@ namespace LinhGioi.World
             || IsMapQuestCaptureForArgs(args)
             || Array.IndexOf(args, "--lgo-map01a-entry-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0
+            || Array.IndexOf(args, "--lgo-map01a-character-entry-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-server-select-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-register-capture") >= 0
             || Array.IndexOf(args, "--lgo-map01a-password-recovery-capture") >= 0
@@ -1809,6 +1811,11 @@ namespace LinhGioi.World
                 yield return CaptureEntryScreen(args);
                 yield break;
             }
+            if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-character-entry-capture") >= 0)
+            {
+                yield return CaptureCharacterEntryScreen(args);
+                yield break;
+            }
             if (Application.isPlaying && Array.IndexOf(args, "--lgo-map01a-character-select-capture") >= 0)
             {
                 yield return CaptureCharacterSelectScreen(args);
@@ -2651,6 +2658,62 @@ namespace LinhGioi.World
             image.Apply();
             File.WriteAllBytes(imagePath, image.EncodeToPNG());
             UnityEngine.Object.Destroy(image);
+        }
+
+        private IEnumerator CaptureCharacterEntryScreen(string[] args)
+        {
+            Application.runInBackground = true;
+            var index = Array.IndexOf(args, "--lgo-map01a-art-dir");
+            if (index < 0 || index + 1 >= args.Length)
+                throw new ArgumentException("Missing Map01A character entry capture directory");
+            var directory = args[index + 1];
+            Directory.CreateDirectory(directory);
+            _controller.enabled = false;
+            yield return null;
+            yield return null;
+            var document = GetComponentInChildren<UIDocument>();
+            if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for character entry capture");
+            var overlay = document.rootVisualElement.Q("Map01A Character Select Overlay");
+            var enter = document.rootVisualElement.Q<Button>("Map01A Character Select Enter Game");
+            if (overlay == null || enter == null)
+                throw new InvalidOperationException("Missing Character Select entry controls for capture");
+            yield return new WaitForEndOfFrame();
+            var selectPath = Path.Combine(directory, "character-select.png");
+            CaptureScreenPng(selectPath);
+            var selectVisible = overlay.style.display.value == DisplayStyle.Flex;
+
+            InvokeHudButton(enter);
+            yield return null;
+            yield return null;
+            yield return new WaitForEndOfFrame();
+            var entryPath = Path.Combine(directory, "map01a-entry.png");
+            CaptureScreenPng(entryPath);
+            var entryApplied = overlay.style.display.value == DisplayStyle.None
+                && Mathf.Abs(PlayerX - 18.5f) <= .001f
+                && ProductEntryFacingSign == -1
+                && LoadedProductRuntimeClassId == "linh"
+                && ActiveEquipmentClassId == "vo"
+                && CurrentRouteNodeId == "village-square";
+            var status = File.Exists(selectPath) && File.Exists(entryPath) && selectVisible && entryApplied
+                ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
+            var manifest = "{\n"
+                + "  \"status\": \"" + status + "\",\n"
+                + "  \"captureScope\": \"map01a-character-entry\",\n"
+                + "  \"usesOsMouseOrKeyboard\": false,\n"
+                + "  \"usesNetwork\": false,\n"
+                + "  \"characterSelectOverlayExpected\": true,\n"
+                + "  \"entryOverlayClosed\": " + (overlay.style.display.value == DisplayStyle.None ? "true" : "false") + ",\n"
+                + "  \"runtimeClassId\": \"" + (LoadedProductRuntimeClassId ?? "") + "\",\n"
+                + "  \"rendererClassId\": \"" + ActiveEquipmentClassId + "\",\n"
+                + "  \"laneX\": " + PlayerX.ToString(System.Globalization.CultureInfo.InvariantCulture) + ",\n"
+                + "  \"facing\": " + ProductEntryFacingSign + ",\n"
+                + "  \"routeNode\": \"" + CurrentRouteNodeId + "\",\n"
+                + "  \"width\": " + Screen.width + ",\n"
+                + "  \"height\": " + Screen.height + ",\n"
+                + "  \"frames\": [\"character-select.png\", \"map01a-entry.png\"]\n"
+                + "}\n";
+            File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
+            Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
         }
 
         private IEnumerator CaptureCharacterSelectScreen(string[] args)

@@ -54,6 +54,9 @@ SCREEN_CAPTURES = {
     "character-select": ScreenCaptureSpec(
         "--lgo-map01a-character-select-capture", "map01a-character-select",
         ("character-select.png",)),
+    "character-entry": ScreenCaptureSpec(
+        "--lgo-map01a-character-entry-capture", "map01a-character-entry",
+        ("character-select.png", "map01a-entry.png")),
     "menu": ScreenCaptureSpec(
         "--lgo-map01a-menu-capture", "map01a-menu", ("menu.png",)),
 }
