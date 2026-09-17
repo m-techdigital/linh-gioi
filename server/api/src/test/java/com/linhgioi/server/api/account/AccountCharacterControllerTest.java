@@ -19,8 +19,9 @@ class AccountCharacterControllerTest {
 
     @Test
     void devLoginCreateCharacterSavePositionAndRejectInvalidRequestsOverController() {
-        AccountCharacterController controller = new AccountCharacterController(
-                new JsonFilePlayerProfileStore(tempDir, Clock.fixed(Instant.ofEpochMilli(1_700_000_000_000L), ZoneOffset.UTC)));
+        var store = new JsonFilePlayerProfileStore(
+                tempDir, Clock.fixed(Instant.ofEpochMilli(1_700_000_000_000L), ZoneOffset.UTC));
+        AccountCharacterController controller = new AccountCharacterController(store);
 
         DevLoginResponse login = controller.login(new DevLoginRequest("m3-dev-key", "Minh"));
         assertTrue(login.created());
@@ -44,6 +45,8 @@ class AccountCharacterControllerTest {
         assertEquals(1.25f, moved.x(), 0.0001f);
         assertEquals(-2.5f, moved.z(), 0.0001f);
         assertEquals(180.0f, moved.yawDegrees(), 0.0001f);
+        assertTrue(store.findRuntimeState(created.characterId()).isEmpty(),
+                "Legacy position endpoint must not invent Map01A runtime state");
 
         CharacterResponse loaded = controller.getCharacter(created.characterId());
         assertEquals("KiemTu", loaded.name());

@@ -2,6 +2,7 @@ package com.linhgioi.server.api.account;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.linhgioi.server.api.auth.AuthSessionRegistry;
 import com.linhgioi.server.api.auth.JsonFileProductCredentialStore;
@@ -40,6 +41,57 @@ class ProductCharacterControllerTest {
             assertEquals(HttpStatus.UNAUTHORIZED, failure.getStatusCode());
             assertEquals("invalid or expired session", failure.getReason());
         }
+    }
+
+    @Test
+    void productReadsExposeCanonicalRuntimeClassAndOptionalRuntimeState() {
+        Fixture fixture = fixture();
+
+        var listed = fixture.controller.listCharacters("Bearer " + fixture.ownerToken);
+
+        assertEquals("class.sword", listed.get(0).classId());
+        assertEquals("kiem", listed.get(0).runtimeClassId());
+        assertNull(listed.get(0).runtimeState());
+        assertEquals("class.martial", listed.get(1).classId());
+        assertEquals("vo", listed.get(1).runtimeClassId());
+        assertNull(listed.get(1).runtimeState());
+    }
+
+    @Test
+    void bearerOwnerCanSaveAndReloadMap01AState() {
+        Fixture fixture = fixture();
+
+        CharacterResponse saved = fixture.controller.saveMap01AState(
+                "Bearer " + fixture.ownerToken, fixture.ownerCharacter.characterId(),
+                new SaveMap01AStateRequest(18.5f, -1));
+        CharacterResponse loaded = fixture.controller.getCharacter(
+                "Bearer " + fixture.ownerToken, fixture.ownerCharacter.characterId());
+
+        assertEquals("kiem", saved.runtimeClassId());
+        assertEquals("map-01a-cong-dong-lam", saved.runtimeState().mapId());
+        assertEquals(18.5f, saved.runtimeState().laneX(), 0.0001f);
+        assertEquals(-1, saved.runtimeState().facing());
+        assertEquals(saved.runtimeState(), loaded.runtimeState());
+    }
+
+    @Test
+    void mapStateSaveHidesCrossAccountExistenceAndRejectsInvalidSession() {
+        Fixture fixture = fixture();
+
+        ResponseStatusException crossAccount = assertThrows(ResponseStatusException.class, () ->
+                fixture.controller.saveMap01AState("Bearer " + fixture.ownerToken,
+                        fixture.otherCharacter.characterId(), new SaveMap01AStateRequest(0f, 1)));
+        ResponseStatusException missing = assertThrows(ResponseStatusException.class, () ->
+                fixture.controller.saveMap01AState("Bearer " + fixture.ownerToken,
+                        "character.missing", new SaveMap01AStateRequest(0f, 1)));
+        ResponseStatusException unauthorized = assertThrows(ResponseStatusException.class, () ->
+                fixture.controller.saveMap01AState("Bearer invalid", fixture.ownerCharacter.characterId(),
+                        new SaveMap01AStateRequest(0f, 1)));
+
+        assertEquals(HttpStatus.NOT_FOUND, crossAccount.getStatusCode());
+        assertEquals(crossAccount.getReason(), missing.getReason());
+        assertEquals("character not found", crossAccount.getReason());
+        assertEquals(HttpStatus.UNAUTHORIZED, unauthorized.getStatusCode());
     }
 
     @Test
