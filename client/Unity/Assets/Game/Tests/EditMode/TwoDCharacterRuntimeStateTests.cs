@@ -570,6 +570,9 @@ namespace LinhGioi.Tests.EditMode
             Assert.That(CongDongLamMap01AArtPreview.ShouldCaptureAuthValidationForArgs(args), Is.False);
             var validationArgs = new[] { "LinhGioiOnline", "--lgo-map01a-entry-capture", "--lgo-map01a-auth-validation-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldCaptureAuthValidationForArgs(validationArgs), Is.True);
+            Assert.That(CongDongLamMap01AArtPreview.ShouldCaptureProductAuthStatesForArgs(args), Is.False);
+            var productAuthArgs = new[] { "LinhGioiOnline", "--lgo-map01a-entry-capture", "--lgo-product-auth-states-capture" };
+            Assert.That(CongDongLamMap01AArtPreview.ShouldCaptureProductAuthStatesForArgs(productAuthArgs), Is.True);
             var inventoryTabArgs = new[] { "LinhGioiOnline", "--lgo-map01a-inventory-tabs-capture" };
             Assert.That(CongDongLamMap01AArtPreview.ShouldRunForArgs(inventoryTabArgs), Is.True);
             var characterScreenArgs = new[] { "LinhGioiOnline", "--lgo-map01a-character-screen-capture" };

@@ -253,7 +253,7 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoEntryStatusLine(_entryStatus)",
         "ApplyLgoEntryPasswordReveal(reveal",
         "ApplyLgoEntryTextField(field)",
-        "ApplyLgoEntryAuthAction(login, true)",
+        "ApplyLgoEntryAuthAction(_entryLoginButton, true)",
         "ApplyLgoEntryAuthAction(register, false)",
         "ApplyLgoEntryServerSwitchAction(serverSwitch",
         "ApplyLgoEntrySecondaryAction(forgot",

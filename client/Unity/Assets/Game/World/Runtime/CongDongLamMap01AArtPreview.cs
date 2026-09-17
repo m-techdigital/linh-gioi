@@ -762,6 +762,9 @@ namespace LinhGioi.World
         public static bool ShouldCaptureAuthValidationForArgs(string[] args)
             => args != null && Array.IndexOf(args, "--lgo-map01a-auth-validation-capture") >= 0;
 
+        public static bool ShouldCaptureProductAuthStatesForArgs(string[] args)
+            => args != null && Array.IndexOf(args, "--lgo-product-auth-states-capture") >= 0;
+
         public static bool QuestCaptureRequiresWorldView(int captureIndex) => captureIndex >= 10 && captureIndex <= 17;
 
         public static CongDongLamMap01AArtPreview Attach(TwoDOnboardingController controller)
@@ -2262,21 +2265,61 @@ namespace LinhGioi.World
             yield return new WaitForEndOfFrame();
             var imagePath = Path.Combine(directory, "entry-login.png");
             CaptureScreenPng(imagePath);
-            var captureValidation = ShouldCaptureAuthValidationForArgs(args);
+            var captureProductAuthStates = ShouldCaptureProductAuthStatesForArgs(args);
+            var captureValidation = ShouldCaptureAuthValidationForArgs(args) || captureProductAuthStates;
             var validationPath = Path.Combine(directory, "entry-login-validation.png");
+            var document = captureValidation || captureProductAuthStates ? GetComponentInChildren<UIDocument>() : null;
+            if ((captureValidation || captureProductAuthStates) && document == null)
+                throw new InvalidOperationException("Missing Map01A UIDocument for entry auth capture");
             if (captureValidation)
             {
-                var document = GetComponentInChildren<UIDocument>();
-                if (document == null) throw new InvalidOperationException("Missing Map01A UIDocument for entry validation capture");
                 InvokeHudButton(document.rootVisualElement.Q<Button>("Map01A Entry Login Button"));
                 yield return null;
                 yield return new WaitForEndOfFrame();
                 CaptureScreenPng(validationPath);
             }
-            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath))
+
+            var authenticatingPath = Path.Combine(directory, "entry-login-authenticating.png");
+            var invalidPath = Path.Combine(directory, "entry-login-invalid-credentials.png");
+            var successPath = Path.Combine(directory, "entry-login-success-character-select.png");
+            if (captureProductAuthStates)
+            {
+                var root = document.rootVisualElement;
+                var entryStatus = root.Q<Label>("Map01A Entry Safety Note");
+                var login = root.Q<Button>("Map01A Entry Login Button");
+                if (entryStatus == null || login == null)
+                    throw new InvalidOperationException("Missing Map01A product auth visual-state controls");
+                entryStatus.text = "Đang xác thực…";
+                login.SetEnabled(false);
+                yield return null;
+                yield return new WaitForEndOfFrame();
+                CaptureScreenPng(authenticatingPath);
+
+                entryStatus.text = "Tài khoản hoặc mật khẩu không đúng.";
+                login.SetEnabled(true);
+                yield return null;
+                yield return new WaitForEndOfFrame();
+                CaptureScreenPng(invalidPath);
+
+                var hud = GetComponentsInChildren<MonoBehaviour>()
+                    .FirstOrDefault(component => component.GetType().FullName == "LinhGioi.UI.CongDongLamArrivalHud");
+                var openCharacterSelect = hud?.GetType().GetMethod("OpenCharacterSelect", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (openCharacterSelect == null)
+                    throw new InvalidOperationException("Missing product auth success transition capture hook");
+                openCharacterSelect.Invoke(hud, null);
+                yield return null;
+                yield return new WaitForEndOfFrame();
+                CaptureScreenPng(successPath);
+            }
+            var productFramesReady = !captureProductAuthStates
+                || (File.Exists(authenticatingPath) && File.Exists(invalidPath) && File.Exists(successPath));
+            var status = File.Exists(imagePath) && (!captureValidation || File.Exists(validationPath)) && productFramesReady
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var validationManifest = captureValidation
                 ? ",\n  \"validationFrame\": \"entry-login-validation.png\""
+                : string.Empty;
+            var productManifest = captureProductAuthStates
+                ? ",\n  \"productAuthFrames\": [\"entry-login-authenticating.png\", \"entry-login-invalid-credentials.png\", \"entry-login-success-character-select.png\"]"
                 : string.Empty;
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
@@ -2285,7 +2328,7 @@ namespace LinhGioi.World
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
-                + "  \"frame\": \"entry-login.png\"" + validationManifest + "\n"
+                + "  \"frame\": \"entry-login.png\"" + validationManifest + productManifest + "\n"
                 + "}\n";
             File.WriteAllText(Path.Combine(directory, "manifest.json"), manifest);
             Application.Quit(status == "FIX_REQUIRED" ? 1 : 0);
