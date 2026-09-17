@@ -70,10 +70,6 @@ namespace LinhGioi.UI
             hud._productAuthCts = new CancellationTokenSource();
             var document = host.AddComponent<UIDocument>();
             hud._ownedPanel = Instantiate(RuntimePanelSettingsProvider.LoadOrCreate());
-            hud._ownedPanel.scaleMode = PanelScaleMode.ScaleWithScreenSize;
-            hud._ownedPanel.referenceResolution = new Vector2Int(1672, 941);
-            hud._ownedPanel.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
-            hud._ownedPanel.match = .5f;
             document.panelSettings = hud._ownedPanel;
             var args = Environment.GetCommandLineArgs();
             var index = Array.IndexOf(args, "--lgo-map01a-device");

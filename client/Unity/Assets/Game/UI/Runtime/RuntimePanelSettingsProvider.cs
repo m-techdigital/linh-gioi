@@ -7,11 +7,18 @@ namespace LinhGioi.UI
     {
         internal const string Marker = "LGO Runtime Panel Settings Provider v1";
         private const string ResourceName = "LGORuntimePanelSettings";
+        internal const int ReferenceWidth = 1672;
+        internal const int ReferenceHeight = 941;
+        internal const float LandscapeHeightMatch = 1f;
 
         internal static PanelSettings LoadOrCreate()
         {
             var resourceSettings = Resources.Load<PanelSettings>(ResourceName);
-            if (resourceSettings != null) return resourceSettings;
+            if (resourceSettings != null)
+            {
+                ApplyPolicy(resourceSettings);
+                return resourceSettings;
+            }
 
             var existingDocuments = Object.FindObjectsByType<UIDocument>(FindObjectsSortMode.None);
             foreach (var document in existingDocuments)
@@ -40,9 +47,9 @@ namespace LinhGioi.UI
         private static void ApplyPolicy(PanelSettings settings)
         {
             settings.scaleMode = PanelScaleMode.ScaleWithScreenSize;
-            settings.referenceResolution = new Vector2Int(1200, 800);
+            settings.referenceResolution = new Vector2Int(ReferenceWidth, ReferenceHeight);
             settings.screenMatchMode = PanelScreenMatchMode.MatchWidthOrHeight;
-            settings.match = 0f;
+            settings.match = LandscapeHeightMatch;
         }
     }
 }

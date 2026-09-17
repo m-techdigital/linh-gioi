@@ -154,6 +154,33 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void RuntimePanelPolicyUsesCanonicalLandscapeHeightAuthority()
+        {
+            var type = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimePanelSettingsProvider");
+            Assert.That(type, Is.Not.Null);
+            var load = type.GetMethod("LoadOrCreate", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            var settings = load.Invoke(null, null) as PanelSettings;
+            Assert.That(settings, Is.Not.Null);
+            Assert.That(settings.scaleMode, Is.EqualTo(PanelScaleMode.ScaleWithScreenSize));
+            Assert.That(settings.referenceResolution, Is.EqualTo(new Vector2Int(1672, 941)));
+            Assert.That(settings.screenMatchMode, Is.EqualTo(PanelScreenMatchMode.MatchWidthOrHeight));
+            Assert.That(settings.match, Is.EqualTo(1f).Within(.001f),
+                "Landscape game UI must scale from safe-panel height instead of becoming oversized on wide phones.");
+        }
+
+        [Test]
+        public void HudAttachDoesNotOverrideSharedPanelScalePolicy()
+        {
+            var source = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.dataPath,
+                "Game/UI/Runtime/CongDongLamArrivalHud.cs"));
+            Assert.That(source, Does.Not.Contain("hud._ownedPanel.referenceResolution ="));
+            Assert.That(source, Does.Not.Contain("hud._ownedPanel.screenMatchMode ="));
+            Assert.That(source, Does.Not.Contain("hud._ownedPanel.match ="));
+            Assert.That(source, Does.Not.Contain("hud._ownedPanel.scaleMode ="));
+        }
+
+        [Test]
         public void SafeAreaCanBeAppliedWithoutHorizontalOverflow()
         {
             var root = new SafeAreaRoot();
