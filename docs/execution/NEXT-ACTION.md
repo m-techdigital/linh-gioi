@@ -1,10 +1,10 @@
-# NEXT ACTION — UI Fidelity / after UIF-00..02 foundation closure
+# NEXT ACTION — UI Fidelity / after UIF-03 Entry/Auth closure
 
-1. Start only **LGO-UIF-03 Entry/Auth family canonical fidelity** from the machine-bound owner authority matrix. First surface is Entry/Login: `redesign-v5-entry/01-entry-login-CANONICAL.png` (`canonical`, SHA-256 `204178a0...b52d`). Audit full owner-vs-current Player composition before production code and write the narrow UIF-03 spec/plan + RED visual/layout contracts first.
-2. Preserve all closed auth/account behavior. UIF-03 changes presentation/composition only unless a concrete regression proves otherwise. Do not reopen register/recovery security semantics, bearer/account isolation, five-class Map01A migration, Character Hub V59 behavior, renderer authority, or Create Character (`DESIGN_GATED`).
-3. After Entry/Login closes, continue the same family sequentially: Server Select `redesign-v7-server-select/01-server-select-CANONICAL.png`, Register `redesign-v8-register/01-register-account-CANONICAL.png`, Recovery Request `redesign-v9-password-recovery-request/01-password-recovery-request-CANONICAL-CANDIDATE.png`, then owner-approved Verify/New Password v3 proposals. Do not collapse all screens into one large rewrite.
-4. Reuse UIF-01/02 authority: ThemeTokens → shared USS/primitives → screen composition; one PanelSettings `1672x941/match=1`; one `RuntimeViewportMetrics → RuntimeUiLayoutProfile` path. Any stable repeated recipe must move to the shared layer before screen code duplicates it.
-5. Every screen-level slice requires RED→GREEN plus fresh Player evidence at PC/tablet/mobile-landscape simulation with truthful evidence authority. macOS tablet/mobile captures remain simulation; Android/iOS physical sizing stays a separate open gate.
+1. Preserve closed UIF-03 Entry/Login, Server Select, Register and Recovery Request/Verify/New Password canonical fidelity unless a concrete regression is proven. Do not reopen auth/account semantics.
+2. Next scoped task is **LGO-UIF-04 Character Select v6 canonical fidelity on live account binding** using the authority matrix and owner v6 canonical. Carry existing bearer/account-bound list/load behavior forward unchanged.
+3. Reuse UIF-01/02 foundation: ThemeTokens → shared USS/primitives → screen composition; one PanelSettings `1672x941/match=1`; one `RuntimeViewportMetrics → RuntimeUiLayoutProfile` path.
+4. Create Character remains `DESIGN_GATED`. Do not fabricate non-Võ renderer art or mix renderer authority into this fidelity slice.
+5. Keep evidence truthful: PC/tablet/mobile macOS captures prove aspect/profile behavior only; Android/iOS physical sizing/touch proof remains an explicit separate open gate.
 
 # NEXT ACTION — Whole Product / after Register + Recovery 3-step closure
 
