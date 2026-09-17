@@ -1460,9 +1460,8 @@ namespace LinhGioi.Tests.EditMode
                 BindingFlags.Static | BindingFlags.NonPublic);
             Assert.That(apply, Is.Not.Null);
             apply.Invoke(null, new object[] { icon });
-            Assert.That(icon.style.flexShrink.value, Is.EqualTo(0),
-                "HUD-catalog skill and roster artwork must not collapse to a horizontal strip.");
-            Assert.That(icon.style.flexGrow.value, Is.EqualTo(0));
+            Assert.That(icon.ClassListContains("lgo-icon-frame"), Is.True,
+                "HUD-catalog artwork must use the shared non-shrinking icon primitive.");
         }
 
         [Test]
@@ -2677,7 +2676,8 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(sideAction, Is.Not.Null);
                     Assert.That(sideAction.ClassListContains("lgo-entry-side-action"), Is.True);
                     Assert.That(sideAction.text, Is.EqualTo(name));
-                    Assert.That(sideAction.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap));
+                    Assert.That(sideAction.ClassListContains("lgo-utility-action"), Is.True,
+                        "Entry utility actions must use the shared no-wrap utility primitive.");
                     Assert.That(sideAction.Q(sideAction.name + " Icon"), Is.Not.Null);
                 }
                 var sideActions = root.Q("Map01A Entry Side Actions");

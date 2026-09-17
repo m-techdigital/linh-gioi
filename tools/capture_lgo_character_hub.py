@@ -75,6 +75,41 @@ def build_player_command(
     ]
 
 
+def expected_evidence_authority(profile: str) -> str:
+    return "macos-player" if profile == "pc" else "macos-aspect-simulation"
+
+
+def validate_ui_metrics(manifest: dict, profile: str) -> list[str]:
+    errors: list[str] = []
+    width, height = PROFILES[profile]
+    expected_authority = expected_evidence_authority(profile)
+    if manifest.get("evidenceAuthority") != expected_authority:
+        errors.append("EVIDENCE_AUTHORITY_MISMATCH")
+    metrics = manifest.get("uiMetrics")
+    if not isinstance(metrics, dict):
+        return errors + ["MISSING_UI_METRICS"]
+    if metrics.get("evidenceAuthority") != expected_authority:
+        errors.append("UI_METRICS_AUTHORITY_MISMATCH")
+    if (metrics.get("screenWidth"), metrics.get("screenHeight")) != (width, height):
+        errors.append("UI_METRICS_SCREEN_MISMATCH")
+    panel_width, panel_height = metrics.get("panelWidth"), metrics.get("panelHeight")
+    if not isinstance(panel_width, int) or panel_width <= 0 or not isinstance(panel_height, int) or panel_height <= 0:
+        errors.append("UI_METRICS_PANEL_INVALID")
+    panel_settings = metrics.get("panelSettings", "")
+    if "referenceResolution=1672x941" not in panel_settings or "match=1" not in panel_settings:
+        errors.append("UI_PANEL_POLICY_MISMATCH")
+    if abs(float(metrics.get("characterHubShellWidth", 0)) - 1098.0) > 2.0 or abs(float(metrics.get("characterHubShellHeight", 0)) - 724.0) > 2.0:
+        errors.append("CHARACTER_HUB_SHELL_METRICS_MISMATCH")
+    ratio = float(metrics.get("characterHubShellScreenHeightRatio", 0))
+    if not 0.75 <= ratio <= 0.80:
+        errors.append("CHARACTER_HUB_OCCUPANCY_INVALID")
+    if metrics.get("minimumTouchTargetPanelUnits") != 44:
+        errors.append("TOUCH_TARGET_TOKEN_MISMATCH")
+    if float(metrics.get("minimumTouchTargetScreenPixels", 0)) <= 0:
+        errors.append("TOUCH_TARGET_SCREEN_METRIC_INVALID")
+    return errors
+
+
 def validate_manifest(manifest: dict, out: Path, profile: str, skill_node: int = 5) -> list[str]:
     validate_skill_node(skill_node)
     errors: list[str] = []
@@ -87,6 +122,7 @@ def validate_manifest(manifest: dict, out: Path, profile: str, skill_node: int =
         errors.append("CAPTURE_SCOPE_INVALID")
     if manifest.get("usesOsMouseOrKeyboard") is not False:
         errors.append("OS_INPUT_USED")
+    errors.extend(validate_ui_metrics(manifest, profile))
     if tuple(manifest.get("potentialClassProfiles", ())) != CHARACTER_HUB_CLASS_IDS:
         errors.append("POTENTIAL_CLASS_PROFILE_MISMATCH")
     if type(manifest.get("skillSelectedNodeIndex")) is not int or manifest["skillSelectedNodeIndex"] != skill_node:

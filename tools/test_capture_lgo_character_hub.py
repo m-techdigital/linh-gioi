@@ -6,6 +6,29 @@ from pathlib import Path
 import capture_lgo_character_hub as capture
 
 
+def valid_ui_metrics(profile: str) -> dict:
+    width, height = capture.PROFILES[profile]
+    authority = capture.expected_evidence_authority(profile)
+    panel_height = 941
+    panel_width = round(width * panel_height / height)
+    return {
+        "evidenceAuthority": authority,
+        "screenWidth": width, "screenHeight": height,
+        "panelWidth": panel_width, "panelHeight": panel_height,
+        "safePanelX": 0, "safePanelY": 0,
+        "safePanelWidth": panel_width, "safePanelHeight": panel_height,
+        "layoutClass": "desktop" if profile == "pc" else profile,
+        "inputClass": "pointer" if profile == "pc" else "touch",
+        "panelSettings": "scaleMode=ScaleWithScreenSize referenceResolution=1672x941 screenMatchMode=MatchWidthOrHeight match=1",
+        "characterHubShellX": (panel_width - 1098) / 2,
+        "characterHubShellY": (panel_height - 724) / 2,
+        "characterHubShellWidth": 1098, "characterHubShellHeight": 724,
+        "characterHubShellScreenHeightRatio": 724 / 941,
+        "minimumTouchTargetPanelUnits": 44,
+        "minimumTouchTargetScreenPixels": 44 * height / 941,
+    }
+
+
 class CaptureLgoCharacterHubTests(unittest.TestCase):
     def test_equipment_selection_detail_is_required_for_every_shared_slot(self) -> None:
         for slot in ('main_weapon','head_hair','inner_top','outer_tunic','lower_garment',
@@ -86,6 +109,8 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
                 "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "spiritPetClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
                 "classSwitchScope": "character-hub-data-only-no-renderer-change",
+                "evidenceAuthority": capture.expected_evidence_authority("pc"),
+                "uiMetrics": valid_ui_metrics("pc"),
             }
             self.assertEqual([], capture.validate_manifest(manifest, out, "pc"))
             manifest["width"] = 1024
@@ -98,6 +123,27 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
             self.assertIn("CLASS_SWITCH_SCOPE_INVALID", capture.validate_manifest(manifest, out, "pc"))
             manifest["skillSelectedNodeIndex"] = 0
             self.assertIn("SKILL_SELECTED_NODE_MISMATCH", capture.validate_manifest(manifest, out, "pc"))
+
+    def test_manifest_requires_measured_ui_metrics_and_truthful_simulation_authority(self) -> None:
+        with tempfile.TemporaryDirectory() as temp:
+            out = Path(temp)
+            for frame in capture.REQUIRED_FRAMES:
+                (out / frame).write_bytes(b"png")
+            manifest = {
+                "status": "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED",
+                "captureScope": "map01a-inventory-tabs",
+                "usesOsMouseOrKeyboard": False,
+                "width": 1600, "height": 720,
+                "frames": list(capture.REQUIRED_FRAMES),
+                "skillClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
+                "skillSelectedNodeIndex": 5,
+                "potentialClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
+                "spiritPetClassProfiles": list(capture.CHARACTER_HUB_CLASS_IDS),
+                "classSwitchScope": "character-hub-data-only-no-renderer-change",
+            }
+            errors = capture.validate_manifest(manifest, out, "mobile")
+            self.assertIn("MISSING_UI_METRICS", errors)
+            self.assertIn("EVIDENCE_AUTHORITY_MISMATCH", errors)
 
     def test_manifest_rejects_missing_frame_and_os_input(self) -> None:
         with tempfile.TemporaryDirectory() as temp:

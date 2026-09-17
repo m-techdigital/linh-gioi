@@ -244,6 +244,43 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void UiEvidenceMetricsQuantifyCompactLandscapeShellAndTouchScale()
+        {
+            var type = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeUiEvidenceMetrics");
+            Assert.That(type, Is.Not.Null, "Runtime evidence needs one measurable UI metrics owner.");
+            var create = type.GetMethod("CreateSnapshot", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(create, Is.Not.Null);
+            var snapshot = create.Invoke(null, new object[] {
+                1600, 720, 2091, 941, new Rect(0, 0, 2091, 941),
+                new Rect(496.5f, 108.5f, 1098, 724), "mobile", "touch",
+                "scaleMode=ScaleWithScreenSize referenceResolution=1672x941 screenMatchMode=MatchWidthOrHeight match=1",
+                "macos-aspect-simulation", 44
+            });
+            Assert.That(GetMember<string>(snapshot, "evidenceAuthority"), Is.EqualTo("macos-aspect-simulation"));
+            Assert.That(GetMember<float>(snapshot, "characterHubShellHeight"), Is.EqualTo(724f).Within(.01f));
+            Assert.That(GetMember<float>(snapshot, "characterHubShellScreenHeightRatio"),
+                Is.EqualTo(724f / 941f).Within(.001f));
+            Assert.That(GetMember<float>(snapshot, "characterHubShellScreenHeightRatio"), Is.LessThan(.80f));
+            Assert.That(GetMember<float>(snapshot, "minimumTouchTargetScreenPixels"),
+                Is.EqualTo(44f * 720f / 941f).Within(.01f));
+        }
+
+        [Test]
+        public void SharedRuntimeStyleSheetOwnsCriticalPrimitiveLayoutRules()
+        {
+            var source = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.dataPath,
+                "Resources/LGOUI/LgoRuntime.uss"));
+            Assert.That(source, Does.Contain(".lgo-icon-frame"));
+            Assert.That(source, Does.Contain("flex-grow: 0"));
+            Assert.That(source, Does.Contain("flex-shrink: 0"));
+            Assert.That(source, Does.Contain(".lgo-utility-action"));
+            Assert.That(source, Does.Contain("position: relative"));
+            Assert.That(source, Does.Contain("white-space: nowrap"));
+            Assert.That(source, Does.Contain("-unity-text-align: lower-center"));
+        }
+
+        [Test]
         public void SafeAreaCanBeAppliedWithoutHorizontalOverflow()
         {
             var root = new SafeAreaRoot();

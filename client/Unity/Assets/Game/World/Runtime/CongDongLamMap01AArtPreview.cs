@@ -4,6 +4,7 @@ using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using LinhGioi.Foundation;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -85,6 +86,8 @@ namespace LinhGioi.World
                 || args.Contains("--lgo-source-pose-class");
             return registered && sourcePose && !args.Contains("--lgo-registered-capture");
         }
+        public RuntimeUiMetricsSnapshot RuntimeUiMetrics { get; private set; }
+        public void SetRuntimeUiMetrics(RuntimeUiMetricsSnapshot snapshot) => RuntimeUiMetrics = snapshot;
         public float PlayerX => _routeX;
         public string LoadedProductRuntimeClassId { get; private set; }
         public int ProductEntryFacingSign => _voState.FacingSign;
@@ -2556,6 +2559,7 @@ namespace LinhGioi.World
                 && File.Exists(bagSearchSelected) && equipmentFrames.All(frame => File.Exists(Path.Combine(directory, frame)))
                 && File.Exists(skillsDefault) && File.Exists(skills) && File.Exists(potentialDefault) && File.Exists(potential)
                 && skillClassFramesExist && potentialClassFramesExist && File.Exists(spiritPet) && spiritPetClassFramesExist
+                && RuntimeUiMetrics != null
                 ? "TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED" : "FIX_REQUIRED";
             var frames = new[] { "character-info.png", "bag.png", "bag-search-binh-mau.png", "bag-search-binh-mau-selected.png",
                 "skills-default.png", "skills.png" }
@@ -2565,12 +2569,16 @@ namespace LinhGioi.World
                 .Concat(potentialClassFrames)
                 .Concat(new[] { "spirit-pet.png" })
                 .Concat(spiritPetClassFrames);
+            var uiMetricsJson = RuntimeUiMetrics == null ? "null" : JsonUtility.ToJson(RuntimeUiMetrics);
+            var evidenceAuthority = RuntimeUiMetrics == null ? "missing" : RuntimeUiMetrics.evidenceAuthority;
             var manifest = "{\n"
                 + "  \"status\": \"" + status + "\",\n"
                 + "  \"captureScope\": \"map01a-inventory-tabs\",\n"
                 + "  \"usesOsMouseOrKeyboard\": false,\n"
                 + "  \"width\": " + Screen.width + ",\n"
                 + "  \"height\": " + Screen.height + ",\n"
+                + "  \"evidenceAuthority\": \"" + evidenceAuthority + "\",\n"
+                + "  \"uiMetrics\": " + uiMetricsJson + ",\n"
                 + "  \"skillClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
                 + "  \"skillSelectedNodeIndex\": " + skillSelectedNodeIndex + ",\n"
                 + "  \"potentialClassProfiles\": [\"vo\", \"kiem\", \"phap\", \"co\", \"linh\"],\n"
