@@ -2071,13 +2071,16 @@ namespace LinhGioi.Tests.EditMode
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 CongDongLamArrivalHud.Attach(scene);
                 var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
-                var open = root.Q<Button>("Map01A Character Select Button");
+                var menu = root.Q<Button>("Map01A Menu Shortcut");
+                var open = root.Q<Button>("Map01A Menu Character Action");
+                Assert.That(menu, Is.Not.Null);
                 Assert.That(open, Is.Not.Null);
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None));
 
+                InvokeBoundButton(menu);
                 InvokeBoundButton(open);
                 Assert.That(root.Q("Map01A Character Select Overlay").style.display.value, Is.EqualTo(DisplayStyle.None),
-                    "The product Nhân vật shortcut must not reopen the legacy class/pose review selector.");
+                    "The product Nhân vật menu route must not reopen the legacy class/pose review selector.");
                 Assert.That(scene.InventoryOpen, Is.True);
                 Assert.That(root.Q("Map01A Inventory").style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(root.Q("Map01A Inventory Character Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
@@ -2510,6 +2513,46 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void GameplayHudSecondaryNavigationCollapsesBehindMenu()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("gameplay compact secondary navigation test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var shortcuts = root.Q("Map01A Product Shortcut Actions");
+                var menu = root.Q<Button>("Map01A Menu Shortcut");
+
+                Assert.That(shortcuts, Is.Not.Null);
+                Assert.That(shortcuts.ClassListContains("lgo-gameplay-secondary-zone"), Is.True,
+                    "Secondary navigation must bind to one edge-docked semantic zone.");
+                Assert.That(shortcuts.childCount, Is.EqualTo(1),
+                    "Permanent gameplay navigation should expose only Menu; Character/Bag/Skills belong inside it.");
+                Assert.That(shortcuts[0], Is.SameAs(menu));
+                Assert.That(root.Q<Button>("Map01A Character Select Button"), Is.Null);
+                Assert.That(root.Q<Button>("Map01A Inventory Toggle"), Is.Null);
+                Assert.That(root.Q<Button>("Map01A Skills Shortcut"), Is.Null);
+
+                InvokeBoundButton(menu);
+                var overlay = root.Q("Map01A Menu Overlay");
+                Assert.That(overlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                foreach (var name in new[]
+                {
+                    "Map01A Menu Character Action", "Map01A Menu Bag Action", "Map01A Menu Skills Action",
+                    "Map01A Menu Potential Action", "Map01A Menu Spirit Pet Action",
+                })
+                    Assert.That(root.Q<Button>(name), Is.Not.Null, name + " must remain reachable from Menu.");
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void GameplayHudShowsProductShortcutGateWithoutDeadClicks()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
@@ -2527,44 +2570,32 @@ namespace LinhGioi.Tests.EditMode
                 var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
                 var flags = BindingFlags.Instance | BindingFlags.NonPublic;
                 var talk = (Button)typeof(CongDongLamArrivalHud).GetField("_talk", flags).GetValue(hud);
-                var inventoryToggle = (Button)typeof(CongDongLamArrivalHud).GetField("_inventoryToggle", flags).GetValue(hud);
-                var characterSelect = root.Q<Button>("Map01A Character Select Button");
                 Assert.That(talk.ClassListContains("lgo-hud-context-action"), Is.True,
                     "HUD context actions must use a shared context-action base instead of local one-off sizing.");
-                Assert.That(inventoryToggle.ClassListContains("lgo-hud-navigation-action"), Is.True,
-                    "Inventory navigation must share the compact HUD navigation base.");
-                Assert.That(characterSelect.ClassListContains("lgo-hud-navigation-action"), Is.True,
-                    "Character navigation must share the same compact HUD navigation base.");
 
-                var skills = root.Q<Button>("Map01A Skills Shortcut");
                 var menu = root.Q<Button>("Map01A Menu Shortcut");
-                Assert.That(skills, Is.Not.Null);
                 Assert.That(menu, Is.Not.Null);
-                Assert.That(skills.text, Is.EqualTo("Kỹ năng"));
                 Assert.That(menu.text, Is.EqualTo("Menu"));
-                Assert.That(skills.enabledSelf, Is.True, "Kỹ năng shortcut should open the approved shared character hub.");
                 Assert.That(menu.enabledSelf, Is.True, "Menu shortcut should open the Map01A navigation menu.");
-                Assert.That(skills.ClassListContains("lgo-hud-shortcut-action"), Is.True,
-                    "HUD product shortcuts must use the shared shortcut base instead of local one-off sizing.");
                 Assert.That(menu.ClassListContains("lgo-hud-shortcut-action"), Is.True,
-                    "All HUD product shortcuts must share the same base style for consistent Player density.");
-                Assert.That(skills.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
-                    "HUD product shortcuts must not wrap into tall two-line buttons.");
-                Assert.That(skills.resolvedStyle.fontSize, Is.LessThanOrEqualTo(13f),
-                    "HUD product shortcuts must stay compact and must not inherit modal/button CTA typography.");
-                Assert.That(skills.resolvedStyle.height, Is.LessThanOrEqualTo(42f),
-                    "HUD product shortcuts must stay compact on Player.");
+                    "The permanent secondary HUD affordance must keep the shared shortcut role.");
+                Assert.That(menu.style.whiteSpace.value, Is.EqualTo(WhiteSpace.NoWrap),
+                    "The permanent Menu affordance must not wrap into a tall two-line button.");
+                Assert.That(shortcutBar.childCount, Is.EqualTo(1),
+                    "Character, Bag, and Skills belong behind Menu instead of permanently occupying the playfield.");
+                Assert.That(shortcutBar[0], Is.SameAs(menu));
+
                 InvokeBoundButton(menu);
                 var menuOverlay = root.Q("Map01A Menu Overlay");
                 Assert.That(menuOverlay, Is.Not.Null);
                 Assert.That(menuOverlay.style.display.value, Is.EqualTo(DisplayStyle.Flex));
-                Assert.That(root.Q<Button>("Map01A Menu Character Action"), Is.Not.Null);
-                Assert.That(root.Q<Button>("Map01A Menu Bag Action"), Is.Not.Null);
-                Assert.That(root.Q<Button>("Map01A Menu Skills Action"), Is.Not.Null);
+                var characterAction = root.Q<Button>("Map01A Menu Character Action");
+                var bagAction = root.Q<Button>("Map01A Menu Bag Action");
+                var skillsAction = root.Q<Button>("Map01A Menu Skills Action");
                 var potentialAction = root.Q<Button>("Map01A Menu Potential Action");
-                Assert.That(potentialAction, Is.Not.Null,
-                    "The navigation menu must expose every approved character-hub tab, including Tiềm năng.");
-                Assert.That(root.Q<Button>("Map01A Menu Spirit Pet Action"), Is.Not.Null);
+                var spiritPetAction = root.Q<Button>("Map01A Menu Spirit Pet Action");
+                foreach (var action in new[] { characterAction, bagAction, skillsAction, potentialAction, spiritPetAction })
+                    Assert.That(action, Is.Not.Null, "Every approved Character Hub destination must remain reachable from Menu.");
                 Assert.That(root.Q("Map01A Menu Panel").ClassListContains("lgo-layered-frame"), Is.True,
                     "Menu should reuse the shared modal frame instead of defining a second panel system.");
                 var controlsHelp = root.Q<Label>("Map01A Menu Controls Help");
@@ -2578,13 +2609,15 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(controlsHelp.text, Does.Contain("E"));
                 Assert.That(controlsHelp.text, Does.Contain("I"));
                 Assert.That(controlsHelp.text, Does.Not.Contain("Di chuyển: Shift"));
-                Assert.That(root.Q<Button>("Map01A Menu Character Action").style.flexGrow.value, Is.EqualTo(0),
+                Assert.That(characterAction.style.flexGrow.value, Is.EqualTo(0),
                     "Menu grid actions must keep a bounded row height instead of stretching into the panel body.");
+
                 InvokeBoundButton(potentialAction);
                 Assert.That(menuOverlay.style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(scene.InventoryOpen, Is.True);
                 Assert.That(root.Q("Map01A Potential Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "Menu Tiềm năng must route into the approved shared hub tab.");
+
                 InvokeBoundButton(menu);
                 var handleEscape = typeof(CongDongLamArrivalHud).GetMethod("HandleEscape",
                     BindingFlags.Instance | BindingFlags.NonPublic);
@@ -2592,12 +2625,12 @@ namespace LinhGioi.Tests.EditMode
                     "Menu must share one escape handler with the other foreground workspaces.");
                 handleEscape.Invoke(hud, null);
                 Assert.That(menuOverlay.style.display.value, Is.EqualTo(DisplayStyle.None));
-                InvokeBoundButton(skills);
-                Assert.That(scene.InventoryOpen, Is.True);
-                Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex));
 
-                InvokeBoundButton(root.Q<Button>("Map01A Character Select Button"));
-                Assert.That(shortcutBar.style.display.value, Is.EqualTo(DisplayStyle.None));
+                InvokeBoundButton(menu);
+                InvokeBoundButton(skillsAction);
+                Assert.That(scene.InventoryOpen, Is.True);
+                Assert.That(root.Q("Map01A Skills Panel").style.display.value, Is.EqualTo(DisplayStyle.Flex),
+                    "Kỹ năng remains actionable through the consolidated Menu route.");
             }
             finally
             {
@@ -3401,9 +3434,6 @@ namespace LinhGioi.Tests.EditMode
                     ("Map01A Jump Action", "jump"),
                     ("Map01A Basic Attack Action", "attack"),
                     ("Map01A Skill Action", "skill"),
-                    ("Map01A Character Select Button", "character"),
-                    ("Map01A Inventory Toggle", "inventory"),
-                    ("Map01A Skills Shortcut", "skills"),
                     ("Map01A Menu Shortcut", "menu"),
                 })
                 {
@@ -3413,17 +3443,17 @@ namespace LinhGioi.Tests.EditMode
                     Assert.That(icon.style.backgroundImage.value.sprite, Is.EqualTo(scene.GetMap01AHudIconSprite(binding.Item2)));
                 }
                 var navigation = root.Q("Map01A Product Shortcut Actions");
-                foreach (var name in new[]
+                var menuButton = root.Q<Button>("Map01A Menu Shortcut");
+                Assert.That(menuButton.parent, Is.EqualTo(navigation),
+                    "The compact Menu affordance must stay in the shared bottom navigation group.");
+                Assert.That(menuButton.ClassListContains("lgo-hud-navigation-action"), Is.True);
+                Assert.That(menuButton.style.height.value.value, Is.InRange(60f, 76f));
+                foreach (var removed in new[]
                 {
-                    "Map01A Character Select Button", "Map01A Inventory Toggle",
-                    "Map01A Skills Shortcut", "Map01A Menu Shortcut",
+                    "Map01A Character Select Button", "Map01A Inventory Toggle", "Map01A Skills Shortcut",
                 })
-                {
-                    var button = root.Q<Button>(name);
-                    Assert.That(button.parent, Is.EqualTo(navigation), name + " must stay in the shared bottom navigation group.");
-                    Assert.That(button.ClassListContains("lgo-hud-navigation-action"), Is.True);
-                    Assert.That(button.style.height.value.value, Is.InRange(60f, 76f));
-                }
+                    Assert.That(root.Q<Button>(removed), Is.Null,
+                        removed + " must remain consolidated behind Menu instead of occupying the permanent playfield.");
                 Assert.That(root.Q<Button>("Map01A Talk Action").parent, Is.Not.EqualTo(navigation),
                     "Context interaction must not be mixed into product navigation.");
                 Assert.That(root.Q<UnityEngine.UIElements.ProgressBar>("Map01A Health").value, Is.EqualTo(60));
@@ -3481,11 +3511,24 @@ namespace LinhGioi.Tests.EditMode
                 Assert.That(dialogue.ClassListContains("lgo-layered-frame"), Is.True,
                     "Dialogue must reuse the shared layered frame rather than remain a flat full-width strip.");
                 Assert.That(root.Q<Label>("Map01A Dialogue Line").resolvedStyle.fontSize, Is.LessThanOrEqualTo(18f));
-                Assert.That(combatActions.style.width.value.value, Is.GreaterThanOrEqualTo(330f),
-                    "A right-anchored combat row needs an explicit width or its children overflow off-screen.");
+                var requiredCombatWidth = new[]
+                {
+                    root.Q<Button>("Map01A Run Action"),
+                    root.Q<Button>("Map01A Jump Action"),
+                    root.Q<Button>("Map01A Basic Attack Action"),
+                    root.Q<Button>("Map01A Skill Action"),
+                }.Sum(button => button.style.minWidth.value.value + button.style.marginRight.value.value);
+                Assert.That(combatActions.style.width.value.value, Is.GreaterThanOrEqualTo(requiredCombatWidth - .01f),
+                    "The right-anchored combat zone must contain its actual action row without clipping.");
                 Assert.That(combatActions.style.height.value.value, Is.GreaterThanOrEqualTo(48f));
-                Assert.That(combatActions.style.bottom.value.value, Is.GreaterThanOrEqualTo(150f),
-                    "Combat controls must sit above the shortcut and context rows instead of being painted underneath them.");
+                var contextAction = root.Q("Map01A Talk Action");
+                var secondaryNav = root.Q("Map01A Product Shortcut Actions");
+                Assert.That(combatActions.style.top.value.value,
+                    Is.GreaterThanOrEqualTo(contextAction.style.top.value.value + contextAction.style.height.value.value),
+                    "Combat controls must stay in their bottom edge dock without overlapping the context row.");
+                Assert.That(combatActions.style.top.value.value,
+                    Is.GreaterThanOrEqualTo(secondaryNav.style.top.value.value + secondaryNav.style.height.value.value),
+                    "Combat controls must stay clear of the compact secondary-navigation row.");
             }
             finally
             {
@@ -3718,28 +3761,39 @@ namespace LinhGioi.Tests.EditMode
                 var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
                 CongDongLamArrivalHud.Attach(scene);
                 var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
                 var flags = BindingFlags.Instance | BindingFlags.NonPublic;
                 var update = typeof(CongDongLamArrivalHud).GetMethod("Update", flags);
-                var inventory = (Button)typeof(CongDongLamArrivalHud).GetField("_inventoryToggle", flags).GetValue(hud);
+                var handleEscape = typeof(CongDongLamArrivalHud).GetMethod("HandleEscape", flags);
                 var combat = (VisualElement)typeof(CongDongLamArrivalHud).GetField("_combatBar", flags).GetValue(hud);
                 var talk = (Button)typeof(CongDongLamArrivalHud).GetField("_talk", flags).GetValue(hud);
+                var shortcutBar = root.Q("Map01A Product Shortcut Actions");
+                var menu = root.Q<Button>("Map01A Menu Shortcut");
+                var bagAction = root.Q<Button>("Map01A Menu Bag Action");
+                typeof(CongDongLamArrivalHud).GetField("_entryOpen", flags).SetValue(hud, false);
+                typeof(CongDongLamArrivalHud).GetMethod("UpdateEntryScreen", flags).Invoke(hud, null);
                 update.Invoke(hud, null);
                 Assert.That(talk.style.display.value, Is.EqualTo(DisplayStyle.Flex),
                     "The contextual action must be visible when the current route action is usable.");
                 foreach (var field in new[] { "_outfit", "_level", "_gender", "_slot", "_itemLevel", "_toggleSlot" })
                     Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
                         Is.EqualTo(DisplayStyle.None), "Review/debug controls must not appear in owner-facing gameplay HUD: " + field);
-                InvokeBoundButton(inventory);
+
+                InvokeBoundButton(menu);
+                InvokeBoundButton(bagAction);
                 update.Invoke(hud, null);
+                Assert.That(scene.InventoryOpen, Is.True);
                 foreach (var field in new[] { "_outfit", "_level", "_gender", "_slot", "_itemLevel", "_toggleSlot" })
                     Assert.That(((Button)typeof(CongDongLamArrivalHud).GetField(field, flags).GetValue(hud)).style.display.value,
                         Is.EqualTo(DisplayStyle.None), "Review/debug controls must not bleed behind inventory: " + field);
-                InvokeBoundButton(inventory);
+                handleEscape.Invoke(hud, null);
                 update.Invoke(hud, null);
+                Assert.That(scene.InventoryOpen, Is.False);
+
                 InvokeBoundButton(talk);
                 Assert.That(scene.DialogueOpen, Is.True);
                 update.Invoke(hud, null);
-                Assert.That(inventory.style.display.value, Is.EqualTo(DisplayStyle.None));
+                Assert.That(shortcutBar.style.display.value, Is.EqualTo(DisplayStyle.None));
                 Assert.That(combat.style.display.value, Is.EqualTo(DisplayStyle.None));
                 InvokeBoundButton(talk);
                 FinishDialogue(scene);
@@ -3747,7 +3801,7 @@ namespace LinhGioi.Tests.EditMode
                 typeof(CongDongLamMap01AArtPreview).GetField("_routeX", flags).SetValue(scene, scene.PlayerX + 2f);
                 scene.Refresh();
                 update.Invoke(hud, null);
-                Assert.That(inventory.style.display.value, Is.EqualTo(DisplayStyle.Flex));
+                Assert.That(shortcutBar.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(combat.style.display.value, Is.EqualTo(DisplayStyle.Flex));
                 Assert.That(scene.CanUseCurrentRouteAction, Is.False);
                 Assert.That(talk.style.display.value, Is.EqualTo(DisplayStyle.None),

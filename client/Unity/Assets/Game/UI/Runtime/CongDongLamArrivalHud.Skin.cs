@@ -64,6 +64,7 @@ namespace LinhGioi.UI
         private const string LgoGameplayCombatZoneClass = "lgo-gameplay-combat-zone";
         private const string LgoGameplayContextZoneClass = "lgo-gameplay-context-zone";
         private const string LgoGameplayTouchZoneClass = "lgo-gameplay-touch-zone";
+        private const string LgoGameplaySecondaryZoneClass = "lgo-gameplay-secondary-zone";
         private const string LgoDialoguePrimaryActionClass = "lgo-dialogue-primary-action";
         private const string LgoDialogueSecondaryActionClass = "lgo-dialogue-secondary-action";
         private const string LgoDialoguePortraitClass = "lgo-dialogue-portrait";

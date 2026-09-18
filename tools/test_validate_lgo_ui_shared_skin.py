@@ -367,8 +367,8 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             hud = Path(temp) / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs"
             hud.write_text(
                 hud.read_text(encoding="utf-8").replace(
-                    "ApplyLgoHudShortcutAction(_skillsShortcut, _touch, true);",
-                    "ApplyLgoDisabledAction(button);",
+                    "ApplyLgoHudShortcutAction(_menuShortcut, _touch, true);",
+                    "ApplyLgoDisabledAction(_menuShortcut);",
                     1,
                 ),
                 encoding="utf-8",
@@ -376,7 +376,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
 
             violations = validator.validate_root(Path(temp))
 
-        self.assertTrue(any("ApplyLgoHudShortcutAction(_skillsShortcut" in item for item in violations), violations)
+        self.assertTrue(any("ApplyLgoHudShortcutAction(_menuShortcut" in item for item in violations), violations)
 
     def test_rejects_dialogue_panel_that_skips_shared_skin(self) -> None:
         with self._copy_minimal_repo() as temp:

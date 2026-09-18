@@ -28,8 +28,8 @@ namespace LinhGioi.UI
         private Label _questCategory, _questTitle, _questObjective, _questProgress, _questMessage;
         private Label _marker, _dialogueSpeaker, _dialogueQuestContext, _dialogueLine, _minimapTitle, _minimapStatus, _inventorySummary, _equipmentTitle, _equipmentDetail;
         private Button _talk, _outfit, _level, _gender, _slot, _itemLevel, _toggleSlot, _run, _jump, _basic, _skill;
-        private Button _inventoryToggle, _characterSelectButton, _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
-        private Button _skillsShortcut, _menuShortcut, _questMissionsTab, _questPartyTab;
+        private Button _healthPotion, _manaPotion, _equipReward, _equipmentToggle, _equipmentVariant, _equipmentClass;
+        private Button _menuShortcut, _questMissionsTab, _questPartyTab;
         private Button _dialogueContinue, _dialogueInformation, _dialogueClose, _npcTalk;
         private Button[] _equipmentRows;
         private IReadOnlyList<string> _equipmentSlotIds;
@@ -271,31 +271,12 @@ namespace LinhGioi.UI
             AttachLgoHudActionIcon(_basic, _scene.GetMap01AHudIconSprite("attack"), _touch);
             AttachLgoHudActionIcon(_skill, _scene.GetMap01AHudIconSprite("skill"), _touch);
             _safe.Add(_combatBar);
-            _characterSelectButton = new Button(() => OpenInventoryReviewMode("character-info")) { name = "Map01A Character Select Button", text = "Nhân vật" };
-            _characterSelectButton.tooltip = "Thông tin nhân vật · P";
-            ApplyLgoHudNavigationAction(_characterSelectButton, _touch, true);
-            _inventoryToggle = new Button(() => _scene.ToggleInventory()) { name = "Map01A Inventory Toggle", text = "Hành trang · I" };
-            _inventoryToggle.tooltip = "Mở hành trang · I";
-            ApplyLgoHudNavigationAction(_inventoryToggle, _touch, true);
-            AttachLgoHudActionIcon(_characterSelectButton, _scene.GetMap01AHudIconSprite("character"), _touch);
-            AttachLgoHudActionIcon(_inventoryToggle, _scene.GetMap01AHudIconSprite("inventory"), _touch);
             _productShortcutActions = new VisualElement { name = "Map01A Product Shortcut Actions", pickingMode = PickingMode.Ignore };
-            Place(_productShortcutActions, null, 16, null, 18);
-            _productShortcutActions.style.flexDirection = FlexDirection.Row;
-            _productShortcutActions.style.alignItems = Align.FlexEnd;
-            _productShortcutActions.Add(_characterSelectButton);
-            _productShortcutActions.Add(_inventoryToggle);
-            _skillsShortcut = new Button(() =>
-            {
-                if (!_scene.InventoryOpen) _scene.ToggleInventory();
-                ShowCharacterHubPreviewMode(CharacterHubMode.Skills);
-            }) { name = "Map01A Skills Shortcut", text = "Kỹ năng" };
+            ApplyLgoGameplaySecondaryZone(_productShortcutActions);
             _menuShortcut = new Button(ToggleMenu) { name = "Map01A Menu Shortcut", text = "Menu" };
-            ApplyLgoHudShortcutAction(_skillsShortcut, _touch, true);
+            _menuShortcut.tooltip = "Mở menu nhân vật và hệ thống";
             ApplyLgoHudShortcutAction(_menuShortcut, _touch, true);
-            _productShortcutActions.Add(_skillsShortcut);
             _productShortcutActions.Add(_menuShortcut);
-            AttachLgoHudActionIcon(_skillsShortcut, _scene.GetMap01AHudIconSprite("skills"), _touch);
             AttachLgoHudActionIcon(_menuShortcut, _scene.GetMap01AHudIconSprite("menu"), _touch);
             _safe.Add(_productShortcutActions);
             BuildInventory();
@@ -460,6 +441,7 @@ namespace LinhGioi.UI
             ApplyLgoGameplayHudRect(_talk, gameplayHud.Context);
             ApplyLgoGameplayHudRect(_npcTalk, gameplayHud.Context);
             ApplyLgoGameplayHudRect(_pad, gameplayHud.TouchPad);
+            ApplyLgoGameplayHudRect(_productShortcutActions, gameplayHud.SecondaryNav);
             _vitals.style.width = gameplayHud.PlayerStatus.width;
             var rightColumnWidth = gameplayHud.RightInfo.width;
             _quest.style.width = rightColumnWidth;
@@ -591,8 +573,6 @@ namespace LinhGioi.UI
             _minimapCurrentMarker.style.left = new Length(7f + 86f * Mathf.Clamp01(_scene.CurrentRouteProgress), LengthUnit.Percent);
             _minimap.style.opacity = _scene.MinimapUnlocked ? 1f : .74f;
             _minimap.style.display = _scene.InventoryOpen ? DisplayStyle.None : DisplayStyle.Flex;
-            _characterSelectButton.text = "Nhân vật";
-            _inventoryToggle.text = _scene.InventoryOpen ? "Đóng" : "Hành trang";
             _inventory.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
             if (_inventoryBackdrop != null)
                 _inventoryBackdrop.style.display = _scene.InventoryOpen ? DisplayStyle.Flex : DisplayStyle.None;
@@ -644,8 +624,6 @@ namespace LinhGioi.UI
             RefreshInventorySupplyRows();
             _dialogue.style.display = _scene.DialogueOpen ? DisplayStyle.Flex : DisplayStyle.None;
             var hudBlocked = _scene.DialogueOpen || _scene.InventoryOpen || _characterSelectOpen;
-            _characterSelectButton.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
-            _inventoryToggle.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
             _talk.style.display = hudBlocked || !_scene.CanUseCurrentRouteAction ? DisplayStyle.None : DisplayStyle.Flex;
             _productShortcutActions.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;
             _combatBar.style.display = hudBlocked ? DisplayStyle.None : DisplayStyle.Flex;

@@ -517,7 +517,6 @@ namespace LinhGioi.UI
         {
             var hide = _entryOpen || _characterSelectOpen;
             if (_safe != null) _safe.style.display = hide ? DisplayStyle.None : DisplayStyle.Flex;
-            if (_productShortcutActions != null) _productShortcutActions.style.display = hide ? DisplayStyle.None : DisplayStyle.Flex;
             if (_marker != null) _marker.style.display = hide ? DisplayStyle.None : DisplayStyle.Flex;
         }
     }

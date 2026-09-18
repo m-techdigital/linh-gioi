@@ -108,6 +108,15 @@ namespace LinhGioi.UI
             element.style.position = Position.Absolute;
         }
 
+        private static void ApplyLgoGameplaySecondaryZone(VisualElement element)
+        {
+            element.AddToClassList(LgoGameplaySecondaryZoneClass);
+            element.style.position = Position.Absolute;
+            element.style.flexDirection = FlexDirection.Row;
+            element.style.alignItems = Align.FlexEnd;
+            element.style.justifyContent = Justify.FlexEnd;
+        }
+
         private static void ApplyLgoGameplayHudRect(VisualElement element, Rect rect)
         {
             element.style.position = Position.Absolute;
