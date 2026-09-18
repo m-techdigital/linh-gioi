@@ -111,6 +111,45 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void LargeRuntimeTexturesHaveExplicitMobileImportProfiles()
+        {
+            const string resourcesRoot = "Assets/Game/World/Runtime/Resources";
+            var texturePaths = AssetDatabase.FindAssets("t:Texture2D", new[] { resourcesRoot })
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(path => path.EndsWith(".png", System.StringComparison.OrdinalIgnoreCase))
+                .OrderBy(path => path)
+                .ToArray();
+            var largeCount = 0;
+            foreach (var path in texturePaths)
+            {
+                var texture = AssetDatabase.LoadAssetAtPath<Texture2D>(path);
+                if (texture == null || Mathf.Max(texture.width, texture.height) < 1024) continue;
+                largeCount++;
+                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
+                Assert.That(importer, Is.Not.Null, path);
+                Assert.That(importer.mipmapEnabled, Is.False, path + " must not waste memory on world/UI mipmaps.");
+                Assert.That(importer.isReadable, Is.False, path + " must not keep a CPU-readable texture copy.");
+
+                var environment = path.Contains("/LGOMaps/CongDongLamMap01AArt/")
+                    || path.Contains("/LGOMaps/DongMonIllustrated/");
+                var expectedFormatCode = environment ? 50 : 48;
+                var minimumMaxSize = Mathf.NextPowerOfTwo(Mathf.Max(texture.width, texture.height));
+                foreach (var target in new[] { BuildTarget.Android, BuildTarget.iOS })
+                {
+                    var targetName = BuildPipeline.GetBuildTargetName(target);
+                    var settings = importer.GetPlatformTextureSettings(targetName);
+                    Assert.That(settings.overridden, Is.True, path + " missing " + targetName + " override.");
+                    Assert.That(settings.maxTextureSize, Is.InRange(minimumMaxSize, 2048),
+                        path + " " + targetName + " must preserve source resolution without an unbounded cap.");
+                    Assert.That((int)settings.format, Is.EqualTo(expectedFormatCode), path + " " + targetName);
+                    Assert.That(settings.textureCompression, Is.EqualTo(TextureImporterCompression.CompressedHQ),
+                        path + " " + targetName + " must use explicit high-quality mobile compression.");
+                }
+            }
+            Assert.That(largeCount, Is.GreaterThanOrEqualTo(19), "Current runtime inventory unexpectedly lost large textures.");
+        }
+
+        [Test]
         public void RuntimeThemeProviderLoadsGeneratedDesignTokens()
         {
             var type = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeUiTheme");
