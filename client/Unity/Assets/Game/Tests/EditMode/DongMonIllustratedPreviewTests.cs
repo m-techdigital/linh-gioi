@@ -800,7 +800,7 @@ namespace LinhGioi.Tests
         public void QuestCaptureManifestPublishesMeasuredWorldMetrics()
         {
             var source = File.ReadAllText(Path.Combine(Application.dataPath,
-                "Game/World/Runtime/CongDongLamMap01AArtPreview.cs"));
+                "Game/World/Runtime/CongDongLamMap01AArtPreview.Capture.cs"));
             Assert.That(source, Does.Contain("result.worldMetrics = WorldPresentationMetrics;"),
                 "Quest capture must serialize the measured runtime world metrics instead of a default empty object.");
             Assert.That(source, Does.Contain("result.worldMetrics.actorScreenHeightRatio <= 0f"),
