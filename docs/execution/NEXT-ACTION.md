@@ -1,3 +1,13 @@
+# NEXT ACTION — UI Fidelity / after UIF-09 HUD/world decomposition closure
+
+1. Preserve all closed UI/world behavior and adaptive mobile presentation contracts. Authoritative UIF-09 runtime source is `5e9b9c9b9d8d95812142e76c18a42553b5c995eb`, pushed remote-equal to `origin/feature/2d`.
+2. Map01A capture/evidence code is isolated from product world ownership: `CongDongLamMap01AArtPreview.cs` dropped from 3046 → 1808 LOC, while evidence-only orchestration/manifest writers live in `CongDongLamMap01AArtPreview.Capture.cs` (1262 LOC). Product bootstrap uses one `HasCaptureRequestForArgs` gateway; no screen-specific capture methods or manifest writes remain in world core.
+3. HUD runtime orchestration is isolated from construction/state binding: `CongDongLamArrivalHud.cs` dropped 735 → 434 LOC; responsive `Layout`, runtime UI metrics publication, per-frame input/orchestration and related display helpers live in `CongDongLamArrivalHud.Runtime.cs` (313 LOC). Shared skin/governance validators are bound to the new runtime owner rather than duplicating layout/style rules.
+4. Exact-source final evidence on `5e9b9c9b`: Unity EditMode 396/396 PASS; shared-skin/style/no-3D/no-source/package/code-governance gates PASS; fresh macOS Player build Succeeded with errors=0 warnings=44.
+5. Exact Player smoke from the same binary: whole-flow PC 27 required frames PASS and Character Hub 44 frames PASS, no OS mouse/keyboard. Against pre-decomposition evidence, representative Character Hub frames are pixel-identical; Map01A arrival changed ~0.326% pixels and dialogue ~0.025%, confined to the animated actor region rather than layout/UI.
+6. The first full EditMode run correctly exposed one stale source-ownership assertion that still searched world metrics serialization in the old core file. The test was rebound to the capture owner; fresh full run then passed 396/396. No production behavior was changed for that correction.
+7. Continue sequentially with already-assigned **UIF-10 Authoritative fidelity/device gates**. Make exact design/source binding, geometry/anchor/safe-area/device evidence and drift budgets authoritative; do not invent opaque aesthetic scores and do not claim physical Android/iOS proof from macOS aspect simulation.
+
 # NEXT ACTION — UI Fidelity / after UIF-02R adaptive mobile presentation-scale closure
 
 1. Preserve UIF-08 texture/import policy and the closed auth/persistence/gameplay contracts. Authoritative responsive runtime source is `404b89636fe76f6659935f2a099fcb9fc22ef95b`, pushed remote-equal to `origin/feature/2d`.

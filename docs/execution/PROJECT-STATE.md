@@ -1,3 +1,17 @@
+## UIF-09 HUD/world decomposition — 2026-09-18
+
+- Authoritative runtime source: `5e9b9c9b9d8d95812142e76c18a42553b5c995eb`, pushed remote-equal to `origin/feature/2d`.
+- Runtime commits: `82384e96` isolates Map01A capture harness; `d3d2af56` isolates HUD runtime orchestration; `16303d05` binds shared-skin governance to the new HUD runtime owner; `5e9b9c9b` rebinds world-metrics evidence assertion to the capture owner.
+- World mega-class decomposition: product core `CongDongLamMap01AArtPreview.cs` 3046 → 1808 LOC. Evidence-only flags, `CaptureInfo`, capture routing, Player screenshot/manifest writers and capture `Start()` live in `CongDongLamMap01AArtPreview.Capture.cs` (1262 LOC). Product core retains one `HasCaptureRequestForArgs` gateway and no screen-specific capture methods/manifest writes.
+- HUD decomposition: `CongDongLamArrivalHud.cs` 735 → 434 LOC; runtime responsive layout, UI metric publication, update/input orchestration and related display helpers moved to `CongDongLamArrivalHud.Runtime.cs` (313 LOC). Build/state/feature partials and shared Skin remain separate owners.
+- Architecture RED→GREEN: capture-owner test 0/1 → 1/1; HUD-runtime ownership 0/1 → 1/1; focused UIFoundation 40/40 and TwoD runtime-state 79/79 PASS; shared-skin validator now recognizes 17 partials without duplicating style ownership.
+- First full exact-source Unity run was 395/396 because `QuestCaptureManifestPublishesMeasuredWorldMetrics` still inspected the old product-core source after capture extraction. The assertion was rebound to `CongDongLamMap01AArtPreview.Capture.cs`; fresh exact-source run is 396/396 PASS.
+- Static/governance closure PASS: shared skin, style debt, no-3D, no-source-images, package hygiene, code governance and diff check.
+- Fresh exact-source macOS Player build: `build/ui-fidelity-foundation-v1/uif09-player-exact/LinhGioiOnline.app`, 175,337,338 bytes, errors=0 warnings=44.
+- Player smoke from the exact binary: `uif09-player-smoke/whole-flow/pc` PASS with 27 required frames and all Entry/Auth/Character Select/Menu/Quest/Character Hub scopes; dedicated Character Hub smoke PASS with 44 frames. No OS mouse/keyboard was used.
+- Pixel non-regression versus the immediately preceding adaptive-mobile evidence: Character/Skills/Potential/Spirit-Pet samples are pixel-identical; world arrival changed 0.326% and dialogue 0.025%, both bounded to animated actor pixels rather than shell/HUD geometry.
+- Next: UIF-10 Authoritative fidelity/device gates. Physical Android/iOS remains unverified; keep macOS simulation labels explicit.
+
 ## UIF-02R Adaptive mobile presentation scale — 2026-09-18
 
 - User-reported oversized mobile presentation was reproduced from UIF-08 evidence: Character Hub occupied ~76.94% of mobile-landscape screen height while world actor/NPC ratios were ~21.46% / 25%. The root problem was desktop-like vertical occupancy surviving global PanelSettings normalization; texture resolution was not the cause.
