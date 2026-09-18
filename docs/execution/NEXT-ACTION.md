@@ -1,3 +1,14 @@
+# NEXT ACTION — UI Fidelity / after UIF-10 authoritative fidelity/device gates
+
+1. Preserve the closed UIF-02R and UIF-03..09 contracts. Authoritative UIF-10 gate/tooling source is `f3eae94435edf0cb382e51769683a83ed3ab51f0`, pushed remote-equal before this closure-doc update.
+2. UI fidelity closure is now fail-closed and evidence-addressed. `docs/design/LGO-UI-AUTHORITY-MATRIX-v1.0.json` strict mode opens canonical/approved authority files, verifies SHA-256, validates current code owners and runtime-evidence paths. `docs/design/LGO-UI-FIDELITY-DEVICE-GATE-v1.0.json` owns required profiles, viewports, geometry ranges, safe-area/touch requirements and physical-device authorities.
+3. `tools/validate_lgo_ui_fidelity_gate_bundle.py` validates exact source binding, immutable artifact hashes, human/assistant visual-review screenshot hashes, Character Hub aspect/occupancy, adaptive presentation scale, HUD safe-panel containment/overlap, actor/NPC world scale, current style-debt metrics and device authority. It has no weighted/opaque aesthetic score.
+4. Fresh exact-source evidence from `f3eae944`: Unity EditMode 396/396 PASS; macOS Player build Succeeded, 175,337,338 bytes, errors=0 warnings=0; Whole Flow captured 27 frames/profile and Character Hub 44 frames/profile at PC 1600×900, tablet 1024×768 and mobile-landscape 1600×720.
+5. Fresh review record hashes 48 configured runtime screenshots. Foundation gate PASS with 58 immutable artifacts. Product closure gate intentionally FAILS for exactly one reason: `physical mobile device evidence required for closure: macos-aspect-simulation`.
+6. This Mac currently has only Unity `MacStandaloneSupport`; no Android/iOS PlaybackEngine is installed. Do not relabel macOS aspect evidence as physical-device proof. Full mobile-device closure requires real/authoritative Android or iOS evidence whose manifest authority is `physical-android-device` or `physical-ios-device`.
+7. `tools/lgo_playable_closure_check.sh --visual-evidence` now requires `LGO_UI_OWNER_ROOT` and an immutable `LGO_UI_FIDELITY_GATE_BUNDLE`, and runs the gate in `closure` mode before reporting visual-runtime evidence ready.
+8. The planned UIF-00..10 program is implementation-complete through the authoritative gate layer. Do not invent another UI refactor task merely to get a green physical-device status; await authoritative mobile tooling/device evidence or a new operator-assigned product task.
+
 # NEXT ACTION — UI Fidelity / after UIF-09 HUD/world decomposition closure
 
 1. Preserve all closed UI/world behavior and adaptive mobile presentation contracts. Authoritative UIF-09 runtime source is `5e9b9c9b9d8d95812142e76c18a42553b5c995eb`, pushed remote-equal to `origin/feature/2d`.

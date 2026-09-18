@@ -1,3 +1,19 @@
+## UIF-10 Authoritative fidelity/device gates — 2026-09-18
+
+- Authoritative gate/tooling source: `f3eae94435edf0cb382e51769683a83ed3ab51f0`, pushed remote-equal to `origin/feature/2d` before closure-doc publication.
+- Authority matrix strict mode now verifies actual canonical/approved design files and SHA-256, current post-UIF09 code-owner paths and runtime-evidence paths. Fresh strict audit PASS: 17/17 surfaces.
+- New gate policy: `docs/design/LGO-UI-FIDELITY-DEVICE-GATE-v1.0.json`. It declares required PC/tablet/mobile viewports, 44-unit semantic touch floor, Character Hub canonical aspect/occupancy ranges, adaptive presentation-scale ranges, actor/NPC screen-height ranges, safe-panel rules and accepted physical-mobile authorities.
+- New deterministic gate bundle: `tools/build_lgo_ui_fidelity_gate_bundle.py` + `tools/validate_lgo_ui_fidelity_gate_bundle.py`. Bundles hash authority/config/budget/review files, manifests and all configured screenshots; validator binds source HEAD, current style metrics, screenshot review hashes, geometry/safe-area/device evidence. There is no opaque visual score.
+- Visual review is explicit rather than inferred: `tools/record_lgo_ui_fidelity_review.py` records reviewer identity/status and exact hashes of configured screenshots. Fresh UIF-10 review contains 48 reviewed artifacts and notes macOS tablet/mobile simulation limitations.
+- TDD: authority strict tests RED→GREEN then 6/6; fidelity/device bundle tests RED→GREEN then 7/7, including source mismatch, screenshot tamper, safe-area overflow, physical-mobile fail-closed and closure-script wiring.
+- Fresh exact-source Unity on `f3eae944`: 396/396 PASS. Static closure gates PASS: authority strict, style debt (2149 direct / 1169 numeric / 0 semantic palette / max 843 LOC / 59 methods), shared skin, no-3D, no-source-images, package hygiene, code governance and diff check.
+- Fresh exact-source macOS Player: `build/ui-fidelity-foundation-v1/uif10-player-exact/LinhGioiOnline.app`, 175,337,338 bytes, errors=0 warnings=0.
+- Fresh same-binary all-profile evidence: `build/ui-fidelity-foundation-v1/uif10-evidence/`; PC/tablet/mobile each PASS Character Hub 44 frames + Whole Flow 27 frames. Owner/runtime and three-profile boards are under `uif10-visual-review/`.
+- Immutable bundle: `uif10-gate/gate-bundle.json` with 58 artifacts, sourceHead `f3eae944`. Foundation mode PASS. Closure mode FAILS for exactly one reason: mobile authority is `macos-aspect-simulation`, while closure accepts only `physical-android-device` or `physical-ios-device`.
+- Unity installation currently exposes only `MacStandaloneSupport`; Android/iOS physical-device validation cannot be truthfully completed here. The product must remain fail-closed for that claim until authoritative device/tooling evidence is supplied.
+- `lgo_playable_closure_check.sh --visual-evidence` is now wired to the authoritative bundle in closure mode and requires `LGO_UI_OWNER_ROOT`; missing owner/bundle or non-physical mobile evidence cannot silently close.
+- UIF-00..10 implementation program is complete at the gate/tooling layer. Next action is physical Android/iOS evidence when an authoritative device/toolchain is available, or a new operator-assigned product task.
+
 ## UIF-09 HUD/world decomposition — 2026-09-18
 
 - Authoritative runtime source: `5e9b9c9b9d8d95812142e76c18a42553b5c995eb`, pushed remote-equal to `origin/feature/2d`.
