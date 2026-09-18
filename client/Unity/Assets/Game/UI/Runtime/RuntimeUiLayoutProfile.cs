@@ -146,6 +146,7 @@ namespace LinhGioi.UI
         internal int LobbyPanelPaddingBottom => IsMobile ? 8 : 18;
         internal float CharacterHallPanelVerticalInset => IsMobile ? OverlayBottomInset : Mathf.Clamp(Height * 0.04f, 34f, 58f);
         internal float CharacterHallPanelMaxHeight => IsMobile ? Mathf.Max(360f, Height - CharacterHallPanelVerticalInset * 2f) : 0f;
+        internal float CharacterHubShellMaxHeight => IsMobile ? 640f : 724f;
         internal RuntimeUiDensityProfile CharacterHallDensity => RuntimeUiDensityProfile.CharacterHall(this);
         internal int CreatePanelPaddingHorizontal => IsMobile ? 12 : 16;
         internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;

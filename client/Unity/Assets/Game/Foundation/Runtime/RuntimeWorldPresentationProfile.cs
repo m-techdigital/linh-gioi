@@ -22,12 +22,13 @@ namespace LinhGioi.Foundation
         private RuntimeWorldPresentationProfile(string name)
         {
             Name = name;
-            CameraOrthographicSize = 3.8f;
+            var mobileLandscape = string.Equals(name, "mobile", StringComparison.Ordinal);
+            CameraOrthographicSize = mobileLandscape ? 4.5f : 3.8f;
             CameraGroundOffsetY = 1.5f;
-            ActorMinScreenHeightRatio = .18f;
-            ActorMaxScreenHeightRatio = .27f;
-            NpcMinScreenHeightRatio = .16f;
-            NpcMaxScreenHeightRatio = .27f;
+            ActorMinScreenHeightRatio = mobileLandscape ? .16f : .18f;
+            ActorMaxScreenHeightRatio = mobileLandscape ? .20f : .27f;
+            NpcMinScreenHeightRatio = mobileLandscape ? .18f : .16f;
+            NpcMaxScreenHeightRatio = mobileLandscape ? .23f : .27f;
             InteractionMarkerFontSize = 64;
             InteractionMarkerCharacterSize = .045f;
         }

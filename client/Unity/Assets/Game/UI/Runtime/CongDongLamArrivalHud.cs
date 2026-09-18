@@ -387,13 +387,15 @@ namespace LinhGioi.UI
             else if (_scene.InventoryOpen) _scene.ToggleInventory();
         }
 
-        public static Rect CalculateInventoryModalRect(Rect safePanelRect, bool touch)
+        public static Rect CalculateInventoryModalRect(Rect safePanelRect, bool touch,
+            float maximumShellHeight = InventoryCanonicalShellHeight)
         {
             const float minimumMargin = 24f;
             const float opticalVerticalOffset = 18f;
             var width = Mathf.Min(InventoryCanonicalShellWidth,
                 Mathf.Max(0f, safePanelRect.width - minimumMargin * 2f));
-            var height = Mathf.Min(InventoryCanonicalShellHeight,
+            var profileHeight = Mathf.Clamp(maximumShellHeight, 0f, InventoryCanonicalShellHeight);
+            var height = Mathf.Min(profileHeight,
                 Mathf.Max(0f, safePanelRect.height - minimumMargin * 2f));
             var x = safePanelRect.x + (safePanelRect.width - width) * .5f;
             var centeredY = (safePanelRect.height - height) * .5f + opticalVerticalOffset;
@@ -439,7 +441,8 @@ namespace LinhGioi.UI
             _questTabs.style.width = rightColumnWidth;
             _minimap.style.width = rightColumnWidth;
             ApplyLgoGameplayHudRect(_dialogue, gameplayHud.Dialogue);
-            var inventoryRect = CalculateInventoryModalRect(new Rect(0, 0, r.width, r.height), _touch);
+            var inventoryRect = CalculateInventoryModalRect(
+                new Rect(0, 0, r.width, r.height), _touch, layout.CharacterHubShellMaxHeight);
             _inventory.style.left = inventoryRect.x;
             _inventory.style.right = StyleKeyword.Auto;
             _inventory.style.top = inventoryRect.y;

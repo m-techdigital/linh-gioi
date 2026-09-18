@@ -11,6 +11,7 @@ def valid_ui_metrics(profile: str) -> dict:
     authority = capture.expected_evidence_authority(profile)
     panel_height = 941
     panel_width = round(width * panel_height / height)
+    shell_height = 640 if profile == "mobile" else 724
     return {
         "evidenceAuthority": authority,
         "screenWidth": width, "screenHeight": height,
@@ -21,9 +22,9 @@ def valid_ui_metrics(profile: str) -> dict:
         "inputClass": "pointer" if profile == "pc" else "touch",
         "panelSettings": "scaleMode=ScaleWithScreenSize referenceResolution=1672x941 screenMatchMode=MatchWidthOrHeight match=1",
         "characterHubShellX": (panel_width - 1098) / 2,
-        "characterHubShellY": (panel_height - 724) / 2,
-        "characterHubShellWidth": 1098, "characterHubShellHeight": 724,
-        "characterHubShellScreenHeightRatio": 724 / 941,
+        "characterHubShellY": (panel_height - shell_height) / 2 + 18,
+        "characterHubShellWidth": 1098, "characterHubShellHeight": shell_height,
+        "characterHubShellScreenHeightRatio": shell_height / 941,
         "minimumTouchTargetPanelUnits": 44,
         "minimumTouchTargetScreenPixels": 44 * height / 941,
     }
@@ -52,6 +53,20 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
         self.assertEqual((1024, 768), capture.PROFILES["tablet"])
         self.assertEqual((1600, 720), capture.PROFILES["mobile"])
         self.assertEqual(3, len(set(capture.PROFILES.values())))
+
+    def test_mobile_metrics_require_compact_shell_and_reject_desktop_sized_occupancy(self) -> None:
+        compact = {
+            "evidenceAuthority": capture.expected_evidence_authority("mobile"),
+            "uiMetrics": valid_ui_metrics("mobile"),
+        }
+        self.assertEqual([], capture.validate_ui_metrics(compact, "mobile"))
+
+        oversized = json.loads(json.dumps(compact))
+        oversized["uiMetrics"]["characterHubShellHeight"] = 724
+        oversized["uiMetrics"]["characterHubShellScreenHeightRatio"] = 724 / 941
+        errors = capture.validate_ui_metrics(oversized, "mobile")
+        self.assertIn("CHARACTER_HUB_SHELL_METRICS_MISMATCH", errors)
+        self.assertIn("CHARACTER_HUB_OCCUPANCY_INVALID", errors)
 
     def test_capture_requires_data_only_potential_frames_for_all_five_classes(self) -> None:
         expected = tuple(

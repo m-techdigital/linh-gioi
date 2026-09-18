@@ -39,7 +39,9 @@ namespace LinhGioi.UI
             {
                 safe = _touch ? new Rect(0, 0, 800, 480) : new Rect(0, 0, 1600, 900);
             }
-            var rect = CalculateInventoryModalRect(new Rect(0, 0, safe.width, safe.height), _touch);
+            var layout = RuntimeUiLayoutProfile.FromViewport(_metrics);
+            var rect = CalculateInventoryModalRect(
+                new Rect(0, 0, safe.width, safe.height), _touch, layout.CharacterHubShellMaxHeight);
             _inventory.style.height = CalculateInventoryShellHeight(rect, _touch, compact);
         }
 
