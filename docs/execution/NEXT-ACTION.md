@@ -1,3 +1,13 @@
+# NEXT ACTION — UI Fidelity / after UIF-02R adaptive mobile presentation-scale closure
+
+1. Preserve UIF-08 texture/import policy and the closed auth/persistence/gameplay contracts. Authoritative responsive runtime source is `404b89636fe76f6659935f2a099fcb9fc22ef95b`, pushed remote-equal to `origin/feature/2d`.
+2. Mobile presentation is no longer a fixed `1098x640` / `camera=4.5` patch. `RuntimePresentationScaleProfile` is the shared derived authority: mobile uses a window/aspect curve (base density + bounded aspect compression), PC/tablet remain scale 1, Character Hub scales the canonical 1098x724 shell uniformly, and world camera uses the same curve with gentler square-root zoom-out. Keep `design-tokens.json` frozen.
+3. Runtime mobile 1600x720 simulation now measures `presentationScale=0.85118`, Character Hub 934.59x616.25 panel units / 65.49% screen height (was 76.94%), camera 4.11885, actor 19.80% screen height and NPC 23.06%. PC/tablet remain at scale 1 / shell 1098x724 / camera 3.8.
+4. Touch/gameplay hit zones are deliberately independent from visual compression: gameplay joystick/action geometry, 44-unit semantic minimum target and safe-area conversion remain under their existing authorities. Do not globally transform-scale the entire UIDocument.
+5. Exact-source closure evidence: Unity EditMode 394/394 PASS; fresh macOS Player build from `404b8963` succeeded with errors=0 warnings=44; Character Hub 44 frames/profile and whole-flow 27 frames/profile PASS on PC/tablet/mobile-landscape simulation; representative visual audit found no new shell distortion, obvious clipping/overlap or displaced touch dock.
+6. Tablet/mobile are still macOS profile/aspect simulations. Android/iOS physical points, cutouts, DPI and frame/memory remain unproven until authoritative simulator/device tooling exists; UIF-10 must keep that limitation explicit.
+7. Continue sequentially with already-assigned **UIF-09 HUD/world decomposition**, then **UIF-10 authoritative fidelity/device gates**. Do not reopen mobile scale with screen-specific fixed pixels unless a fresh measured Player/device regression proves the shared curve insufficient.
+
 # NEXT ACTION — UI Fidelity / after UIF-08 Runtime texture/mobile memory closure
 
 1. Preserve UIF-03..07 behavior/presentation contracts and UIF-08 texture evidence. Authoritative UIF-08 runtime source is `bdc0461bccaf7439ce238b3e6a86659eff3cd1d2`: 40 Resources PNGs inventoried, 19 large textures all have explicit Android+iOS import decisions, and no mass recompression/Addressables migration was performed.
