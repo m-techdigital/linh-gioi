@@ -324,6 +324,33 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void Map01ACaptureHarnessIsIsolatedFromProductWorldCore()
+        {
+            var worldDir = System.IO.Path.Combine(Application.dataPath, "Game/World/Runtime");
+            var corePath = System.IO.Path.Combine(worldDir, "CongDongLamMap01AArtPreview.cs");
+            var capturePath = System.IO.Path.Combine(worldDir, "CongDongLamMap01AArtPreview.Capture.cs");
+            Assert.That(System.IO.File.Exists(capturePath), Is.True,
+                "UIF-09 requires one dedicated Map01A capture partial.");
+            var core = System.IO.File.ReadAllText(corePath);
+            var capture = System.IO.File.ReadAllText(capturePath);
+
+            Assert.That(core, Does.Contain("HasCaptureRequestForArgs(args)"),
+                "Product bootstrap may ask one capture gateway but must not own individual harness routes.");
+            Assert.That(core, Does.Not.Contain("private IEnumerator CaptureEntryScreen"));
+            Assert.That(core, Does.Not.Contain("private IEnumerator CaptureInventoryTabs"));
+            Assert.That(core, Does.Not.Contain("private IEnumerator CapturePasswordRecoveryScreen"));
+            Assert.That(core, Does.Not.Contain("private sealed class CaptureInfo"));
+            Assert.That(core, Does.Not.Contain("File.WriteAllText(Path.Combine(directory, \"manifest.json\")"));
+
+            Assert.That(capture, Does.Contain("private IEnumerator Start()"));
+            Assert.That(capture, Does.Contain("private sealed class CaptureInfo"));
+            Assert.That(capture, Does.Contain("private IEnumerator CaptureEntryScreen"));
+            Assert.That(capture, Does.Contain("private IEnumerator CaptureInventoryTabs"));
+            Assert.That(capture, Does.Contain("private IEnumerator CapturePasswordRecoveryScreen"));
+            Assert.That(capture, Does.Contain("File.WriteAllText(Path.Combine(directory, \"manifest.json\")"));
+        }
+
+        [Test]
         public void PlayableWorldReusesSharedPresentationClassifier()
         {
             var source = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.dataPath,
