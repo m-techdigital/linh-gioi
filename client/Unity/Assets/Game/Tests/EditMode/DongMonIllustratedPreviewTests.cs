@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LinhGioi.Foundation;
 using LinhGioi.World;
 using NUnit.Framework;
 using UnityEngine;
@@ -808,9 +809,23 @@ namespace LinhGioi.Tests
                 var previous = gate.enabled;
                 var cameraSize = Camera.main.orthographicSize;
                 preview = CongDongLamMap01AArtPreview.Attach(controller);
-                Assert.That(Camera.main.orthographicSize, Is.EqualTo(3.8f).Within(.001f),
-                    "Map01A framing must keep characters readable instead of spending most of the viewport on empty sky");
-                Assert.That(Camera.main.transform.position.y - preview.GroundY, Is.EqualTo(1.5f).Within(.001f));
+                var worldProfile = RuntimeWorldPresentationProfile.FromScreen(
+                    preview.WorldPresentationProfileName, Screen.width, Screen.height);
+                Assert.That(Camera.main.orthographicSize, Is.EqualTo(worldProfile.CameraOrthographicSize).Within(.001f),
+                    "Map01A camera must consume the shared world-presentation authority.");
+                Assert.That(Camera.main.transform.position.y - preview.GroundY,
+                    Is.EqualTo(worldProfile.CameraGroundOffsetY).Within(.001f));
+                var worldMetrics = preview.WorldPresentationMetrics;
+                Assert.That(worldMetrics, Is.Not.Null, "Shipping Map01A must publish measurable world presentation evidence.");
+                Assert.That(worldMetrics.profileName, Is.EqualTo(worldProfile.Name));
+                Assert.That(worldMetrics.cameraOrthographicSize, Is.EqualTo(Camera.main.orthographicSize).Within(.001f));
+                Assert.That(worldMetrics.cameraGroundOffsetY, Is.EqualTo(worldProfile.CameraGroundOffsetY).Within(.001f));
+                Assert.That(worldMetrics.actorWorldHeight, Is.GreaterThan(1.5f));
+                Assert.That(worldMetrics.actorScreenHeightRatio,
+                    Is.InRange(worldProfile.ActorMinScreenHeightRatio, worldProfile.ActorMaxScreenHeightRatio));
+                Assert.That(worldMetrics.npcWorldHeight, Is.GreaterThan(1.3f));
+                Assert.That(worldMetrics.npcScreenHeightRatio,
+                    Is.InRange(worldProfile.NpcMinScreenHeightRatio, worldProfile.NpcMaxScreenHeightRatio));
                 Assert.That(preview.PartCount, Is.EqualTo(2));
                 Assert.That(preview.LayerCount, Is.EqualTo(3));
                 Assert.That(preview.SourcePropCount, Is.EqualTo(4));

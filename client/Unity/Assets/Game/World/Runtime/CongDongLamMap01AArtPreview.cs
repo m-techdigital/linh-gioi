@@ -88,6 +88,9 @@ namespace LinhGioi.World
         }
         public RuntimeUiMetricsSnapshot RuntimeUiMetrics { get; private set; }
         public void SetRuntimeUiMetrics(RuntimeUiMetricsSnapshot snapshot) => RuntimeUiMetrics = snapshot;
+        public RuntimeWorldPresentationMetrics WorldPresentationMetrics { get; private set; }
+        public string WorldPresentationProfileName => _worldPresentationProfile.Name;
+        private RuntimeWorldPresentationProfile _worldPresentationProfile;
         public float PlayerX => _routeX;
         public string LoadedProductRuntimeClassId { get; private set; }
         public int ProductEntryFacingSign => _voState.FacingSign;
@@ -651,6 +654,7 @@ namespace LinhGioi.World
             public int healthPotionCount, manaPotionCount, playerHealth;
             public bool dialogueOpened, greetingCompleted;
             public RuntimeUiMetricsSnapshot uiMetrics;
+            public RuntimeWorldPresentationMetrics worldMetrics;
             public bool voBaseVerified, voModularVerified, voWalkVerified, voSkillVerified;
             public bool voFemaleVerified, voSlotToggleVerified;
             public bool voFemaleMotionVerified, voProgressionVerified;
@@ -792,6 +796,17 @@ namespace LinhGioi.World
 
         public static bool IsMapQuestCaptureForArgs(string[] args) => Array.IndexOf(args, "--lgo-map01a-art-capture") >= 0;
 
+        private static string RequestedWorldPresentationProfile(string[] args)
+        {
+            if (args == null) return null;
+            foreach (var key in new[] { "--lgo-map01a-device", "--lgo-device-profile" })
+            {
+                var index = Array.IndexOf(args, key);
+                if (index >= 0 && index + 1 < args.Length) return args[index + 1];
+            }
+            return null;
+        }
+
         public static bool ShouldCaptureAuthValidationForArgs(string[] args)
             => args != null && Array.IndexOf(args, "--lgo-map01a-auth-validation-capture") >= 0;
 
@@ -823,6 +838,8 @@ namespace LinhGioi.World
             if (HasRendererAuthorityConflict(Environment.GetCommandLineArgs()))
                 throw new InvalidOperationException(
                     "Map01A Player selected registered and source-pose renderers together");
+            _worldPresentationProfile = RuntimeWorldPresentationProfile.FromScreen(
+                RequestedWorldPresentationProfile(Environment.GetCommandLineArgs()), Screen.width, Screen.height);
             var manifest = Resources.Load<TextAsset>(ResourcePath + "manifest");
             var atlas = Resources.Load<Texture2D>(ResourcePath + "props-atlas");
             var far = Resources.Load<Texture2D>(ResourcePath + "far-background");
@@ -902,10 +919,13 @@ namespace LinhGioi.World
             {
                 _previousCameraSize = _camera.orthographicSize;
                 _previousCameraPosition = _camera.transform.position;
-                // Frame the gameplay lane at a readable side-scroller scale. The background
-                // still covers every supported aspect ratio in Refresh().
-                _camera.orthographicSize = 3.8f;
-                _camera.transform.position = new Vector3(_camera.transform.position.x, GroundY + 1.5f, _camera.transform.position.z);
+                // Frame the gameplay lane from the shared world-presentation contract.
+                // Aspect-specific evidence may change this contract later; product code does not own literals.
+                _camera.orthographicSize = _worldPresentationProfile.CameraOrthographicSize;
+                _camera.transform.position = new Vector3(
+                    _camera.transform.position.x,
+                    GroundY + _worldPresentationProfile.CameraGroundOffsetY,
+                    _camera.transform.position.z);
             }
             // Suppress the old world presentation only while this opt-in slice is attached.
             foreach (var renderer in FindObjectsByType<Renderer>(FindObjectsInactive.Include, FindObjectsSortMode.None))
@@ -1796,7 +1816,44 @@ namespace LinhGioi.World
             }
             foreach (var marker in _interactionMarkers)
                 marker.Item1.SetActive(marker.Item1 == nearest);
+            RefreshWorldPresentationMetrics();
         }
+
+        private static bool TryEnabledSpriteBounds(Transform root, out Bounds bounds)
+        {
+            bounds = default;
+            if (root == null) return false;
+            var renderers = root.GetComponentsInChildren<SpriteRenderer>(true)
+                .Where(renderer => renderer.enabled && renderer.sprite != null)
+                .ToArray();
+            if (renderers.Length == 0) return false;
+            bounds = renderers[0].bounds;
+            for (var index = 1; index < renderers.Length; index++) bounds.Encapsulate(renderers[index].bounds);
+            return bounds.size.y > 0f;
+        }
+
+        private void RefreshWorldPresentationMetrics()
+        {
+            if (_camera == null) return;
+            var actorRoot = ActiveSourcePoseReview != null ? ActiveSourcePoseReview.transform : _voAvatarRoot;
+            TryEnabledSpriteBounds(actorRoot, out var actorBounds);
+            var npcRenderer = GetComponentsInChildren<SpriteRenderer>(true)
+                .FirstOrDefault(renderer => renderer.name == "Map01A NPC quan-thu-dong-lam");
+            var npcBounds = npcRenderer == null ? default : npcRenderer.bounds;
+            WorldPresentationMetrics = new RuntimeWorldPresentationMetrics
+            {
+                profileName = _worldPresentationProfile.Name,
+                cameraOrthographicSize = _camera.orthographicSize,
+                cameraGroundOffsetY = _camera.transform.position.y - GroundY,
+                actorWorldHeight = actorBounds.size.y,
+                actorScreenHeightRatio = RuntimeWorldPresentationMetrics.ScreenHeightRatio(_camera, actorBounds),
+                npcWorldHeight = npcBounds.size.y,
+                npcScreenHeightRatio = RuntimeWorldPresentationMetrics.ScreenHeightRatio(_camera, npcBounds),
+                interactionMarkerFontSize = _worldPresentationProfile.InteractionMarkerFontSize,
+                interactionMarkerCharacterSize = _worldPresentationProfile.InteractionMarkerCharacterSize,
+            };
+        }
+
         private IEnumerator Start()
         {
             var args = Environment.GetCommandLineArgs();

@@ -6,6 +6,16 @@ namespace LinhGioi.Foundation
     [Serializable]
     public sealed class RuntimeWorldPresentationMetrics
     {
+        public string profileName;
+        public float cameraOrthographicSize;
+        public float cameraGroundOffsetY;
+        public float actorWorldHeight;
+        public float actorScreenHeightRatio;
+        public float npcWorldHeight;
+        public float npcScreenHeightRatio;
+        public int interactionMarkerFontSize;
+        public float interactionMarkerCharacterSize;
+
         public static float ScreenHeightRatio(Camera camera, Bounds worldBounds)
         {
             if (camera == null || worldBounds.size.y <= 0f) return 0f;
