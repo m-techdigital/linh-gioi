@@ -227,7 +227,6 @@ REQUIRED_PARTIAL_MARKERS = {
         "ApplyLgoGameplaySecondaryZone(_productShortcutActions)",
         "ApplyLgoHudShortcutAction(_menuShortcut",
         "AttachLgoHudActionIcon(_menuShortcut",
-        "ApplyLgoGameplayHudRect(_productShortcutActions, gameplayHud.SecondaryNav)",
         "ApplyLgoHudQuestTab(_questMissionsTab",
         "ApplyLgoHudQuestTab(_questPartyTab",
         "ApplyLgoHudLocationChip(title)",
@@ -242,7 +241,13 @@ REQUIRED_PARTIAL_MARKERS = {
         "private const float InventoryDesktopDetailColumnWidth",
         "private const float InventoryDesktopMainColumnWidth",
         "private const float InventoryGridCellBasisPercent",
+    ],
+    "CongDongLamArrivalHud.Runtime.cs": [
+        "ApplyLgoGameplayHudRect(_productShortcutActions, gameplayHud.SecondaryNav)",
         "UpdateCharacterHubOpenAnimation(_scene.InventoryOpen)",
+        "layout.CharacterHubShellMaxHeight",
+        "RuntimeUiEvidenceMetrics.CreateGameplaySnapshot(",
+        "ShouldBlockWorldInput(",
     ],
     "CongDongLamArrivalHud.Entry.cs": [
         "ApplyLgoEntryShell(_entryPanel)",

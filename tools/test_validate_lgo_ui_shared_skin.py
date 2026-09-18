@@ -68,6 +68,18 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             self.assertGreater(len(skin_parts), 1)
             self.assertEqual([], validator.validate_root(root))
 
+    def test_runtime_orchestration_partial_keeps_decomposed_structural_markers(self) -> None:
+        with self._copy_minimal_repo() as temp:
+            root = Path(temp)
+            runtime = root / "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Runtime.cs"
+            self.assertEqual([], validator.validate_root(root), "The decomposed fixture must be valid before mutation.")
+            marker = "ApplyLgoGameplayHudRect(_productShortcutActions, gameplayHud.SecondaryNav)"
+            text = runtime.read_text(encoding="utf-8")
+            self.assertEqual(1, text.count(marker))
+            runtime.write_text(text.replace(marker, "OneOffProductShortcutPlacement()", 1), encoding="utf-8")
+            violations = validator.validate_root(root)
+        self.assertTrue(any("CongDongLamArrivalHud.Runtime.cs" in item and marker in item for item in violations), violations)
+
     def test_all_equipment_surfaces_keep_shared_content_and_missing_state(self) -> None:
         markers = (
             "BindLgoItemIconContent(_equipmentRowIcons[index],",
