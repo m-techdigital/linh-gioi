@@ -3201,6 +3201,38 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void GameplayHudDocksStatusAndQuestMapToSharedEdgeZones()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("gameplay HUD edge-zone test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var playerZone = root.Q("Map01A Player Status Cluster");
+                var rightZone = root.Q("Map01A Right Hud Cluster");
+
+                Assert.That(playerZone.ClassListContains("lgo-gameplay-player-zone"), Is.True,
+                    "Player status must bind to one semantic top-edge zone.");
+                Assert.That(rightZone.ClassListContains("lgo-gameplay-right-zone"), Is.True,
+                    "Location, map and quest tracker must bind to one semantic right-edge zone.");
+                Assert.That(root.Q("Map01A Vitals").parent, Is.SameAs(playerZone));
+                foreach (var name in new[] { "Map01A Location Title", "Map01A Minimap", "Map01A Quest Tracker Tabs", "Map01A Quest Tracker Body" })
+                    Assert.That(root.Q(name).parent, Is.SameAs(rightZone), name);
+                Assert.That(playerZone.style.left.value.value, Is.GreaterThanOrEqualTo(14f));
+                Assert.That(playerZone.style.height.value.value, Is.GreaterThanOrEqualTo(70f));
+                Assert.That(rightZone.style.left.value.value, Is.GreaterThan(0f));
+                Assert.That(rightZone.style.height.value.value, Is.GreaterThanOrEqualTo(300f));
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void SourceGameplayHudKeepsVitalsAndHidesLegacyModeButtonsWhenInventoryCloses()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

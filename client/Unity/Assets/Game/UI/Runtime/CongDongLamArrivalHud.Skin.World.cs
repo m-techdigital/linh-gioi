@@ -76,6 +76,31 @@ namespace LinhGioi.UI
             element.style.alignItems = Align.Stretch;
         }
 
+        private static void ApplyLgoGameplayPlayerZone(VisualElement element)
+        {
+            element.AddToClassList(LgoGameplayPlayerZoneClass);
+            ApplyLgoHudComposition(element);
+            element.style.position = Position.Absolute;
+        }
+
+        private static void ApplyLgoGameplayRightZone(VisualElement element)
+        {
+            element.AddToClassList(LgoGameplayRightZoneClass);
+            ApplyLgoHudComposition(element);
+            element.style.position = Position.Absolute;
+        }
+
+        private static void ApplyLgoGameplayHudRect(VisualElement element, Rect rect)
+        {
+            element.style.position = Position.Absolute;
+            element.style.left = rect.x;
+            element.style.right = StyleKeyword.Auto;
+            element.style.top = rect.y;
+            element.style.bottom = StyleKeyword.Auto;
+            element.style.width = rect.width;
+            element.style.height = rect.height;
+        }
+
         private static void ApplyLgoHudPlayerCard(VisualElement element)
         {
             element.AddToClassList(LgoHudPlayerCardClass);

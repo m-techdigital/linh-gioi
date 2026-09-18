@@ -101,14 +101,12 @@ namespace LinhGioi.UI
             _root.Add(_safe);
 
             _playerHudCluster = new VisualElement { name = "Map01A Player Status Cluster", pickingMode = PickingMode.Ignore };
-            ApplyLgoHudComposition(_playerHudCluster);
-            Place(_playerHudCluster, 12, null, 12, null);
+            ApplyLgoGameplayPlayerZone(_playerHudCluster);
             _playerHudCluster.style.width = 292;
             _safe.Add(_playerHudCluster);
 
             _rightHudCluster = new VisualElement { name = "Map01A Right Hud Cluster", pickingMode = PickingMode.Ignore };
-            ApplyLgoHudComposition(_rightHudCluster);
-            Place(_rightHudCluster, null, 12, 12, null);
+            ApplyLgoGameplayRightZone(_rightHudCluster);
             _rightHudCluster.style.width = 286;
             _safe.Add(_rightHudCluster);
 
@@ -455,8 +453,11 @@ namespace LinhGioi.UI
             var r = _metrics.SafePanelRect;
             Place(_safe, r.x, null, r.y, null); _safe.style.width = r.width; _safe.style.height = r.height;
             LayoutEntryScreen(layout, r);
-            var rightColumnWidth = layout.WorldRightColumnWidth;
-            _rightHudCluster.style.width = rightColumnWidth;
+            var gameplayHud = RuntimeGameplayHudLayout.Calculate(new Rect(0, 0, r.width, r.height), layout);
+            ApplyLgoGameplayHudRect(_playerHudCluster, gameplayHud.PlayerStatus);
+            ApplyLgoGameplayHudRect(_rightHudCluster, gameplayHud.RightInfo);
+            _vitals.style.width = gameplayHud.PlayerStatus.width;
+            var rightColumnWidth = gameplayHud.RightInfo.width;
             _quest.style.width = rightColumnWidth;
             _questTabs.style.width = rightColumnWidth;
             _minimap.style.width = rightColumnWidth;
