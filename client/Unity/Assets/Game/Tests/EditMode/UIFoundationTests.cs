@@ -214,6 +214,17 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void PlayableWorldReusesSharedPresentationClassifier()
+        {
+            var source = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.dataPath,
+                "Game/World/Runtime/PlayableWorldController.cs"));
+            Assert.That(source, Does.Contain("RuntimeWorldPresentationProfile.FromScreen"),
+                "Prototype/smoke world may retain its legacy camera values, but device classification must reuse the shared authority.");
+            Assert.That(source, Does.Not.Contain("private readonly struct WorldLayoutProfile"),
+                "World profile classification must not be duplicated inside PlayableWorldController.");
+        }
+
+        [Test]
         public void HudAttachDoesNotOverrideSharedPanelScalePolicy()
         {
             var source = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.dataPath,

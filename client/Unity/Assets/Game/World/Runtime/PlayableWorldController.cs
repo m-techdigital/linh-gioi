@@ -2,6 +2,7 @@ using System;
 using System.Globalization;
 using LinhGioi.Account;
 using LinhGioi.Art;
+using LinhGioi.Foundation;
 using LinhGioi.Protocol.V1;
 using UnityEngine;
 
@@ -433,10 +434,10 @@ namespace LinhGioi.World
 
         private static float CurrentCameraOrthographicSize()
         {
-            // LGO Mobile World Camera Framing v1: smaller screens need larger readable actors, not a farther fixed desktop view.
-            var layout = CurrentWorldLayoutProfile();
-            if (layout.IsMobile) return 5.45f;
-            if (layout.IsTablet) return 6.15f;
+            // Preserve prototype/smoke camera values while reusing the shared device classifier.
+            var name = CurrentWorldLayoutProfile().Name;
+            if (string.Equals(name, "mobile", StringComparison.Ordinal)) return 5.45f;
+            if (string.Equals(name, "tablet", StringComparison.Ordinal)) return 6.15f;
             return 6.35f;
         }
 
@@ -1102,28 +1103,22 @@ namespace LinhGioi.World
             return new Vector3(0.72f, 0.72f, 1f);
         }
 
-        private static WorldLayoutProfile CurrentWorldLayoutProfile()
+        private static RuntimeWorldPresentationProfile CurrentWorldLayoutProfile()
         {
-            var forcedProfile = NormalizeWorldLayoutProfile(GetArg("--lgo-device-profile"));
-            return WorldLayoutProfile.FromScreen(forcedProfile, Screen.width, Screen.height);
+            return RuntimeWorldPresentationProfile.FromScreen(
+                GetArg("--lgo-device-profile"), Screen.width, Screen.height);
         }
 
         private static bool IsMobileWorldViewport()
         {
-            return CurrentWorldLayoutProfile().IsMobile;
+            return string.Equals(CurrentWorldLayoutProfile().Name, "mobile", StringComparison.Ordinal);
         }
 
         private static bool IsNarrowWorldViewport()
         {
-            var layout = CurrentWorldLayoutProfile();
-            return layout.IsMobile || layout.IsTablet;
-        }
-
-        private static string NormalizeWorldLayoutProfile(string value)
-        {
-            if (string.IsNullOrWhiteSpace(value)) return null;
-            var normalized = value.Trim().ToLowerInvariant();
-            return normalized == "mobile" || normalized == "tablet" || normalized == "desktop" ? normalized : null;
+            var name = CurrentWorldLayoutProfile().Name;
+            return string.Equals(name, "mobile", StringComparison.Ordinal)
+                || string.Equals(name, "tablet", StringComparison.Ordinal);
         }
 
         private static string GetArg(string key)
@@ -1141,8 +1136,10 @@ namespace LinhGioi.World
         {
             // LGO World Viewport Label Metrics v1: world feedback follows one viewport class instead of scattered pixel branches.
             var layout = CurrentWorldLayoutProfile();
-            var labelFontSize = layout.IsMobile ? 48 : layout.IsTablet ? 46 : 42;
-            var labelCharacterSize = layout.IsMobile ? 0.052f : layout.IsTablet ? 0.048f : 0.042f;
+            var mobile = string.Equals(layout.Name, "mobile", StringComparison.Ordinal);
+            var tablet = string.Equals(layout.Name, "tablet", StringComparison.Ordinal);
+            var labelFontSize = mobile ? 48 : tablet ? 46 : 42;
+            var labelCharacterSize = mobile ? 0.052f : tablet ? 0.048f : 0.042f;
             ApplyWorldLabelStyle(_gateKeeperWorldLabel, labelFontSize, labelCharacterSize);
             ApplyWorldLabelStyle(_trainingStoneWorldLabel, labelFontSize, labelCharacterSize);
             ApplyWorldLabelStyle(_targetDummyWorldLabel, labelFontSize, labelCharacterSize);
@@ -1150,45 +1147,8 @@ namespace LinhGioi.World
             ApplyWorldLabelStyle(_shadowSlimeWorldLabel, labelFontSize, labelCharacterSize);
             ApplyWorldLabelStyle(
                 _targetDummyRewardLabel,
-                layout.IsMobile ? 50 : layout.IsTablet ? 48 : 44,
-                layout.IsMobile ? 0.050f : layout.IsTablet ? 0.046f : 0.040f);
-        }
-
-        private readonly struct WorldLayoutProfile
-        {
-            private const int MobileMaxShortSide = 600;
-            private const int MobileMaxLongSide = 1050;
-            private const int TabletMaxShortSide = 900;
-            private const int TabletMaxLongSide = 1450;
-
-            internal readonly bool IsMobile;
-            internal readonly bool IsTablet;
-
-            private WorldLayoutProfile(bool isMobile, bool isTablet)
-            {
-                IsMobile = isMobile;
-                IsTablet = isTablet;
-            }
-
-            internal static WorldLayoutProfile FromScreen(string forcedProfile, int screenWidth, int screenHeight)
-            {
-                if (string.Equals(forcedProfile, "mobile", StringComparison.Ordinal))
-                    return new WorldLayoutProfile(true, false);
-                if (string.Equals(forcedProfile, "tablet", StringComparison.Ordinal))
-                    return new WorldLayoutProfile(false, true);
-                if (string.Equals(forcedProfile, "desktop", StringComparison.Ordinal))
-                    return new WorldLayoutProfile(false, false);
-
-                var width = screenWidth > 0 ? screenWidth : 1280;
-                var height = screenHeight > 0 ? screenHeight : 720;
-                var shortSide = Mathf.Min(width, height);
-                var longSide = Mathf.Max(width, height);
-                if (shortSide <= MobileMaxShortSide && longSide <= MobileMaxLongSide)
-                    return new WorldLayoutProfile(true, false);
-                if (shortSide <= TabletMaxShortSide && longSide <= TabletMaxLongSide)
-                    return new WorldLayoutProfile(false, true);
-                return new WorldLayoutProfile(false, false);
-            }
+                mobile ? 50 : tablet ? 48 : 44,
+                mobile ? 0.050f : tablet ? 0.046f : 0.040f);
         }
 
         private void RefreshTargetDummyReadabilityMarkers(bool vfxActive)
