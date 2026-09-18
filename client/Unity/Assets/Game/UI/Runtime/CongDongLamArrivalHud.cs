@@ -211,7 +211,7 @@ namespace LinhGioi.UI
             _rightHudCluster.Add(_minimap);
             _rightHudCluster.Add(_questTabs);
             _rightHudCluster.Add(_quest);
-            _pad = new RuntimeTouchMovementPad { name = "LGO World Touch Movement Pad" }; ApplyLgoHudInfoPanel(_pad); Place(_pad, 16, null, null, 16);
+            _pad = new RuntimeTouchMovementPad { name = "LGO World Touch Movement Pad" }; ApplyLgoHudInfoPanel(_pad); ApplyLgoGameplayTouchZone(_pad);
             _pad.style.width = _pad.style.height = 112;
             _pad.style.display = _touch ? DisplayStyle.Flex : DisplayStyle.None;
             var nub = new VisualElement { name = "LGO World Touch Movement Nub", pickingMode = PickingMode.Ignore };
@@ -223,9 +223,9 @@ namespace LinhGioi.UI
                 UiGoldBorder);
             _pad.Add(nub); _safe.Add(_pad);
             _talk = new Button(() => _scene.UseCurrentRouteAction()) { name = "Map01A Talk Action", text = "Tương tác · E" };
-            ApplyLgoHudContextAction(_talk, _touch, minWidth: 150); Place(_talk, null, 16, null, _touch ? 318 : 232); _safe.Add(_talk);
+            ApplyLgoHudContextAction(_talk, _touch, minWidth: 150); ApplyLgoGameplayContextZone(_talk); _safe.Add(_talk);
             _npcTalk = new Button(() => _scene.UseNpcConversation()) { text = "Nói chuyện với Tiểu Đồng" };
-            ApplyLgoHudContextAction(_npcTalk, _touch, minHeight: 48); Place(_npcTalk, null, 16, null, _touch ? 394 : 292); _safe.Add(_npcTalk);
+            ApplyLgoHudContextAction(_npcTalk, _touch, minHeight: 48); ApplyLgoGameplayContextZone(_npcTalk); _safe.Add(_npcTalk);
             _outfit = new Button(() => _scene.CycleCharacterAvatarMode()) { text = "Trang bị · C" };
             ApplyLgoHudInfoPanel(_outfit); Place(_outfit, 16, null, _touch ? 90 : 90, null);
             _outfit.style.minHeight = _touch ? 56 : 42; _outfit.style.minWidth = 170; _safe.Add(_outfit);
@@ -244,7 +244,7 @@ namespace LinhGioi.UI
             _toggleSlot = new Button(() => _scene.ToggleEquipmentSlot()) { text = "Mặc/Cởi · B" };
             ApplyLgoHudInfoPanel(_toggleSlot); Place(_toggleSlot, 16, null, _touch ? 384 : 322, null);
             _toggleSlot.style.minHeight = _touch ? 52 : 40; _toggleSlot.style.minWidth = 170; _safe.Add(_toggleSlot);
-            _combatBar = new VisualElement { name = "Map01A Combat Actions" }; Place(_combatBar, null, 16, null, _touch ? 154 : 84);
+            _combatBar = new VisualElement { name = "Map01A Combat Actions" }; ApplyLgoGameplayCombatZone(_combatBar);
             _combatBar.style.flexDirection = FlexDirection.Row;
             _combatBar.style.width = 330;
             _combatBar.style.height = _touch ? 76 : 66;
@@ -456,6 +456,10 @@ namespace LinhGioi.UI
             var gameplayHud = RuntimeGameplayHudLayout.Calculate(new Rect(0, 0, r.width, r.height), layout);
             ApplyLgoGameplayHudRect(_playerHudCluster, gameplayHud.PlayerStatus);
             ApplyLgoGameplayHudRect(_rightHudCluster, gameplayHud.RightInfo);
+            ApplyLgoGameplayHudRect(_combatBar, gameplayHud.Combat);
+            ApplyLgoGameplayHudRect(_talk, gameplayHud.Context);
+            ApplyLgoGameplayHudRect(_npcTalk, gameplayHud.Context);
+            ApplyLgoGameplayHudRect(_pad, gameplayHud.TouchPad);
             _vitals.style.width = gameplayHud.PlayerStatus.width;
             var rightColumnWidth = gameplayHud.RightInfo.width;
             _quest.style.width = rightColumnWidth;
@@ -473,7 +477,6 @@ namespace LinhGioi.UI
             _inventory.style.width = inventoryRect.width;
             _inventory.style.height = CalculateInventoryShellHeight(inventoryRect, _touch, IsInventoryCompactShellActive());
             PublishRuntimeUiMetrics(layout, inventoryRect);
-            _combatBar.style.bottom = layout.WorldCombatBarBottom;
             _talk.style.fontSize = layout.WorldTalkFontSize;
             if (_inventoryHeroPanel != null)
             {

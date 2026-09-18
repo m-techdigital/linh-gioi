@@ -90,6 +90,24 @@ namespace LinhGioi.UI
             element.style.position = Position.Absolute;
         }
 
+        private static void ApplyLgoGameplayCombatZone(VisualElement element)
+        {
+            element.AddToClassList(LgoGameplayCombatZoneClass);
+            element.style.position = Position.Absolute;
+        }
+
+        private static void ApplyLgoGameplayContextZone(VisualElement element)
+        {
+            element.AddToClassList(LgoGameplayContextZoneClass);
+            element.style.position = Position.Absolute;
+        }
+
+        private static void ApplyLgoGameplayTouchZone(VisualElement element)
+        {
+            element.AddToClassList(LgoGameplayTouchZoneClass);
+            element.style.position = Position.Absolute;
+        }
+
         private static void ApplyLgoGameplayHudRect(VisualElement element, Rect rect)
         {
             element.style.position = Position.Absolute;

@@ -3233,6 +3233,50 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void GameplayHudBindsCombatContextAndTouchToSemanticThumbZones()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("gameplay HUD thumb-zone binding test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                typeof(CongDongLamArrivalHud).GetField("_forcedLayoutProfile", flags).SetValue(hud, "mobile");
+                typeof(CongDongLamArrivalHud).GetField("_touch", flags).SetValue(hud, true);
+                typeof(CongDongLamArrivalHud).GetMethod("Layout", flags).Invoke(hud, null);
+
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var combat = root.Q("Map01A Combat Actions");
+                var talk = root.Q("Map01A Talk Action");
+                var pad = root.Q("LGO World Touch Movement Pad");
+                Assert.That(combat.ClassListContains("lgo-gameplay-combat-zone"), Is.True);
+                Assert.That(talk.ClassListContains("lgo-gameplay-context-zone"), Is.True);
+                Assert.That(pad.ClassListContains("lgo-gameplay-touch-zone"), Is.True);
+
+                var safe = root.Q("Map01A Safe Hud");
+                var safeCenter = safe.style.width.value.value * .5f;
+                var combatRect = new Rect(combat.style.left.value.value, combat.style.top.value.value,
+                    combat.style.width.value.value, combat.style.height.value.value);
+                var talkRect = new Rect(talk.style.left.value.value, talk.style.top.value.value,
+                    talk.style.width.value.value, talk.style.height.value.value);
+                var padRect = new Rect(pad.style.left.value.value, pad.style.top.value.value,
+                    pad.style.width.value.value, pad.style.height.value.value);
+                Assert.That(padRect.xMax, Is.LessThan(safeCenter));
+                Assert.That(combatRect.xMin, Is.GreaterThan(safeCenter));
+                Assert.That(padRect.Overlaps(combatRect), Is.False);
+                Assert.That(padRect.Overlaps(talkRect), Is.False);
+                Assert.That(talkRect.Overlaps(combatRect), Is.False);
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void SourceGameplayHudKeepsVitalsAndHidesLegacyModeButtonsWhenInventoryCloses()
         {
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
