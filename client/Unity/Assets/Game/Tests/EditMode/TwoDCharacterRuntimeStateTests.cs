@@ -2050,10 +2050,11 @@ namespace LinhGioi.Tests.EditMode
                 "Every approved character-hub tab must keep one stable outer shell instead of jumping between heights.");
 
             var compact = CongDongLamArrivalHud.CalculateInventoryModalRect(new Rect(0, 0, 800, 480), touch: true);
-            Assert.That(compact.x, Is.EqualTo(24));
-            Assert.That(compact.y, Is.EqualTo(24));
-            Assert.That(compact.width, Is.EqualTo(752));
-            Assert.That(compact.height, Is.EqualTo(432));
+            Assert.That(compact.y, Is.EqualTo(24).Within(.1f));
+            Assert.That(compact.height, Is.EqualTo(432).Within(.1f));
+            Assert.That(compact.width / compact.height, Is.EqualTo(1098f / 724f).Within(.002f),
+                "Small windows must fit the canonical modal uniformly instead of stretching width and height independently.");
+            Assert.That(compact.x, Is.EqualTo((800f - compact.width) * .5f).Within(.1f));
             var compactColumns = CongDongLamArrivalHud.CalculateInventoryColumnWidths(compact.width);
             Assert.That(compactColumns.x / compactColumns.y, Is.EqualTo(600f / 448f).Within(.01f));
             Assert.That(compactColumns.x + compactColumns.y + compactColumns.z,

@@ -11,7 +11,9 @@ def valid_ui_metrics(profile: str) -> dict:
     authority = capture.expected_evidence_authority(profile)
     panel_height = 941
     panel_width = round(width * panel_height / height)
-    shell_height = 640 if profile == "mobile" else 724
+    presentation_scale = 0.85 if profile == "mobile" else 1.0
+    shell_width = 1098 * presentation_scale
+    shell_height = 724 * presentation_scale
     return {
         "evidenceAuthority": authority,
         "screenWidth": width, "screenHeight": height,
@@ -21,10 +23,11 @@ def valid_ui_metrics(profile: str) -> dict:
         "layoutClass": "desktop" if profile == "pc" else profile,
         "inputClass": "pointer" if profile == "pc" else "touch",
         "panelSettings": "scaleMode=ScaleWithScreenSize referenceResolution=1672x941 screenMatchMode=MatchWidthOrHeight match=1",
-        "characterHubShellX": (panel_width - 1098) / 2,
+        "characterHubShellX": (panel_width - shell_width) / 2,
         "characterHubShellY": (panel_height - shell_height) / 2 + 18,
-        "characterHubShellWidth": 1098, "characterHubShellHeight": shell_height,
+        "characterHubShellWidth": shell_width, "characterHubShellHeight": shell_height,
         "characterHubShellScreenHeightRatio": shell_height / 941,
+        "presentationScale": presentation_scale,
         "minimumTouchTargetPanelUnits": 44,
         "minimumTouchTargetScreenPixels": 44 * height / 941,
     }
@@ -62,11 +65,19 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
         self.assertEqual([], capture.validate_ui_metrics(compact, "mobile"))
 
         oversized = json.loads(json.dumps(compact))
+        oversized["uiMetrics"]["presentationScale"] = 1.0
+        oversized["uiMetrics"]["characterHubShellWidth"] = 1098
         oversized["uiMetrics"]["characterHubShellHeight"] = 724
         oversized["uiMetrics"]["characterHubShellScreenHeightRatio"] = 724 / 941
         errors = capture.validate_ui_metrics(oversized, "mobile")
-        self.assertIn("CHARACTER_HUB_SHELL_METRICS_MISMATCH", errors)
+        self.assertIn("PRESENTATION_SCALE_INVALID", errors)
         self.assertIn("CHARACTER_HUB_OCCUPANCY_INVALID", errors)
+
+        distorted = json.loads(json.dumps(compact))
+        distorted["uiMetrics"]["characterHubShellWidth"] = 1098
+        errors = capture.validate_ui_metrics(distorted, "mobile")
+        self.assertIn("CHARACTER_HUB_SHELL_METRICS_MISMATCH", errors)
+        self.assertIn("CHARACTER_HUB_SHELL_ASPECT_MISMATCH", errors)
 
     def test_capture_requires_data_only_potential_frames_for_all_five_classes(self) -> None:
         expected = tuple(

@@ -98,11 +98,20 @@ def validate_ui_metrics(manifest: dict, profile: str) -> list[str]:
     panel_settings = metrics.get("panelSettings", "")
     if "referenceResolution=1672x941" not in panel_settings or "match=1" not in panel_settings:
         errors.append("UI_PANEL_POLICY_MISMATCH")
-    expected_shell_height = 640.0 if profile == "mobile" else 724.0
-    if abs(float(metrics.get("characterHubShellWidth", 0)) - 1098.0) > 2.0 or abs(float(metrics.get("characterHubShellHeight", 0)) - expected_shell_height) > 2.0:
+    presentation_scale = float(metrics.get("presentationScale", 0))
+    minimum_scale, maximum_scale = ((0.82, 0.90) if profile == "mobile" else (0.995, 1.005))
+    if not minimum_scale <= presentation_scale <= maximum_scale:
+        errors.append("PRESENTATION_SCALE_INVALID")
+    expected_shell_width = 1098.0 * presentation_scale
+    expected_shell_height = 724.0 * presentation_scale
+    actual_shell_width = float(metrics.get("characterHubShellWidth", 0))
+    actual_shell_height = float(metrics.get("characterHubShellHeight", 0))
+    if abs(actual_shell_width - expected_shell_width) > 2.0 or abs(actual_shell_height - expected_shell_height) > 2.0:
         errors.append("CHARACTER_HUB_SHELL_METRICS_MISMATCH")
+    if actual_shell_height <= 0 or abs(actual_shell_width / actual_shell_height - 1098.0 / 724.0) > 0.01:
+        errors.append("CHARACTER_HUB_SHELL_ASPECT_MISMATCH")
     ratio = float(metrics.get("characterHubShellScreenHeightRatio", 0))
-    minimum_ratio, maximum_ratio = (0.66, 0.70) if profile == "mobile" else (0.75, 0.80)
+    minimum_ratio, maximum_ratio = (0.62, 0.70) if profile == "mobile" else (0.75, 0.80)
     if not minimum_ratio <= ratio <= maximum_ratio:
         errors.append("CHARACTER_HUB_OCCUPANCY_INVALID")
     if metrics.get("minimumTouchTargetPanelUnits") != 44:

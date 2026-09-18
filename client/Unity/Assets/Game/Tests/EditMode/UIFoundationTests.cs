@@ -242,22 +242,59 @@ namespace LinhGioi.Tests
                 "Landscape game UI must scale from safe-panel height instead of becoming oversized on wide phones.");
         }
 
-        [TestCase("desktop", 1600, 900, "desktop", 3.8f, .18f, .27f, .16f, .27f)]
-        [TestCase("tablet", 1024, 768, "tablet", 3.8f, .18f, .27f, .16f, .27f)]
-        [TestCase("mobile", 1600, 720, "mobile", 4.5f, .16f, .20f, .18f, .23f)]
+        [TestCase("desktop", 1600, 900, "desktop")]
+        [TestCase("tablet", 1024, 768, "tablet")]
+        [TestCase("mobile", 1600, 720, "mobile")]
         public void WorldPresentationProfileOwnsShippingMapScale(string forcedProfile, int width, int height,
-            string expectedName, float cameraSize, float actorMin, float actorMax, float npcMin, float npcMax)
+            string expectedName)
         {
             var profile = RuntimeWorldPresentationProfile.FromScreen(forcedProfile, width, height);
             Assert.That(profile.Name, Is.EqualTo(expectedName));
-            Assert.That(profile.CameraOrthographicSize, Is.EqualTo(cameraSize).Within(.001f));
+            if (expectedName == "mobile")
+                Assert.That(profile.CameraOrthographicSize, Is.InRange(3.9f, 4.4f),
+                    "Wide-phone framing must derive a moderate zoom-out instead of one fixed 4.5 camera.");
+            else
+                Assert.That(profile.CameraOrthographicSize, Is.EqualTo(3.8f).Within(.001f));
             Assert.That(profile.CameraGroundOffsetY, Is.EqualTo(1.5f).Within(.001f));
-            Assert.That(profile.ActorMinScreenHeightRatio, Is.EqualTo(actorMin).Within(.001f));
-            Assert.That(profile.ActorMaxScreenHeightRatio, Is.EqualTo(actorMax).Within(.001f));
-            Assert.That(profile.NpcMinScreenHeightRatio, Is.EqualTo(npcMin).Within(.001f));
-            Assert.That(profile.NpcMaxScreenHeightRatio, Is.EqualTo(npcMax).Within(.001f));
+            Assert.That(profile.ActorMinScreenHeightRatio, Is.EqualTo(.18f).Within(.001f));
+            Assert.That(profile.ActorMaxScreenHeightRatio, Is.EqualTo(.27f).Within(.001f));
+            Assert.That(profile.NpcMinScreenHeightRatio, Is.EqualTo(.16f).Within(.001f));
+            Assert.That(profile.NpcMaxScreenHeightRatio, Is.EqualTo(.27f).Within(.001f));
             Assert.That(profile.InteractionMarkerFontSize, Is.EqualTo(64));
             Assert.That(profile.InteractionMarkerCharacterSize, Is.EqualTo(.045f).Within(.001f));
+        }
+
+        [Test]
+        public void MobilePresentationScaleUsesOneAspectCurveAcrossUiAndWorld()
+        {
+            var type = typeof(RuntimeWorldPresentationProfile).Assembly.GetType(
+                "LinhGioi.Foundation.RuntimePresentationScaleProfile");
+            Assert.That(type, Is.Not.Null,
+                "UI and world need one shared derived presentation-scale authority, not fixed per-screen mobile sizes.");
+            var fromWindow = type.GetMethod("FromWindow", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(fromWindow, Is.Not.Null);
+
+            var standardPhone = fromWindow.Invoke(null, new object[] { "mobile", 1600, 900 });
+            var widePhone = fromWindow.Invoke(null, new object[] { "mobile", 1600, 720 });
+            var tablet = fromWindow.Invoke(null, new object[] { "tablet", 1024, 768 });
+            var desktop = fromWindow.Invoke(null, new object[] { "desktop", 1600, 900 });
+            var standardScale = GetMember<float>(standardPhone, "UiContentScale");
+            var wideScale = GetMember<float>(widePhone, "UiContentScale");
+            var wideWorldScale = GetMember<float>(widePhone, "WorldCameraScale");
+
+            Assert.That(standardScale, Is.EqualTo(.90f).Within(.001f),
+                "Mobile window class keeps its own density even at canonical 16:9.");
+            Assert.That(wideScale, Is.InRange(.82f, .89f));
+            Assert.That(wideScale, Is.LessThan(standardScale),
+                "Wider phone windows must expose more playfield instead of preserving desktop vertical occupancy.");
+            Assert.That(GetMember<float>(tablet, "UiContentScale"), Is.EqualTo(1f).Within(.001f));
+            Assert.That(GetMember<float>(desktop, "UiContentScale"), Is.EqualTo(1f).Within(.001f));
+            Assert.That(wideWorldScale, Is.GreaterThan(1f));
+            Assert.That(wideWorldScale, Is.LessThan(1.15f),
+                "World zoom-out must be gentler than modal density compression.");
+            Assert.That(RuntimeWorldPresentationProfile.FromScreen("mobile", 1600, 720).CameraOrthographicSize,
+                Is.EqualTo(3.8f * wideWorldScale).Within(.01f));
         }
 
         [Test]
@@ -336,8 +373,17 @@ namespace LinhGioi.Tests
                 new[] { viewportType }, null);
             var layout = fromViewport.Invoke(null, new[] { viewport });
 
-            Assert.That(GetMember<float>(layout, "CharacterHubShellMaxHeight"), Is.EqualTo(640f).Within(.01f),
-                "Mobile landscape must expose a smaller vertical shell authority instead of reusing the 724-unit desktop shell.");
+            var presentationScale = GetMember<float>(layout, "PresentationScale");
+            var maximumShellHeight = GetMember<float>(layout, "CharacterHubShellMaxHeight");
+            Assert.That(presentationScale, Is.InRange(.82f, .90f),
+                "Mobile landscape density must be derived from the shared aspect curve.");
+            Assert.That(maximumShellHeight, Is.EqualTo(724f * presentationScale).Within(.1f),
+                "Character Hub height must derive from the canonical shell token times presentation scale.");
+            var mobileRect = CongDongLamArrivalHud.CalculateInventoryModalRect(
+                new Rect(0, 0, 2091, 941), touch: true, maximumShellHeight: maximumShellHeight);
+            Assert.That(mobileRect.width / mobileRect.height, Is.EqualTo(1098f / 724f).Within(.002f),
+                "Responsive Character Hub must preserve the canonical modal aspect ratio instead of hard-coding only its height.");
+            Assert.That(mobileRect.height / 941f, Is.InRange(.62f, .69f));
             Assert.That(GetMember<float>(layout, "GameplayHudTouchPadSize"), Is.EqualTo(124f).Within(.01f),
                 "Fixing shell occupancy must not shrink the touch joystick target.");
             var themeType = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeUiTheme");
@@ -500,16 +546,20 @@ namespace LinhGioi.Tests
             var create = type.GetMethod("CreateSnapshot", System.Reflection.BindingFlags.Static
                 | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
             Assert.That(create, Is.Not.Null);
+            const float presentationScale = .85f;
+            var shell = new Rect(0, 0, 1098f * presentationScale, 724f * presentationScale);
             var snapshot = create.Invoke(null, new object[] {
                 1600, 720, 2091, 941, new Rect(0, 0, 2091, 941),
-                new Rect(496.5f, 168.5f, 1098, 640), "mobile", "touch",
+                shell, "mobile", "touch",
                 "scaleMode=ScaleWithScreenSize referenceResolution=1672x941 screenMatchMode=MatchWidthOrHeight match=1",
                 "macos-aspect-simulation", 44
             });
             Assert.That(GetMember<string>(snapshot, "evidenceAuthority"), Is.EqualTo("macos-aspect-simulation"));
-            Assert.That(GetMember<float>(snapshot, "characterHubShellHeight"), Is.EqualTo(640f).Within(.01f));
+            Assert.That(GetMember<float>(snapshot, "presentationScale"), Is.EqualTo(presentationScale).Within(.001f));
+            Assert.That(GetMember<float>(snapshot, "characterHubShellWidth") / GetMember<float>(snapshot, "characterHubShellHeight"),
+                Is.EqualTo(1098f / 724f).Within(.002f));
             Assert.That(GetMember<float>(snapshot, "characterHubShellScreenHeightRatio"),
-                Is.EqualTo(640f / 941f).Within(.001f));
+                Is.EqualTo(shell.height / 941f).Within(.001f));
             Assert.That(GetMember<float>(snapshot, "characterHubShellScreenHeightRatio"), Is.LessThan(.70f));
             Assert.That(GetMember<float>(snapshot, "minimumTouchTargetScreenPixels"),
                 Is.EqualTo(44f * 720f / 941f).Within(.01f));
@@ -535,7 +585,7 @@ namespace LinhGioi.Tests
             Assert.That(create, Is.Not.Null,
                 "UIF-06 runtime evidence must export the same semantic HUD geometry used by Layout().");
             var snapshot = create.Invoke(null, new object[] {
-                1600, 720, 2091, 941, safe, new Rect(496.5f, 168.5f, 1098, 640),
+                1600, 720, 2091, 941, safe, new Rect(0, 0, 1098f * .85f, 724f * .85f),
                 "mobile", "touch",
                 "scaleMode=ScaleWithScreenSize referenceResolution=1672x941 screenMatchMode=MatchWidthOrHeight match=1",
                 "macos-aspect-simulation", 44, gameplay

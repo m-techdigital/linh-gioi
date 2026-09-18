@@ -31,6 +31,7 @@ namespace LinhGioi.Foundation
         public float characterHubShellWidth;
         public float characterHubShellHeight;
         public float characterHubShellScreenHeightRatio;
+        public float presentationScale;
         public int minimumTouchTargetPanelUnits;
         public float minimumTouchTargetScreenPixels;
         public RuntimeUiRectSnapshot gameplayPlayerStatus;

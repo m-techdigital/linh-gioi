@@ -17,8 +17,8 @@ namespace LinhGioi.UI
         private const float InventoryDesktopMainColumnWidth = 600f;
         private const float InventoryDesktopDetailColumnWidth = 448f;
         private const float InventoryDesktopColumnGap = 12f;
-        private const float InventoryCanonicalShellWidth = 1098f;
-        private const float InventoryCanonicalShellHeight = 724f;
+        private const float InventoryCanonicalShellWidth = RuntimeUiSizing.CharacterHubCanonicalShellWidth;
+        private const float InventoryCanonicalShellHeight = RuntimeUiSizing.CharacterHubCanonicalShellHeight;
         private const float InventoryCanonicalBodyHorizontalInset = 38f;
         private const float InventoryGridCellBasisPercent = 18.2f;
 
@@ -392,11 +392,17 @@ namespace LinhGioi.UI
         {
             const float minimumMargin = 24f;
             const float opticalVerticalOffset = 18f;
-            var width = Mathf.Min(InventoryCanonicalShellWidth,
-                Mathf.Max(0f, safePanelRect.width - minimumMargin * 2f));
-            var profileHeight = Mathf.Clamp(maximumShellHeight, 0f, InventoryCanonicalShellHeight);
-            var height = Mathf.Min(profileHeight,
-                Mathf.Max(0f, safePanelRect.height - minimumMargin * 2f));
+            var availableWidth = Mathf.Max(0f, safePanelRect.width - minimumMargin * 2f);
+            var availableHeight = Mathf.Max(0f, safePanelRect.height - minimumMargin * 2f);
+            var profileScale = InventoryCanonicalShellHeight <= 0f
+                ? 0f
+                : Mathf.Clamp(maximumShellHeight / InventoryCanonicalShellHeight, 0f, 1f);
+            var fitScale = Mathf.Min(
+                InventoryCanonicalShellWidth <= 0f ? 0f : availableWidth / InventoryCanonicalShellWidth,
+                InventoryCanonicalShellHeight <= 0f ? 0f : availableHeight / InventoryCanonicalShellHeight);
+            var shellScale = Mathf.Min(profileScale, fitScale);
+            var width = InventoryCanonicalShellWidth * shellScale;
+            var height = InventoryCanonicalShellHeight * shellScale;
             var x = safePanelRect.x + (safePanelRect.width - width) * .5f;
             var centeredY = (safePanelRect.height - height) * .5f + opticalVerticalOffset;
             var y = safePanelRect.y + Mathf.Clamp(centeredY, minimumMargin,

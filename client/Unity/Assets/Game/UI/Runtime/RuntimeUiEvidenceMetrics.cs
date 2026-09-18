@@ -78,6 +78,9 @@ namespace LinhGioi.UI
                 characterHubShellWidth = characterHubShellRect.width,
                 characterHubShellHeight = characterHubShellRect.height,
                 characterHubShellScreenHeightRatio = characterHubShellRect.height * panelToScreenY / safeScreenHeight,
+                presentationScale = RuntimeUiSizing.CharacterHubCanonicalShellHeight <= 0
+                    ? 1f
+                    : characterHubShellRect.height / RuntimeUiSizing.CharacterHubCanonicalShellHeight,
                 minimumTouchTargetPanelUnits = minimumTouchTargetPanelUnits,
                 minimumTouchTargetScreenPixels = minimumTouchTargetPanelUnits * panelToScreenY,
             };

@@ -19,16 +19,16 @@ namespace LinhGioi.Foundation
         public int InteractionMarkerFontSize { get; }
         public float InteractionMarkerCharacterSize { get; }
 
-        private RuntimeWorldPresentationProfile(string name)
+        private RuntimeWorldPresentationProfile(string name, int width, int height)
         {
             Name = name;
-            var mobileLandscape = string.Equals(name, "mobile", StringComparison.Ordinal);
-            CameraOrthographicSize = mobileLandscape ? 4.5f : 3.8f;
+            var presentation = RuntimePresentationScaleProfile.FromWindow(name, width, height);
+            CameraOrthographicSize = 3.8f * presentation.WorldCameraScale;
             CameraGroundOffsetY = 1.5f;
-            ActorMinScreenHeightRatio = mobileLandscape ? .16f : .18f;
-            ActorMaxScreenHeightRatio = mobileLandscape ? .20f : .27f;
-            NpcMinScreenHeightRatio = mobileLandscape ? .18f : .16f;
-            NpcMaxScreenHeightRatio = mobileLandscape ? .23f : .27f;
+            ActorMinScreenHeightRatio = .18f;
+            ActorMaxScreenHeightRatio = .27f;
+            NpcMinScreenHeightRatio = .16f;
+            NpcMaxScreenHeightRatio = .27f;
             InteractionMarkerFontSize = 64;
             InteractionMarkerCharacterSize = .045f;
         }
@@ -36,17 +36,17 @@ namespace LinhGioi.Foundation
             string forcedProfile, int screenWidth, int screenHeight)
         {
             var forced = NormalizeProfile(forcedProfile);
-            if (forced != null) return new RuntimeWorldPresentationProfile(forced);
+            if (forced != null) return new RuntimeWorldPresentationProfile(forced, screenWidth, screenHeight);
 
             var width = screenWidth > 0 ? screenWidth : 1280;
             var height = screenHeight > 0 ? screenHeight : 720;
             var shortSide = Math.Min(width, height);
             var longSide = Math.Max(width, height);
             if (shortSide <= MobileMaxShortSide && longSide <= MobileMaxLongSide)
-                return new RuntimeWorldPresentationProfile("mobile");
+                return new RuntimeWorldPresentationProfile("mobile", width, height);
             if (shortSide <= TabletMaxShortSide && longSide <= TabletMaxLongSide)
-                return new RuntimeWorldPresentationProfile("tablet");
-            return new RuntimeWorldPresentationProfile("desktop");
+                return new RuntimeWorldPresentationProfile("tablet", width, height);
+            return new RuntimeWorldPresentationProfile("desktop", width, height);
         }
 
         public static string NormalizeProfile(string value)

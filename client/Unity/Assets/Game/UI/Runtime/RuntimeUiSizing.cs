@@ -17,6 +17,8 @@ namespace LinhGioi.UI
         internal const int CharacterCreatePanelMaxHeight = 210;
 
         internal const int MainShellMaxWidth = 1180;
+        internal const int CharacterHubCanonicalShellWidth = 1098;
+        internal const int CharacterHubCanonicalShellHeight = 724;
         internal const int HeaderMinHeight = 76;
         internal const int HeaderBrandWidth = 300;
         internal const int HeaderBrandHeight = 42;

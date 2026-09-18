@@ -1,3 +1,4 @@
+using LinhGioi.Foundation;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -34,6 +35,7 @@ namespace LinhGioi.UI
         internal readonly string LayoutClass;
         internal readonly string InputClass;
         internal readonly float MobileScale;
+        internal readonly float PresentationScale;
         internal readonly float LoginLogoWidth;
         internal readonly float LoginLogoHeight;
         internal readonly float LoginCardWidth;
@@ -146,7 +148,7 @@ namespace LinhGioi.UI
         internal int LobbyPanelPaddingBottom => IsMobile ? 8 : 18;
         internal float CharacterHallPanelVerticalInset => IsMobile ? OverlayBottomInset : Mathf.Clamp(Height * 0.04f, 34f, 58f);
         internal float CharacterHallPanelMaxHeight => IsMobile ? Mathf.Max(360f, Height - CharacterHallPanelVerticalInset * 2f) : 0f;
-        internal float CharacterHubShellMaxHeight => IsMobile ? 640f : 724f;
+        internal float CharacterHubShellMaxHeight => RuntimeUiSizing.CharacterHubCanonicalShellHeight * PresentationScale;
         internal RuntimeUiDensityProfile CharacterHallDensity => RuntimeUiDensityProfile.CharacterHall(this);
         internal int CreatePanelPaddingHorizontal => IsMobile ? 12 : 16;
         internal int CreatePanelPaddingTop => IsMobile ? 8 : 12;
@@ -304,7 +306,10 @@ namespace LinhGioi.UI
             IsTablet = name == "tablet";
             LayoutClass = layoutClass ?? name;
             InputClass = inputClass ?? (IsMobile || IsTablet ? "touch" : "pointer");
-            MobileScale = IsMobile ? Mathf.Clamp(ShortSide / MobileScaleBaseline, MobileScaleMin, MobileScaleMax) : 1f;
+            PresentationScale = RuntimePresentationScaleProfile.FromWindow(name, width, height).UiContentScale;
+            MobileScale = IsMobile
+                ? Mathf.Min(Mathf.Clamp(ShortSide / MobileScaleBaseline, MobileScaleMin, MobileScaleMax), PresentationScale)
+                : 1f;
             LoginCardWidth = IsMobile
                 ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 420f, 580f)
                 : IsTablet
