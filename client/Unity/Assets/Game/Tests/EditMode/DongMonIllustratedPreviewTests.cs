@@ -797,6 +797,19 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void QuestCaptureManifestPublishesMeasuredWorldMetrics()
+        {
+            var source = File.ReadAllText(Path.Combine(Application.dataPath,
+                "Game/World/Runtime/CongDongLamMap01AArtPreview.cs"));
+            Assert.That(source, Does.Contain("result.worldMetrics = WorldPresentationMetrics;"),
+                "Quest capture must serialize the measured runtime world metrics instead of a default empty object.");
+            Assert.That(source, Does.Contain("result.worldMetrics.actorScreenHeightRatio <= 0f"),
+                "Quest capture must fail closed when actor scale evidence is empty.");
+            Assert.That(source, Does.Contain("result.worldMetrics.npcScreenHeightRatio <= 0f"),
+                "Quest capture must fail closed when NPC scale evidence is empty.");
+        }
+
+        [Test]
         public void Map01AArtLoadsMovesFarLayerAndRestoresOldWorld()
         {
             var beforeRoots = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());

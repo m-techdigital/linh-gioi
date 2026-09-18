@@ -2337,6 +2337,7 @@ namespace LinhGioi.World
             result.playerHealth = PlayerHealth;
             result.parallaxDelta = FarOffset - initial;
             result.uiMetrics = RuntimeUiMetrics;
+            result.worldMetrics = WorldPresentationMetrics;
             var mapFailed = !result.mapQuestFlowVerified || !result.functionalUiVerified
                 || !result.dialogueOpened || !result.greetingCompleted
                 || !result.inventoryItemDetailVerified
@@ -2345,6 +2346,13 @@ namespace LinhGioi.World
             mapFailed |= questOnly && !result.dialogueRevisitsVerified;
             mapFailed |= questOnly && !result.questWorldFramesUnobstructed;
             mapFailed |= questOnly && result.uiMetrics == null;
+            mapFailed |= questOnly && (result.worldMetrics == null
+                || string.IsNullOrEmpty(result.worldMetrics.profileName)
+                || result.worldMetrics.actorScreenHeightRatio <= 0f
+                || result.worldMetrics.npcScreenHeightRatio <= 0f
+                || result.worldMetrics.backgroundCoverageScale <= 0f
+                || result.worldMetrics.interactionMarkerFontSize <= 0
+                || result.worldMetrics.interactionMarkerCharacterSize <= 0f);
             var wardrobeFailed = !questOnly && (!result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified
