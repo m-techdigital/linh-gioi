@@ -324,6 +324,30 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void ArrivalHudRuntimeOrchestrationIsIsolatedFromBuildBinder()
+        {
+            var uiDir = System.IO.Path.Combine(Application.dataPath, "Game/UI/Runtime");
+            var corePath = System.IO.Path.Combine(uiDir, "CongDongLamArrivalHud.cs");
+            var runtimePath = System.IO.Path.Combine(uiDir, "CongDongLamArrivalHud.Runtime.cs");
+            Assert.That(System.IO.File.Exists(runtimePath), Is.True,
+                "UIF-09 requires one runtime orchestration partial for layout/input/evidence ownership.");
+            var core = System.IO.File.ReadAllText(corePath);
+            var runtime = System.IO.File.ReadAllText(runtimePath);
+
+            Assert.That(core, Does.Contain("private void Build(VisualElement root)"),
+                "Hierarchy construction remains in the build binder.");
+            Assert.That(core, Does.Not.Contain("private void Layout()"));
+            Assert.That(core, Does.Not.Contain("private void Update()"));
+            Assert.That(core, Does.Not.Contain("private void PublishRuntimeUiMetrics"));
+            Assert.That(runtime, Does.Contain("private void Layout()"));
+            Assert.That(runtime, Does.Contain("private void Update()"));
+            Assert.That(runtime, Does.Contain("private void PublishRuntimeUiMetrics"));
+            Assert.That(runtime, Does.Contain("public static bool ShouldBlockWorldInput"));
+            Assert.That(runtime, Does.Not.Contain("ApplyLgoCharacterHubShell"),
+                "Runtime orchestration must consume established skin/layout roles, not own skin recipes.");
+        }
+
+        [Test]
         public void Map01ACaptureHarnessIsIsolatedFromProductWorldCore()
         {
             var worldDir = System.IO.Path.Combine(Application.dataPath, "Game/World/Runtime");
@@ -425,9 +449,9 @@ namespace LinhGioi.Tests
         public void CharacterHubLayoutConsumesProfileOwnedShellHeight()
         {
             var source = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.dataPath,
-                "Game/UI/Runtime/CongDongLamArrivalHud.cs"));
+                "Game/UI/Runtime/CongDongLamArrivalHud.Runtime.cs"));
             Assert.That(source, Does.Contain("layout.CharacterHubShellMaxHeight"),
-                "Character Hub placement must consume the profile-owned mobile height cap.");
+                "Character Hub runtime placement must consume the profile-owned mobile height cap through the orchestration owner.");
         }
 
         [TestCase(1600, 900, 1673, 941, "desktop", "pointer", 286f, 154f, 15)]
