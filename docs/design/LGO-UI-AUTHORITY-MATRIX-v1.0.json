@@ -379,8 +379,8 @@
         "build/whole-flow-p0-v1/pc/quest/01-arrival-q01.png"
       ],
       "codeOwners": [
-        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs",
-        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Runtime.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.World.cs"
       ],
       "states": [
         "normal",
@@ -409,9 +409,9 @@
         "build/whole-flow-p0-v1/mobile/quest/01-arrival-q01.png"
       ],
       "codeOwners": [
-        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Runtime.cs",
         "client/Unity/Assets/Game/UI/Runtime/RuntimeTouchMovementPad.cs",
-        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.World.cs"
       ],
       "states": [
         "normal",
@@ -441,7 +441,8 @@
       ],
       "codeOwners": [
         "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Menu.cs",
-        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Runtime.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.World.cs"
       ],
       "states": [
         "open",
@@ -469,7 +470,8 @@
       ],
       "codeOwners": [
         "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.cs",
-        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.cs"
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Runtime.cs",
+        "client/Unity/Assets/Game/UI/Runtime/CongDongLamArrivalHud.Skin.World.cs"
       ],
       "states": [
         "open",
@@ -498,7 +500,7 @@
       ],
       "codeOwners": [
         "client/Unity/Assets/Game/World/Runtime/CongDongLamMap01AArtPreview.cs",
-        "client/Unity/Assets/Game/World/Runtime/PlayableWorldController.cs"
+        "client/Unity/Assets/Game/Foundation/Runtime/RuntimeWorldPresentationProfile.cs"
       ],
       "states": [
         "normal",

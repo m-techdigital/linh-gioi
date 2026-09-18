@@ -22,13 +22,16 @@ def surface(kind="owner"):
     }
 
 class AuthorityMatrixValidatorTests(unittest.TestCase):
-    def run_validator(self, document):
+    def run_validator(self, document, owner_root=None, strict=False):
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp) / "matrix.json"
             path.write_text(json.dumps(document), encoding="utf-8")
-            return subprocess.run(
-                [sys.executable, str(SCRIPT), "--matrix", str(path)],
-                cwd=ROOT, text=True, capture_output=True)
+            command = [sys.executable, str(SCRIPT), "--matrix", str(path)]
+            if owner_root is not None:
+                command.extend(["--owner-root", str(owner_root)])
+            if strict:
+                command.append("--require-authority-files")
+            return subprocess.run(command, cwd=ROOT, text=True, capture_output=True)
 
     def test_accepts_complete_owner_authority_surface(self):
         result = self.run_validator({"version": 1, "surfaces": [surface()]})
@@ -56,6 +59,41 @@ class AuthorityMatrixValidatorTests(unittest.TestCase):
         result = self.run_validator({"version": 1, "surfaces": [item, dict(item)]})
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("duplicate surface id", result.stdout + result.stderr)
+
+    def test_strict_mode_requires_owner_root_for_owner_authority(self):
+        item = surface()
+        item["designAuthority"]["sha256"] = "0" * 64
+        result = self.run_validator({"version": 1, "surfaces": [item]}, strict=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("owner root is required", result.stdout + result.stderr)
+
+    def test_strict_mode_verifies_authority_hash_code_owner_and_runtime_evidence(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as tmp:
+            owner_root = Path(tmp)
+            authority = owner_root / "redesign-v5-entry/01-entry-login-CANONICAL.png"
+            authority.parent.mkdir(parents=True)
+            authority.write_bytes(b"owner-canonical")
+            item = surface()
+            item["designAuthority"]["sha256"] = hashlib.sha256(authority.read_bytes()).hexdigest()
+            item["runtimeEvidence"] = ["docs/design/LGO-MAP01A-ENTRY-SCREEN-CONTRACT-v1.0.md"]
+            result = self.run_validator({"version": 1, "surfaces": [item]},
+                                        owner_root=owner_root, strict=True)
+            self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
+            broken = json.loads(json.dumps(item))
+            broken["codeOwners"] = ["client/Unity/Assets/Game/UI/Runtime/DOES-NOT-EXIST.cs"]
+            result = self.run_validator({"version": 1, "surfaces": [broken]},
+                                        owner_root=owner_root, strict=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("missing code owner", result.stdout + result.stderr)
+
+            broken = json.loads(json.dumps(item))
+            broken["runtimeEvidence"] = ["build/does-not-exist.png"]
+            result = self.run_validator({"version": 1, "surfaces": [broken]},
+                                        owner_root=owner_root, strict=True)
+            self.assertNotEqual(result.returncode, 0)
+            self.assertIn("missing runtime evidence", result.stdout + result.stderr)
 
 
 if __name__ == "__main__":

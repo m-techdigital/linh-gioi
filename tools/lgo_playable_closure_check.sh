@@ -6,6 +6,7 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SUMMARY_DIR="$ROOT/build/lgo-playable-closure"
 SUMMARY_TXT="$SUMMARY_DIR/latest-summary.txt"
 SUMMARY_JSON="$SUMMARY_DIR/latest-summary.json"
+UI_FIDELITY_GATE_BUNDLE="${LGO_UI_FIDELITY_GATE_BUNDLE:-$ROOT/build/ui-fidelity-gate/latest/gate-bundle.json}"
 MODE=""
 
 usage() {
@@ -1360,8 +1361,25 @@ visual_evidence() {
   if grep -q "VISUAL_RUNTIME_SCREENSHOT_UNAVAILABLE" "$ROOT/build/visual-evidence/latest/visual-runtime-evidence-manifest.json"; then
     log "LGO_PLAYABLE_VISUAL_RUNTIME_SCREENSHOT_UNAVAILABLE"
   fi
+  if [[ -z "${LGO_UI_OWNER_ROOT:-}" ]]; then
+    log "LGO_PLAYABLE_CLOSURE_FIX_REQUIRED"
+    log "LGO_UI_FIDELITY_DEVICE_GATE_BLOCKED owner root is required"
+    write_json "FIX_REQUIRED" "LGO_UI_OWNER_ROOT is required for authoritative visual closure"
+    exit 52
+  fi
+  if [[ ! -f "$UI_FIDELITY_GATE_BUNDLE" ]]; then
+    log "LGO_PLAYABLE_CLOSURE_FIX_REQUIRED"
+    log "LGO_UI_FIDELITY_DEVICE_GATE_BLOCKED bundle missing: $UI_FIDELITY_GATE_BUNDLE"
+    write_json "FIX_REQUIRED" "authoritative UI fidelity/device gate bundle is missing"
+    exit 53
+  fi
+  run_phase ui_fidelity_device_gate \
+    python3.12 tools/validate_lgo_ui_fidelity_gate_bundle.py \
+    --bundle "$UI_FIDELITY_GATE_BUNDLE" \
+    --owner-root "$LGO_UI_OWNER_ROOT" \
+    --mode closure
   log "LGO_PLAYABLE_VISUAL_RUNTIME_EVIDENCE_READY"
-  write_json "PASS" "visual runtime evidence ready"
+  write_json "PASS" "visual runtime evidence and authoritative fidelity/device gate pass"
 }
 
 case "$MODE" in

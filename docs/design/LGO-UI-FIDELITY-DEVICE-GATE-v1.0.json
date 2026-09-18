@@ -1,0 +1,135 @@
+{
+  "version": 1,
+  "program": "LGO Whole-game UI/UX Fidelity & Foundation Program",
+  "authorityMatrix": "docs/design/LGO-UI-AUTHORITY-MATRIX-v1.0.json",
+  "styleBudget": "docs/design/LGO-UI-STYLE-DEBT-BUDGET-v1.0.json",
+  "requiredProfiles": [
+    "pc",
+    "tablet",
+    "mobile"
+  ],
+  "profileSemantics": {
+    "pc": "macOS Player runtime",
+    "tablet": "tablet profile/aspect evidence; physical device required only when a task claims physical tablet proof",
+    "mobile": "mobile-landscape profile; product closure requires explicit physical Android/iOS evidence"
+  },
+  "viewports": {
+    "pc": [1600, 900],
+    "tablet": [1024, 768],
+    "mobile": [1600, 720]
+  },
+  "minimumTouchTargetPanelUnits": 44,
+  "physicalMobileAuthorities": [
+    "physical-android-device",
+    "physical-ios-device"
+  ],
+  "surfaceEvidence": {
+    "entry-login": {
+      "path": "entry/entry-login.png"
+    },
+    "server-select": {
+      "path": "server-select/server-select.png"
+    },
+    "register": {
+      "path": "register/register-account.png"
+    },
+    "recovery-request": {
+      "path": "password-recovery/password-recovery-request.png"
+    },
+    "recovery-verify": {
+      "path": "password-recovery-verify/password-recovery-verify.png"
+    },
+    "recovery-new-password": {
+      "path": "password-recovery-new-password/password-recovery-new-password.png"
+    },
+    "character-select": {
+      "path": "character-select/character-select.png"
+    },
+    "hub-character": {
+      "path": "character-hub/character-info.png"
+    },
+    "hub-bag": {
+      "path": "character-hub/bag.png"
+    },
+    "hub-skills": {
+      "path": "character-hub/skills.png"
+    },
+    "hub-potential": {
+      "path": "character-hub/potential.png"
+    },
+    "hub-spirit-pet": {
+      "path": "character-hub/spirit-pet.png"
+    },
+    "gameplay-hud-pc": {
+      "path": "quest/01-arrival-q01.png",
+      "profiles": [
+        "pc"
+      ]
+    },
+    "gameplay-hud-touch": {
+      "path": "quest/01-arrival-q01.png",
+      "profiles": [
+        "tablet",
+        "mobile"
+      ]
+    },
+    "gameplay-menu": {
+      "path": "menu/menu.png"
+    },
+    "npc-dialogue": {
+      "path": "quest/02-ha-van-dialogue.png"
+    },
+    "map01a-world-composition": {
+      "path": "quest/01-arrival-q01.png"
+    }
+  },
+  "geometry": {
+    "hubAspect": 1.5165745856,
+    "hubAspectTolerance": 0.01,
+    "hubHeightRatio": {
+      "pc": [
+        0.75,
+        0.80
+      ],
+      "tablet": [
+        0.75,
+        0.80
+      ],
+      "mobile": [
+        0.62,
+        0.70
+      ]
+    },
+    "presentationScale": {
+      "pc": [
+        0.995,
+        1.005
+      ],
+      "tablet": [
+        0.995,
+        1.005
+      ],
+      "mobile": [
+        0.82,
+        0.90
+      ]
+    },
+    "actorHeightRatio": [
+      0.18,
+      0.27
+    ],
+    "npcHeightRatio": [
+      0.16,
+      0.27
+    ]
+  },
+  "closureRules": [
+    "Every canonical/approved design file is opened and SHA-256 verified.",
+    "Bundle sourceHead must equal the source being closed.",
+    "Every required screenshot is hash-bound to an explicit visual review record.",
+    "Character Hub and gameplay HUD geometry must remain within normalized profile ranges and safe-panel bounds.",
+    "Style/component debt budgets are non-increasing and semantic palette declarations remain zero.",
+    "macOS aspect simulation may pass foundation validation but cannot satisfy physical mobile-device closure.",
+    "No weighted or opaque aesthetic score is accepted as a closure signal."
+  ]
+}

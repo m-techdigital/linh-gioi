@@ -18,7 +18,7 @@ def file_sha256(path):
     return digest.hexdigest()
 
 
-def validate_document(document, owner_root=None):
+def validate_document(document, owner_root=None, require_authority_files=False):
     errors = []
     if document.get("version") != 1:
         errors.append("matrix.version must be 1")
@@ -56,22 +56,32 @@ def validate_document(document, owner_root=None):
                 errors.append(prefix + "." + field + " must be a non-empty list")
         if not isinstance(surface.get("knownGaps"), list):
             errors.append(prefix + ".knownGaps must be a list")
-        if kind == "owner" and owner_root and isinstance(path, str) and path:
-            candidate = Path(owner_root) / path
-            if not candidate.is_file():
-                errors.append(prefix + ".designAuthority missing owner file: " + str(candidate))
-            else:
-                expected = authority.get("sha256")
-                if expected and file_sha256(candidate) != expected:
+        expected = authority.get("sha256")
+        if require_authority_files:
+            if not isinstance(expected, str) or len(expected) != 64:
+                errors.append(prefix + ".designAuthority.sha256 is required for strict validation")
+            for code_owner in surface.get("codeOwners") or []:
+                if not (ROOT / code_owner).is_file():
+                    errors.append(prefix + ".missing code owner: " + code_owner)
+            for evidence_path in surface.get("runtimeEvidence") or []:
+                if not (ROOT / evidence_path).is_file():
+                    errors.append(prefix + ".missing runtime evidence: " + evidence_path)
+
+        if kind == "owner" and isinstance(path, str) and path:
+            if require_authority_files and not owner_root:
+                errors.append(prefix + ".designAuthority owner root is required for strict validation")
+            if owner_root:
+                candidate = Path(owner_root) / path
+                if not candidate.is_file():
+                    errors.append(prefix + ".designAuthority missing owner file: " + str(candidate))
+                elif expected and file_sha256(candidate) != expected:
                     errors.append(prefix + ".designAuthority sha256 mismatch: " + path)
         if kind == "approved-proposal" and isinstance(path, str) and path:
             candidate = ROOT / path
             if not candidate.is_file():
                 errors.append(prefix + ".designAuthority missing proposal file: " + path)
-            else:
-                expected = authority.get("sha256")
-                if expected and file_sha256(candidate) != expected:
-                    errors.append(prefix + ".designAuthority sha256 mismatch: " + path)
+            elif expected and file_sha256(candidate) != expected:
+                errors.append(prefix + ".designAuthority sha256 mismatch: " + path)
     return errors
 
 
@@ -79,9 +89,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--matrix", default=str(DEFAULT_MATRIX))
     parser.add_argument("--owner-root")
+    parser.add_argument("--require-authority-files", action="store_true")
     args = parser.parse_args()
     document = json.loads(Path(args.matrix).read_text(encoding="utf-8"))
-    errors = validate_document(document, args.owner_root)
+    errors = validate_document(document, args.owner_root, args.require_authority_files)
     if errors:
         print("LGO_UI_AUTHORITY_MATRIX_FAIL")
         for error in errors:
