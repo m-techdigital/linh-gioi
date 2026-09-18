@@ -826,6 +826,19 @@ namespace LinhGioi.Tests
                 Assert.That(worldMetrics.npcWorldHeight, Is.GreaterThan(1.3f));
                 Assert.That(worldMetrics.npcScreenHeightRatio,
                     Is.InRange(worldProfile.NpcMinScreenHeightRatio, worldProfile.NpcMaxScreenHeightRatio));
+                Assert.That(worldMetrics.backgroundCoverageScale, Is.GreaterThan(0f));
+                var activeMarker = preview.GetComponentsInChildren<TextMesh>(true)
+                    .Single(label => label.name.StartsWith("Map01A interaction ") && label.gameObject.activeSelf);
+                Assert.That(activeMarker.fontSize, Is.EqualTo(worldProfile.InteractionMarkerFontSize));
+                Assert.That(activeMarker.characterSize, Is.EqualTo(worldProfile.InteractionMarkerCharacterSize).Within(.001f));
+                Assert.That(worldMetrics.interactionMarkerFontSize, Is.EqualTo(activeMarker.fontSize));
+                Assert.That(worldMetrics.interactionMarkerCharacterSize, Is.EqualTo(activeMarker.characterSize).Within(.001f));
+                var mapSource = File.ReadAllText(Path.Combine(Application.dataPath,
+                    "Game/World/Runtime/CongDongLamMap01AArtPreview.cs"));
+                Assert.That(mapSource, Does.Not.Contain("text.fontSize = 64;"),
+                    "Interaction-marker typography must come from RuntimeWorldPresentationProfile.");
+                Assert.That(mapSource, Does.Not.Contain("text.characterSize = .045f;"),
+                    "Interaction-marker scale must come from RuntimeWorldPresentationProfile.");
                 Assert.That(preview.PartCount, Is.EqualTo(2));
                 Assert.That(preview.LayerCount, Is.EqualTo(3));
                 Assert.That(preview.SourcePropCount, Is.EqualTo(4));

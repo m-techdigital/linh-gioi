@@ -13,6 +13,7 @@ namespace LinhGioi.Foundation
         public float actorScreenHeightRatio;
         public float npcWorldHeight;
         public float npcScreenHeightRatio;
+        public float backgroundCoverageScale;
         public int interactionMarkerFontSize;
         public float interactionMarkerCharacterSize;
 

@@ -675,6 +675,7 @@ namespace LinhGioi.World
         private Vector3 _previousCameraPosition;
         private Transform _farLayer;
         private Vector3 _farScale;
+        private float _farCoverageScale = 1f;
         public int PartCount { get; private set; }
         public int SourcePropCount { get; private set; }
         public int LayerCount { get; private set; }
@@ -1678,8 +1679,8 @@ namespace LinhGioi.World
                 text.text = "!";
                 text.anchor = TextAnchor.MiddleCenter;
                 text.alignment = TextAlignment.Center;
-                text.fontSize = 64;
-                text.characterSize = .045f;
+                text.fontSize = _worldPresentationProfile.InteractionMarkerFontSize;
+                text.characterSize = _worldPresentationProfile.InteractionMarkerCharacterSize;
                 text.color = new Color(1f, .75f, .18f);
                 text.GetComponent<MeshRenderer>().sortingOrder = 10;
                 _interactionMarkers.Add(Tuple.Create(host, RouteNodeX[index]));
@@ -1800,6 +1801,7 @@ namespace LinhGioi.World
                 var requiredWidth = 2f * (halfHeight * _camera.aspect + Mathf.Abs(offset.x) + .1f);
                 var requiredHeight = 2f * (halfHeight + Mathf.Abs(offset.y) + .1f);
                 var cover = Mathf.Max(requiredWidth / 12.6f, requiredHeight / 7.0875f);
+                _farCoverageScale = cover;
                 _farLayer.localScale = _farScale * cover;
             }
             GameObject nearest = null;
@@ -1840,6 +1842,9 @@ namespace LinhGioi.World
             var npcRenderer = GetComponentsInChildren<SpriteRenderer>(true)
                 .FirstOrDefault(renderer => renderer.name == "Map01A NPC quan-thu-dong-lam");
             var npcBounds = npcRenderer == null ? default : npcRenderer.bounds;
+            var marker = _interactionMarkers
+                .Select(item => item.Item1.GetComponent<TextMesh>())
+                .FirstOrDefault(label => label != null && label.gameObject.activeSelf);
             WorldPresentationMetrics = new RuntimeWorldPresentationMetrics
             {
                 profileName = _worldPresentationProfile.Name,
@@ -1849,8 +1854,9 @@ namespace LinhGioi.World
                 actorScreenHeightRatio = RuntimeWorldPresentationMetrics.ScreenHeightRatio(_camera, actorBounds),
                 npcWorldHeight = npcBounds.size.y,
                 npcScreenHeightRatio = RuntimeWorldPresentationMetrics.ScreenHeightRatio(_camera, npcBounds),
-                interactionMarkerFontSize = _worldPresentationProfile.InteractionMarkerFontSize,
-                interactionMarkerCharacterSize = _worldPresentationProfile.InteractionMarkerCharacterSize,
+                backgroundCoverageScale = _farCoverageScale,
+                interactionMarkerFontSize = marker == null ? 0 : marker.fontSize,
+                interactionMarkerCharacterSize = marker == null ? 0f : marker.characterSize,
             };
         }
 
