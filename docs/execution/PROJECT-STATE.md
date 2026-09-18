@@ -1,3 +1,14 @@
+## UIF-06 Gameplay HUD information architecture + touch-control fidelity — 2026-09-18
+
+- Authoritative runtime source: `1b3642dd807419b15ec7ecc2278739740cf1d0ee`, pushed remote-equal to `origin/feature/2d` before closure-doc publication.
+- Added one pure `RuntimeGameplayHudLayout` authority for player status, right info, combat, context, secondary navigation, touch pad and dialogue safe-area geometry. Existing gameplay/input callbacks and quest/combat semantics remain unchanged.
+- Player/quest-map stay edge-docked; touch pad and combat/context controls occupy opposite thumb zones; permanent Character/Bag/Skills shortcuts were removed from the combat playfield and remain reachable through the existing Menu together with Potential/Spirit Pet.
+- Dialogue now consumes the same layout authority and continues blocking world input/underlying HUD actions. RED→GREEN evidence exists for Tasks 1–5 plus exported occlusion metrics.
+- Fresh exact-source verification: Unity EditMode 382/382 PASS; shared/capture/style/governance gates PASS; macOS Player build Succeeded with errors=0 warnings=44; PC 1600×900, tablet-simulation 1024×768 and mobile-landscape-simulation 1600×720 captures PASS.
+- Occlusion audit: zero persistent-zone intersections and zero safe-area containment failures; center open-corridor ratios 0.607 PC / 0.490 tablet / 0.704 mobile. Visual boards `uif06-hud-audit/owner-before-after-arrival.jpg` and `after-three-profile-representative.jpg` were reviewed against owner desktop/touch references.
+- Tablet/mobile are still macOS aspect/profile simulations, not physical-device proof. Known Unity map `.meta` + Graphics/Quality import rewrites are excluded from authority.
+- Next sequential assigned program item: UIF-07 World presentation scale. Keep UI scale and world/camera scale as separate authorities.
+
 ## Character Hub v57 — shared unavailable semantics + truthful Character/Bag — 2026-09-17
 
 - P0 shared unavailable base: one `lgo-unavailable-control`, disabled control opacity0.48 with readable text; Potential/Linh thú locked actions no longer look active.

@@ -1,10 +1,10 @@
-# NEXT ACTION — UI Fidelity / after UIF-05 Character Hub closure
+# NEXT ACTION — UI Fidelity / after UIF-06 Gameplay HUD closure
 
-1. Preserve the closed UIF-03 Entry/Auth, UIF-04 Character Select and UIF-05 Character Hub behavior/presentation unless a concrete Player regression is proven. Do not reopen auth, persistence, account binding or Map01A world-entry semantics from this closure.
-2. UIF-05 authoritative runtime source is `3fd986ef7226b552aad9ed441c884a8ffbe37844`: shared Character Hub layout ownership is consolidated, the Bag title is aligned to `RƯƠNG ĐỒ`, and the verified five-tab layout remains faithful to approved `redesign-v4-five-tabs` without a broad redesign.
-3. UIF-05 closure evidence is `build/ui-fidelity-foundation-v1/uif05-hub-closure-v1/`: Unity EditMode 372/372, macOS Player build errors=0 warnings=44, 44 frames/profile across PC/tablet/mobile-landscape, and owner/before/after visual audit PASS. Tablet/mobile remain macOS aspect simulations, not physical-device proof.
-4. Incidental Unity `.meta`, `GraphicsSettings.asset` and `QualitySettings.asset` rewrites are not part of UIF-05 and must not be reintroduced without exact-runtime evidence.
-5. Next program candidate is **LGO-UIF-06 Gameplay HUD fidelity**, but it remains separately scoped/proposed authority. Do not start UIF-06 from this closure alone; Create Character and production five-class renderer authority remain separately gated.
+1. Preserve the closed UIF-03 Entry/Auth, UIF-04 Character Select, UIF-05 Character Hub and UIF-06 Gameplay HUD behavior/presentation unless a concrete Player regression is proven. Do not reopen auth, persistence, account binding, Map01A world-entry or combat semantics from this closure.
+2. UIF-06 authoritative runtime source is `1b3642dd807419b15ec7ecc2278739740cf1d0ee`: gameplay status/right-info/combat/context/secondary/touch/dialogue zones share one safe-area-aware layout authority; permanent secondary navigation is consolidated behind Menu while the existing five Character Hub destinations remain reachable.
+3. UIF-06 exact-source evidence is under `build/ui-fidelity-foundation-v1/uif06-hud-final-gates/`, `uif06-hud-player-build.log`, `uif06-hud-runtime-final/` and `uif06-hud-audit/`: Unity EditMode 382/382, macOS Player build errors=0 warnings=44, three-profile whole-flow/quest/Character-Hub captures, owner/before/after review, and occlusion audit PASS with zero persistent-zone intersections or safe-area failures. Center-corridor width ratios are 0.607 PC, 0.490 tablet and 0.704 mobile.
+4. Tablet/mobile evidence remains macOS profile/aspect simulation, not physical-device proof. Incidental Unity `.meta`, `GraphicsSettings.asset` and `QualitySettings.asset` rewrites are excluded and must not be reintroduced without exact-runtime evidence.
+5. Continue sequentially with assigned **LGO-UIF-07 World presentation scale**: measure and normalize camera, actor, NPC, labels and map composition independently from UI scale. Do not fold UIF-08 texture/mobile-memory work or Create Character into UIF-07.
 
 # NEXT ACTION — Whole Product / after Register + Recovery 3-step closure
 
