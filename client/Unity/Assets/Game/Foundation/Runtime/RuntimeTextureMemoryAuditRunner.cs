@@ -102,7 +102,7 @@ namespace LinhGioi.Foundation
             var directory = Path.GetDirectoryName(path);
             if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
             File.WriteAllText(path, JsonUtility.ToJson(result, true));
-            Debug.Log($"LGO_RUNTIME_TEXTURE_MEMORY_AUDIT_PASS result={path} textures={result.allResourcesTextures.textureCount} bytes={result.allResourcesTextures.totalRuntimeBytes}");
+            Debug.Log($"LGO_RUNTIME_TEXTURE_MEMORY_AUDIT_PASS result={path} textures={result.allResourcesTextures.textureCount} estimatedBytes={result.allResourcesTextures.totalEstimatedStorageBytes} profilerBytes={result.allResourcesTextures.totalProfilerRuntimeBytes}");
             Application.Quit(0);
         }
 

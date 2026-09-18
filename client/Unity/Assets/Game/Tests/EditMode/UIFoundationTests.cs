@@ -87,10 +87,12 @@ namespace LinhGioi.Tests
             {
                 var snapshot = RuntimeTextureMemoryAudit.Summarize(new[] { first, first, second }, new[] { first.GetInstanceID() });
                 Assert.That(snapshot.textureCount, Is.EqualTo(2));
-                Assert.That(snapshot.totalRuntimeBytes, Is.GreaterThan(0));
+                Assert.That(snapshot.totalEstimatedStorageBytes, Is.EqualTo(64L * 32L * 4L + 32L * 32L * 4L));
                 Assert.That(snapshot.entries.Length, Is.EqualTo(2));
                 Assert.That(snapshot.entries.Count(entry => entry.wasResidentBeforeAudit), Is.EqualTo(1));
                 Assert.That(snapshot.entries.Single(entry => entry.name == "audit-first").width, Is.EqualTo(64));
+                Assert.That(snapshot.entries.Single(entry => entry.name == "audit-first").estimatedStorageBytes,
+                    Is.EqualTo(64L * 32L * 4L));
                 Assert.That(snapshot.entries.Single(entry => entry.name == "audit-second").height, Is.EqualTo(32));
             }
             finally

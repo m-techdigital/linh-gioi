@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering;
 using UnityEngine.Profiling;
 
 namespace LinhGioi.Foundation
@@ -14,7 +15,8 @@ namespace LinhGioi.Foundation
         public string format;
         public int mipmapCount;
         public bool isReadable;
-        public long runtimeBytes;
+        public long profilerRuntimeBytes;
+        public long estimatedStorageBytes;
         public bool wasResidentBeforeAudit;
     }
 
@@ -22,7 +24,8 @@ namespace LinhGioi.Foundation
     public sealed class RuntimeTextureMemorySnapshot
     {
         public int textureCount;
-        public long totalRuntimeBytes;
+        public long totalProfilerRuntimeBytes;
+        public long totalEstimatedStorageBytes;
         public RuntimeTextureMemoryEntry[] entries;
     }
     public static class RuntimeTextureMemoryAudit
@@ -51,25 +54,54 @@ namespace LinhGioi.Foundation
                     format = texture.format.ToString(),
                     mipmapCount = texture.mipmapCount,
                     isReadable = texture.isReadable,
-                    runtimeBytes = Math.Max(0L, Profiler.GetRuntimeMemorySizeLong(texture)),
+                    profilerRuntimeBytes = Math.Max(0L, Profiler.GetRuntimeMemorySizeLong(texture)),
+                    estimatedStorageBytes = EstimateStorageBytes(texture),
                     wasResidentBeforeAudit = residents.Contains(pair.Key),
                 });
             }
 
             entries.Sort((left, right) =>
             {
-                var byBytes = right.runtimeBytes.CompareTo(left.runtimeBytes);
+                var byBytes = right.estimatedStorageBytes.CompareTo(left.estimatedStorageBytes);
                 return byBytes != 0 ? byBytes : string.CompareOrdinal(left.name, right.name);
             });
 
-            long total = 0;
-            foreach (var entry in entries) total += entry.runtimeBytes;
+            long profilerTotal = 0;
+            long estimatedTotal = 0;
+            foreach (var entry in entries)
+            {
+                profilerTotal += entry.profilerRuntimeBytes;
+                estimatedTotal += entry.estimatedStorageBytes;
+            }
             return new RuntimeTextureMemorySnapshot
             {
                 textureCount = entries.Count,
-                totalRuntimeBytes = total,
+                totalProfilerRuntimeBytes = profilerTotal,
+                totalEstimatedStorageBytes = estimatedTotal,
                 entries = entries.ToArray(),
             };
+        }
+
+        public static long EstimateStorageBytes(Texture2D texture)
+        {
+            if (texture == null) return 0L;
+            var format = texture.graphicsFormat;
+            var blockBytes = Math.Max(1L, (long)GraphicsFormatUtility.GetBlockSize(format));
+            var blockWidth = Math.Max(1, (int)GraphicsFormatUtility.GetBlockWidth(format));
+            var blockHeight = Math.Max(1, (int)GraphicsFormatUtility.GetBlockHeight(format));
+            var width = Math.Max(1, texture.width);
+            var height = Math.Max(1, texture.height);
+            var mipCount = Math.Max(1, texture.mipmapCount);
+            long total = 0L;
+            for (var mip = 0; mip < mipCount; mip++)
+            {
+                var blocksX = Math.Max(1, (width + blockWidth - 1) / blockWidth);
+                var blocksY = Math.Max(1, (height + blockHeight - 1) / blockHeight);
+                total += (long)blocksX * blocksY * blockBytes;
+                width = Math.Max(1, width / 2);
+                height = Math.Max(1, height / 2);
+            }
+            return total;
         }
 
         public static int[] CaptureLoadedTextureInstanceIds()
