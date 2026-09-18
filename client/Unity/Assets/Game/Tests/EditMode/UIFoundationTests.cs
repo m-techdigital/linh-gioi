@@ -220,6 +220,72 @@ namespace LinhGioi.Tests
             Assert.That(GetMember<int>(layout, "WorldTalkFontSize"), Is.EqualTo(talkFontSize));
         }
 
+        [TestCase("desktop", 1600, 900, 1673, 941)]
+        [TestCase("tablet", 1024, 768, 1255, 941)]
+        [TestCase("mobile", 1600, 720, 2091, 941)]
+        public void GameplayHudLayoutKeepsEdgeZonesInsideSafeArea(string profile, int screenWidth, int screenHeight,
+            int panelWidth, int panelHeight)
+        {
+            var viewport = CreateViewportMetrics(screenWidth, screenHeight,
+                new Rect(0, 0, screenWidth, screenHeight), panelWidth, panelHeight, profile);
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var profileType = uiAssembly.GetType("LinhGioi.UI.RuntimeUiLayoutProfile");
+            var viewportType = uiAssembly.GetType("LinhGioi.UI.RuntimeViewportMetrics");
+            var fromViewport = profileType.GetMethod("FromViewport", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic, null,
+                new[] { viewportType }, null);
+            var runtimeProfile = fromViewport.Invoke(null, new[] { viewport });
+            var layoutType = uiAssembly.GetType("LinhGioi.UI.RuntimeGameplayHudLayout");
+            Assert.That(layoutType, Is.Not.Null, "UIF-06 requires one pure gameplay-HUD geometry authority.");
+            var calculate = layoutType.GetMethod("Calculate", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(calculate, Is.Not.Null);
+            var safe = GetMember<Rect>(viewport, "SafePanelRect");
+            var layout = calculate.Invoke(null, new object[] { safe, runtimeProfile });
+            foreach (var name in new[] { "PlayerStatus", "RightInfo", "Combat", "Context", "SecondaryNav", "Dialogue" })
+            {
+                var rect = GetMember<Rect>(layout, name);
+                Assert.That(rect.xMin, Is.GreaterThanOrEqualTo(safe.xMin - .01f), name);
+                Assert.That(rect.yMin, Is.GreaterThanOrEqualTo(safe.yMin - .01f), name);
+                Assert.That(rect.xMax, Is.LessThanOrEqualTo(safe.xMax + .01f), name);
+                Assert.That(rect.yMax, Is.LessThanOrEqualTo(safe.yMax + .01f), name);
+            }
+            Assert.That(GetMember<Rect>(layout, "Combat").Overlaps(GetMember<Rect>(layout, "RightInfo")), Is.False);
+            Assert.That(GetMember<Rect>(layout, "Context").Overlaps(GetMember<Rect>(layout, "RightInfo")), Is.False);
+            Assert.That(GetMember<Rect>(layout, "SecondaryNav").Overlaps(GetMember<Rect>(layout, "Combat")), Is.False);
+        }
+
+        [TestCase("tablet", 1024, 768, 1255, 941)]
+        [TestCase("mobile", 1600, 720, 2091, 941)]
+        public void GameplayHudLayoutKeepsTouchThumbZonesSeparated(string profile, int screenWidth, int screenHeight,
+            int panelWidth, int panelHeight)
+        {
+            var viewport = CreateViewportMetrics(screenWidth, screenHeight,
+                new Rect(0, 0, screenWidth, screenHeight), panelWidth, panelHeight, profile);
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var profileType = uiAssembly.GetType("LinhGioi.UI.RuntimeUiLayoutProfile");
+            var viewportType = uiAssembly.GetType("LinhGioi.UI.RuntimeViewportMetrics");
+            var fromViewport = profileType.GetMethod("FromViewport", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic, null,
+                new[] { viewportType }, null);
+            var runtimeProfile = fromViewport.Invoke(null, new[] { viewport });
+            var layoutType = uiAssembly.GetType("LinhGioi.UI.RuntimeGameplayHudLayout");
+            Assert.That(layoutType, Is.Not.Null);
+            var calculate = layoutType.GetMethod("Calculate", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            var safe = GetMember<Rect>(viewport, "SafePanelRect");
+            var layout = calculate.Invoke(null, new object[] { safe, runtimeProfile });
+            var touchPad = GetMember<Rect>(layout, "TouchPad");
+            var combat = GetMember<Rect>(layout, "Combat");
+            var context = GetMember<Rect>(layout, "Context");
+            Assert.That(touchPad.width, Is.GreaterThan(0f));
+            Assert.That(touchPad.xMax, Is.LessThan(safe.center.x), "Movement belongs to the left thumb zone.");
+            Assert.That(combat.xMin, Is.GreaterThan(safe.center.x), "Combat belongs to the right thumb zone.");
+            Assert.That(touchPad.Overlaps(combat), Is.False);
+            Assert.That(touchPad.Overlaps(context), Is.False);
+            Assert.That(context.Overlaps(combat), Is.False);
+        }
+
         [TestCase("desktop", 1600, 900, 1673, 941, 540f, 565f)]
         [TestCase("tablet", 1024, 768, 1255, 941, 460f, 480f)]
         [TestCase("mobile", 1600, 720, 2091, 941, 435f, 450f)]

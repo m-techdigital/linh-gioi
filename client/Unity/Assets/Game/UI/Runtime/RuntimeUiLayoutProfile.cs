@@ -162,6 +162,18 @@ namespace LinhGioi.UI
         internal float CharacterHallSelectedActionDockMaxHeight => IsMobile ? 72f : 78f;
         internal float OverlayBottomInset => IsMobile ? Mathf.Clamp(Height * 0.085f, 36f, 52f) : Mathf.Clamp(Height * 0.06f, 34f, 64f);
         internal float CharacterHallSelectedDockBottom => OverlayBottomInset;
+        internal float GameplayHudEdgeInset => IsMobile ? 14f : IsTablet ? 16f : 18f;
+        internal float GameplayHudPlayerStatusWidth => IsMobile ? 260f : IsTablet ? 278f : 292f;
+        internal float GameplayHudPlayerStatusHeight => IsMobile ? 78f : 88f;
+        internal float GameplayHudRightInfoPreferredHeight => IsMobile ? 310f : IsTablet ? 336f : 348f;
+        internal float GameplayHudCombatWidth => 330f;
+        internal float GameplayHudCombatHeight => InputClass == "touch" ? 84f : 70f;
+        internal float GameplayHudContextWidth => InputClass == "touch" ? 180f : 160f;
+        internal float GameplayHudContextHeight => InputClass == "touch" ? 64f : 48f;
+        internal float GameplayHudSecondaryNavWidth => InputClass == "touch" ? 84f : 80f;
+        internal float GameplayHudSecondaryNavHeight => InputClass == "touch" ? 68f : 58f;
+        internal float GameplayHudTouchPadSize => InputClass == "touch" ? 124f : 0f;
+        internal float GameplayHudDockGap => 12f;
         internal float WorldHudMinWidth => WorldHudMinWidthFor(false);
 
         internal float WorldHudMinWidthFor(bool dialogueVisible)
