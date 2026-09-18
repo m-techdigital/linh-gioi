@@ -83,6 +83,12 @@ namespace LinhGioi.UI
                 InventoryDesktopColumnGap * scale);
         }
 
+        internal static Vector3 CalculateInventoryColumnWidths(
+            float shellWidth, RuntimeCharacterHubLayoutVariant variant)
+        {
+            return variant.CalculateColumns(shellWidth);
+        }
+
         private void Layout()
         {
             _metrics = RuntimeViewportMetrics.FromRoot(_root, _forcedLayoutProfile);
@@ -117,8 +123,11 @@ namespace LinhGioi.UI
             if (_inventoryHeroPanel != null)
             {
                 var body = _inventory.Q("Map01A Inventory Body");
-                var columns = CalculateInventoryColumnWidths(inventoryRect.width);
+                var variant = layout.CharacterHubVariant;
+                var columns = CalculateInventoryColumnWidths(inventoryRect.width, variant);
                 body.style.flexDirection = FlexDirection.Row;
+                ApplyLgoCharacterHubMainTabsLayout(
+                    _inventory.Q("Map01A Inventory Main Tabs"), inventoryRect.width, variant);
                 _inventoryHeroPanel.style.flexBasis = columns.x;
                 _inventoryHeroPanel.style.marginRight = 0;
                 _inventoryHeroPanel.style.marginBottom = 0;

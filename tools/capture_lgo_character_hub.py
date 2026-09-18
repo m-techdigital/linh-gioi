@@ -21,6 +21,13 @@ PROFILES = {
     "tablet": (1024, 768),
     "mobile": (1600, 720),
 }
+CHARACTER_HUB_CANONICAL_WIDTH = 1098.0
+CHARACTER_HUB_CANONICAL_HEIGHT = 724.0
+CHARACTER_HUB_HEIGHT_OCCUPANCY = {
+    "pc": CHARACTER_HUB_CANONICAL_HEIGHT / 941.0,
+    "tablet": 0.72,
+    "mobile": 0.62,
+}
 CHARACTER_HUB_CLASS_IDS = ("vo", "kiem", "phap", "co", "linh")
 POTENTIAL_CLASS_FRAMES = tuple(
     f"potential-{class_id}-{state}.png"
@@ -98,22 +105,36 @@ def validate_ui_metrics(manifest: dict, profile: str) -> list[str]:
     panel_settings = metrics.get("panelSettings", "")
     if "referenceResolution=1672x941" not in panel_settings or "match=1" not in panel_settings:
         errors.append("UI_PANEL_POLICY_MISMATCH")
-    presentation_scale = float(metrics.get("presentationScale", 0))
-    minimum_scale, maximum_scale = ((0.82, 0.90) if profile == "mobile" else (0.995, 1.005))
-    if not minimum_scale <= presentation_scale <= maximum_scale:
-        errors.append("PRESENTATION_SCALE_INVALID")
-    expected_shell_width = 1098.0 * presentation_scale
-    expected_shell_height = 724.0 * presentation_scale
     actual_shell_width = float(metrics.get("characterHubShellWidth", 0))
     actual_shell_height = float(metrics.get("characterHubShellHeight", 0))
-    if abs(actual_shell_width - expected_shell_width) > 2.0 or abs(actual_shell_height - expected_shell_height) > 2.0:
+    if actual_shell_height <= 0:
         errors.append("CHARACTER_HUB_SHELL_METRICS_MISMATCH")
-    if actual_shell_height <= 0 or abs(actual_shell_width / actual_shell_height - 1098.0 / 724.0) > 0.01:
-        errors.append("CHARACTER_HUB_SHELL_ASPECT_MISMATCH")
-    ratio = float(metrics.get("characterHubShellScreenHeightRatio", 0))
-    minimum_ratio, maximum_ratio = (0.62, 0.70) if profile == "mobile" else (0.75, 0.80)
-    if not minimum_ratio <= ratio <= maximum_ratio:
-        errors.append("CHARACTER_HUB_OCCUPANCY_INVALID")
+    else:
+        expected_occupancy = CHARACTER_HUB_HEIGHT_OCCUPANCY[profile]
+        expected_shell_height = min(
+            CHARACTER_HUB_CANONICAL_HEIGHT,
+            float(panel_height) * expected_occupancy,
+        )
+        expected_shell_width = (
+            expected_shell_height * CHARACTER_HUB_CANONICAL_WIDTH / CHARACTER_HUB_CANONICAL_HEIGHT
+        )
+        if abs(actual_shell_width - expected_shell_width) > 2.0 or abs(actual_shell_height - expected_shell_height) > 2.0:
+            errors.append("CHARACTER_HUB_SHELL_METRICS_MISMATCH")
+        if abs(
+            actual_shell_width / actual_shell_height
+            - CHARACTER_HUB_CANONICAL_WIDTH / CHARACTER_HUB_CANONICAL_HEIGHT
+        ) > 0.01:
+            errors.append("CHARACTER_HUB_SHELL_ASPECT_MISMATCH")
+        reported_ratio = float(metrics.get("characterHubShellScreenHeightRatio", 0))
+        actual_ratio = actual_shell_height / float(panel_height)
+        if abs(reported_ratio - actual_ratio) > 0.002 or abs(actual_ratio - expected_shell_height / float(panel_height)) > 0.005:
+            errors.append("CHARACTER_HUB_OCCUPANCY_INVALID")
+        # Legacy evidence field only: it must describe the measured Hub shell,
+        # never drive the responsive policy.
+        presentation_scale = float(metrics.get("presentationScale", 0))
+        measured_shell_scale = actual_shell_height / CHARACTER_HUB_CANONICAL_HEIGHT
+        if abs(presentation_scale - measured_shell_scale) > 0.003:
+            errors.append("PRESENTATION_SCALE_METRIC_MISMATCH")
     if metrics.get("minimumTouchTargetPanelUnits") != 44:
         errors.append("TOUCH_TARGET_TOKEN_MISMATCH")
     if float(metrics.get("minimumTouchTargetScreenPixels", 0)) <= 0:

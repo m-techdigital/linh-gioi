@@ -7,9 +7,15 @@ namespace LinhGioi.UI
         private static void ApplyLgoCharacterHubMainTabs(VisualElement tabs)
         {
             tabs.AddToClassList(LgoCharacterHubMainTabsClass);
-            tabs.style.width = 992;
             tabs.style.alignSelf = Align.FlexStart;
-            tabs.style.marginLeft = 20;
+        }
+
+        private static void ApplyLgoCharacterHubMainTabsLayout(
+            VisualElement tabs, float shellWidth, RuntimeCharacterHubLayoutVariant variant)
+        {
+            if (tabs == null) return;
+            tabs.style.width = shellWidth * variant.TabsWidthShare;
+            tabs.style.marginLeft = shellWidth * variant.TabsInsetShare;
         }
 
         private static void ApplyLgoCharacterHubInspectorColumn(VisualElement panel)

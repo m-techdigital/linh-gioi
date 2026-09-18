@@ -298,6 +298,209 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void AdaptiveUiProfileOwnsNamedWindowClassesAndBoundsWithoutGlobalScaleAuthority()
+        {
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var type = uiAssembly.GetType("LinhGioi.UI.RuntimeUiAdaptiveProfile");
+            Assert.That(type, Is.Not.Null);
+            var fromWindow = type.GetMethod("FromWindow", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(fromWindow, Is.Not.Null);
+
+            var desktop = fromWindow.Invoke(null, new object[] { "wide", "pointer", 1673, 941 });
+            var tablet = fromWindow.Invoke(null, new object[] { "regular", "touch", 1255, 941 });
+            var mobile = fromWindow.Invoke(null, new object[] { "mobile", "touch", 2091, 941 });
+
+            Assert.That(GetMember<string>(desktop, "PresentationClass"), Is.EqualTo("PCWide"));
+            Assert.That(GetMember<string>(tablet, "PresentationClass"), Is.EqualTo("Tablet"));
+            Assert.That(GetMember<string>(mobile, "PresentationClass"), Is.EqualTo("MobileLandscape"));
+            Assert.That(GetMember<string>(desktop, "DensityMode"), Is.EqualTo("comfortable"));
+            Assert.That(GetMember<string>(tablet, "DensityMode"), Is.EqualTo("compact"));
+            Assert.That(GetMember<string>(mobile, "DensityMode"), Is.EqualTo("compact"));
+
+            Assert.That(GetMember<float>(tablet, "SpacingScaleMin"), Is.GreaterThanOrEqualTo(.94f));
+            Assert.That(GetMember<float>(tablet, "TypographyScaleMin"), Is.GreaterThanOrEqualTo(.96f));
+            Assert.That(GetMember<float>(mobile, "SpacingScaleMin"), Is.GreaterThanOrEqualTo(.88f));
+            Assert.That(GetMember<float>(mobile, "TypographyScaleMin"), Is.GreaterThanOrEqualTo(.94f));
+            Assert.That(GetMember<float>(mobile, "TouchTargetScale"), Is.EqualTo(1f).Within(.001f));
+        }
+
+        [Test]
+        public void ResponsiveFoundationDoesNotGloballyScaleAuthSelectOrGameplayHud()
+        {
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var layoutType = uiAssembly.GetType("LinhGioi.UI.RuntimeUiLayoutProfile");
+            var viewportType = uiAssembly.GetType("LinhGioi.UI.RuntimeViewportMetrics");
+            var fromViewport = layoutType.GetMethod("FromViewport", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic, null,
+                new[] { viewportType }, null);
+
+            var tablet = fromViewport.Invoke(null, new[] { CreateViewportMetrics(1024, 768,
+                new Rect(0, 0, 1024, 768), 1255, 941, "tablet") });
+            var mobile = fromViewport.Invoke(null, new[] { CreateViewportMetrics(1600, 720,
+                new Rect(0, 0, 1600, 720), 2091, 941, "mobile") });
+
+            Assert.That(GetMember<float>(tablet, "PresentationScale"), Is.EqualTo(1f).Within(.001f));
+            Assert.That(GetMember<float>(mobile, "PresentationScale"), Is.EqualTo(1f).Within(.001f));
+            Assert.That(GetMember<float>(tablet, "LoginCardWidth"), Is.EqualTo(577.3f).Within(.2f));
+            Assert.That(GetMember<float>(mobile, "LoginCardWidth"), Is.EqualTo(580f).Within(.1f));
+            Assert.That(GetMember<float>(tablet, "CharacterSelectedPreviewMaxWidth"), Is.EqualTo(426.7f).Within(.2f));
+            Assert.That(GetMember<float>(mobile, "CharacterSelectedPreviewMaxWidth"), Is.EqualTo(360f).Within(.1f));
+            Assert.That(GetMember<float>(tablet, "GameplayHudPlayerStatusWidth"), Is.EqualTo(278f).Within(.01f));
+            Assert.That(GetMember<float>(mobile, "GameplayHudPlayerStatusWidth"), Is.EqualTo(260f).Within(.01f));
+            Assert.That(GetMember<float>(mobile, "GameplayHudTouchPadSize"), Is.EqualTo(124f).Within(.01f));
+        }
+
+        [Test]
+        public void ResponsiveFoundationKeepsGlobalLayoutFreeOfSurfaceScaleKnobs()
+        {
+            var uiDir = System.IO.Path.Combine(Application.dataPath, "Game/UI/Runtime");
+            var layoutSource = System.IO.File.ReadAllText(
+                System.IO.Path.Combine(uiDir, "RuntimeUiLayoutProfile.cs"));
+            var adaptiveSource = System.IO.File.ReadAllText(
+                System.IO.Path.Combine(uiDir, "RuntimeUiAdaptiveProfile.cs"));
+            var hubVariantSource = System.IO.File.ReadAllText(
+                System.IO.Path.Combine(uiDir, "RuntimeCharacterHubLayoutVariant.cs"));
+
+            Assert.That(layoutSource, Does.Not.Contain("internal readonly float ContentScale"),
+                "Global layout must not regain a one-number content shrink field.");
+            Assert.That(layoutSource, Does.Not.Contain("AdaptiveProfile.ContentScale"),
+                "Global layout must not consume a semantic profile hint as whole-screen scale authority.");
+            Assert.That(layoutSource, Does.Not.Contain("internal readonly float SurfaceScale"),
+                "Global layout must not regain a second whole-surface shrink field.");
+            Assert.That(layoutSource, Does.Not.Contain("AdaptiveProfile.SurfaceScale"),
+                "Global layout must not consume a derived surface multiplier.");
+            Assert.That(layoutSource, Does.Contain("PresentationScale = 1f"),
+                "Legacy presentation scale remains compatibility-only until screen variants explicitly own composition.");
+            Assert.That(adaptiveSource, Does.Not.Contain("ContentScale"),
+                "Semantic adaptive profile must not expose a generic content-scale range.");
+            Assert.That(adaptiveSource, Does.Not.Contain("SurfaceScale"),
+                "Semantic adaptive profile may expose bounded token-family hints, not a derived global surface multiplier.");
+            Assert.That(hubVariantSource, Does.Contain("MaximumShellHeight"));
+            Assert.That(hubVariantSource, Does.Contain("InspectorShare"));
+            Assert.That(hubVariantSource, Does.Contain("TabsWidthShare"));
+        }
+
+        [Test]
+        public void ResponsiveUiContainsLegacyPresentationScaleToExplicitCompatibilityBoundary()
+        {
+            var uiDir = System.IO.Path.Combine(Application.dataPath, "Game/UI/Runtime");
+            var consumers = System.IO.Directory.GetFiles(uiDir, "*.cs")
+                .Where(path => System.IO.File.ReadAllText(path).Contains("RuntimePresentationScaleProfile"))
+                .Select(System.IO.Path.GetFileName)
+                .OrderBy(name => name)
+                .ToArray();
+            Assert.That(consumers, Is.EqualTo(new[] { "RuntimeUiLayoutProfile.cs" }),
+                "UI screens must not call the legacy scalar profile directly; per-screen variants own composition.");
+            var layoutSource = System.IO.File.ReadAllText(
+                System.IO.Path.Combine(uiDir, "RuntimeUiLayoutProfile.cs"));
+            Assert.That(layoutSource, Does.Contain("legacyMobileScaleCap"),
+                "The remaining UI use must stay visibly marked as temporary Auth compatibility.");
+        }
+
+        [Test]
+        public void ResponsiveScreenRootsDoNotUseAdaptiveRootScaleAsComposition()
+        {
+            var uiDir = System.IO.Path.Combine(Application.dataPath, "Game/UI/Runtime");
+            foreach (var file in new[]
+            {
+                "CongDongLamArrivalHud.Runtime.cs",
+                "CongDongLamArrivalHud.Entry.cs",
+                "CongDongLamArrivalHud.CharacterSelect.cs",
+                "CongDongLamArrivalHud.Inventory.cs"
+            })
+            {
+                var source = System.IO.File.ReadAllText(System.IO.Path.Combine(uiDir, file));
+                Assert.That(source, Does.Not.Contain(".style.scale"), file);
+                Assert.That(source, Does.Not.Contain("ApplyScaleToRoot"), file);
+                Assert.That(source, Does.Not.Contain("GlobalContentScale"), file);
+            }
+        }
+
+        [Test]
+        public void CharacterHubMobileVariantFitsCutoutSafePanelWithoutEmergencyScale()
+        {
+            var viewport = CreateViewportMetrics(
+                2532, 1170, new Rect(132, 63, 2268, 1070), 2091, 941, "mobile");
+            var safe = GetMember<Rect>(viewport, "SafePanelRect");
+            Assert.That(safe.x, Is.GreaterThan(0f));
+            Assert.That(safe.y, Is.GreaterThan(0f));
+            Assert.That(safe.width, Is.LessThan(2091f));
+            Assert.That(safe.height, Is.LessThan(941f));
+
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var layoutType = uiAssembly.GetType("LinhGioi.UI.RuntimeUiLayoutProfile");
+            var viewportType = uiAssembly.GetType("LinhGioi.UI.RuntimeViewportMetrics");
+            var fromViewport = layoutType.GetMethod("FromViewport", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic, null,
+                new[] { viewportType }, null);
+            var layout = fromViewport.Invoke(null, new[] { viewport });
+            Assert.That(GetMember<float>(layout, "PresentationScale"), Is.EqualTo(1f).Within(.001f));
+            var variant = GetMember<object>(layout, "CharacterHubVariant");
+            Assert.That(GetMember<string>(variant, "Name"), Is.EqualTo("MobileLandscape"));
+
+            var runtimeSource = System.IO.File.ReadAllText(System.IO.Path.Combine(
+                Application.dataPath, "Game/UI/Runtime/CongDongLamArrivalHud.Runtime.cs"));
+            Assert.That(runtimeSource, Does.Contain("Place(_safe, r.x, null, r.y, null)"),
+                "Safe-panel x/y must be owned by the safe root before child Hub coordinates become local.");
+            var maximumShellHeight = GetMember<float>(layout, "CharacterHubShellMaxHeight");
+            var rect = CongDongLamArrivalHud.CalculateInventoryModalRect(
+                new Rect(0f, 0f, safe.width, safe.height), touch: true, maximumShellHeight: maximumShellHeight);
+            Assert.That(rect.xMin, Is.GreaterThanOrEqualTo(-.01f));
+            Assert.That(rect.yMin, Is.GreaterThanOrEqualTo(-.01f));
+            Assert.That(rect.xMax, Is.LessThanOrEqualTo(safe.width + .01f));
+            Assert.That(rect.yMax, Is.LessThanOrEqualTo(safe.height + .01f));
+            Assert.That(rect.width / rect.height, Is.EqualTo(1098f / 724f).Within(.002f));
+            Assert.That(GetMember<float>(variant, "TouchTargetScale"), Is.EqualTo(1f).Within(.001f));
+        }
+
+        [Test]
+        public void CharacterHubVariantChangesCompositionBeforeContentScaling()
+        {
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var type = uiAssembly.GetType("LinhGioi.UI.RuntimeCharacterHubLayoutVariant");
+            Assert.That(type, Is.Not.Null,
+                "Character Hub needs one component-owned responsive variant rather than a global UI scalar.");
+            var fromWindow = type.GetMethod("FromWindow", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(fromWindow, Is.Not.Null);
+
+            var wide = fromWindow.Invoke(null, new object[] { "wide", "pointer", 1673, 941 });
+            var tablet = fromWindow.Invoke(null, new object[] { "regular", "touch", 1255, 941 });
+            var mobile = fromWindow.Invoke(null, new object[] { "mobile", "touch", 2091, 941 });
+
+            Assert.That(GetMember<string>(wide, "Name"), Is.EqualTo("Wide"));
+            Assert.That(GetMember<string>(tablet, "Name"), Is.EqualTo("Tablet"));
+            Assert.That(GetMember<string>(mobile, "Name"), Is.EqualTo("MobileLandscape"));
+
+            var wideHeight = GetMember<float>(wide, "MaximumShellHeight");
+            var tabletHeight = GetMember<float>(tablet, "MaximumShellHeight");
+            var mobileHeight = GetMember<float>(mobile, "MaximumShellHeight");
+            Assert.That(wideHeight, Is.EqualTo(724f).Within(.5f));
+            Assert.That(tabletHeight / 941f, Is.InRange(.69f, .74f));
+            Assert.That(mobileHeight / 941f, Is.InRange(.60f, .64f));
+            Assert.That(wideHeight, Is.GreaterThan(tabletHeight));
+            Assert.That(tabletHeight, Is.GreaterThan(mobileHeight));
+
+            var wideInspector = GetMember<float>(wide, "InspectorShare");
+            var tabletInspector = GetMember<float>(tablet, "InspectorShare");
+            var mobileInspector = GetMember<float>(mobile, "InspectorShare");
+            Assert.That(wideInspector, Is.GreaterThan(tabletInspector));
+            Assert.That(tabletInspector, Is.GreaterThan(mobileInspector));
+
+            var wideTabsShare = GetMember<float>(wide, "TabsWidthShare");
+            var tabletTabsShare = GetMember<float>(tablet, "TabsWidthShare");
+            var mobileTabsShare = GetMember<float>(mobile, "TabsWidthShare");
+            Assert.That(1098f * wideTabsShare, Is.EqualTo(992f).Within(.5f),
+                "Wide profile must preserve the current canonical PC tab rail instead of silently widening it.");
+            Assert.That(tabletTabsShare, Is.GreaterThan(wideTabsShare),
+                "Tablet may reclaim horizontal shell space before shrinking tab content.");
+            Assert.That(mobileTabsShare, Is.GreaterThan(tabletTabsShare),
+                "Mobile landscape may use nearly the full local Hub shell for five primary tabs.");
+            Assert.That(GetMember<float>(mobile, "TouchTargetScale"), Is.EqualTo(1f).Within(.001f));
+        }
+
+        [Test]
         public void WorldPresentationMetricsMeasureViewportHeightWithoutScreenGuessing()
         {
             var cameraObject = new GameObject("world presentation metric camera");
@@ -412,7 +615,7 @@ namespace LinhGioi.Tests
         }
 
         [Test]
-        public void MobileLandscapeProfileCapsCharacterHubHeightWithoutShrinkingTouchControls()
+        public void MobileLandscapeCharacterHubUsesLocalVariantWithoutShrinkingTouchControls()
         {
             var viewport = CreateViewportMetrics(1600, 720,
                 new Rect(0, 0, 1600, 720), 2091, 941, "mobile");
@@ -424,25 +627,19 @@ namespace LinhGioi.Tests
                 new[] { viewportType }, null);
             var layout = fromViewport.Invoke(null, new[] { viewport });
 
-            var presentationScale = GetMember<float>(layout, "PresentationScale");
+            Assert.That(GetMember<float>(layout, "PresentationScale"), Is.EqualTo(1f).Within(.001f),
+                "UIF-02R must not make one mobile scalar the authority for every screen.");
             var maximumShellHeight = GetMember<float>(layout, "CharacterHubShellMaxHeight");
-            Assert.That(presentationScale, Is.InRange(.82f, .90f),
-                "Mobile landscape density must be derived from the shared aspect curve.");
-            Assert.That(maximumShellHeight, Is.EqualTo(724f * presentationScale).Within(.1f),
-                "Character Hub height must derive from the canonical shell token times presentation scale.");
+            Assert.That(maximumShellHeight / 941f, Is.InRange(.60f, .64f));
             var mobileRect = CongDongLamArrivalHud.CalculateInventoryModalRect(
                 new Rect(0, 0, 2091, 941), touch: true, maximumShellHeight: maximumShellHeight);
-            Assert.That(mobileRect.width / mobileRect.height, Is.EqualTo(1098f / 724f).Within(.002f),
-                "Responsive Character Hub must preserve the canonical modal aspect ratio instead of hard-coding only its height.");
-            Assert.That(mobileRect.height / 941f, Is.InRange(.62f, .69f));
-            Assert.That(GetMember<float>(layout, "GameplayHudTouchPadSize"), Is.EqualTo(124f).Within(.01f),
-                "Fixing shell occupancy must not shrink the touch joystick target.");
+            Assert.That(mobileRect.width / mobileRect.height, Is.EqualTo(1098f / 724f).Within(.002f));
+            Assert.That(GetMember<float>(layout, "GameplayHudTouchPadSize"), Is.EqualTo(124f).Within(.01f));
             var themeType = typeof(ThemeTokens).Assembly.GetType("LinhGioi.UI.RuntimeUiTheme");
             var current = themeType.GetProperty("Current", System.Reflection.BindingFlags.Static
                 | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
             var theme = current.GetValue(null) as ThemeTokens;
-            Assert.That(theme.minimumTouchTarget, Is.EqualTo(44),
-                "Fixing mobile presentation scale must preserve the semantic minimum touch target.");
+            Assert.That(theme.minimumTouchTarget, Is.EqualTo(44));
         }
 
         [Test]

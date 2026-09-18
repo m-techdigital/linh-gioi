@@ -894,9 +894,12 @@ namespace LinhGioi.Tests.EditMode
                         "All five tabs must derive equal width from one reusable navigation base.");
                     Assert.That(tab.ClassListContains("lgo-inventory-main-tab"), Is.True);
                 }
-                Assert.That(tabs.style.width.value.value, Is.EqualTo(992).Within(1),
-                    "The approved navigation rail is compact and leaves the close/title edge clear for future tabs.");
                 var modal = root.Q("Map01A Inventory");
+                var expectedWideRailWidth = modal.style.width.value.value * (992f / 1098f);
+                Assert.That(tabs.style.width.value.value, Is.EqualTo(expectedWideRailWidth).Within(1),
+                    "The approved Wide navigation rail preserves its canonical 992/1098 shell share instead of overflowing a fitted shell.");
+                Assert.That(tabs.style.width.value.value, Is.LessThan(modal.style.width.value.value),
+                    "The five-tab rail must leave the close/title edge clear after responsive shell fitting.");
                 var backdrop = root.Q("Map01A Character Hub Backdrop");
                 var modalTitle = root.Q<Label>("Map01A Inventory Modal Title");
                 Assert.That(modalTitle.text, Is.EqualTo("RƯƠNG ĐỒ"),

@@ -11,9 +11,15 @@ def valid_ui_metrics(profile: str) -> dict:
     authority = capture.expected_evidence_authority(profile)
     panel_height = 941
     panel_width = round(width * panel_height / height)
-    presentation_scale = 0.85 if profile == "mobile" else 1.0
-    shell_width = 1098 * presentation_scale
-    shell_height = 724 * presentation_scale
+    shell_height = min(
+        capture.CHARACTER_HUB_CANONICAL_HEIGHT,
+        panel_height * capture.CHARACTER_HUB_HEIGHT_OCCUPANCY[profile],
+    )
+    shell_width = (
+        shell_height * capture.CHARACTER_HUB_CANONICAL_WIDTH
+        / capture.CHARACTER_HUB_CANONICAL_HEIGHT
+    )
+    presentation_scale = shell_height / capture.CHARACTER_HUB_CANONICAL_HEIGHT
     return {
         "evidenceAuthority": authority,
         "screenWidth": width, "screenHeight": height,
@@ -70,8 +76,14 @@ class CaptureLgoCharacterHubTests(unittest.TestCase):
         oversized["uiMetrics"]["characterHubShellHeight"] = 724
         oversized["uiMetrics"]["characterHubShellScreenHeightRatio"] = 724 / 941
         errors = capture.validate_ui_metrics(oversized, "mobile")
-        self.assertIn("PRESENTATION_SCALE_INVALID", errors)
+        self.assertIn("CHARACTER_HUB_SHELL_METRICS_MISMATCH", errors)
         self.assertIn("CHARACTER_HUB_OCCUPANCY_INVALID", errors)
+
+        inconsistent_metric = json.loads(json.dumps(compact))
+        inconsistent_metric["uiMetrics"]["presentationScale"] = 1.0
+        errors = capture.validate_ui_metrics(inconsistent_metric, "mobile")
+        self.assertIn("PRESENTATION_SCALE_METRIC_MISMATCH", errors)
+        self.assertNotIn("CHARACTER_HUB_OCCUPANCY_INVALID", errors)
 
         distorted = json.loads(json.dumps(compact))
         distorted["uiMetrics"]["characterHubShellWidth"] = 1098
