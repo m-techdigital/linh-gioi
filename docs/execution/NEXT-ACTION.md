@@ -1,3 +1,13 @@
+# NEXT ACTION — Game Systems / after SYS-01 Product Bible v2 conflict closure
+
+1. Preserve SYS-01 authority source `a66a67a40755c4601ce52c6c627ef0e869b64f81` and all previously closed UI/auth/persistence/gameplay contracts. SYS-01 is documentation/guardrail-only: no runtime behavior, REST shape, persistence schema, protocol, GameData payload or physical-device claim changed.
+2. Product identity is now explicit: canonical new-write IDs are `vo`, `kiem`, `phap`, `co`, `linh`; `class.martial→vo` and `class.sword→kiem` remain legacy-compatible and existing stored/shared values are not silently rewritten.
+3. Founder Alpha's two-class scope means two **combat-complete** Paths first (`vo`, `kiem`), not a two-value identity schema. Pháp/Cơ/Linh can remain valid account/profile/UI identities while their combat content is staged later.
+4. Stable map ID kinds are explicit: `map.city.linh_thanh` is a GameData content-zone ID; `map-01a-cong-dong-lam` is the current persisted runtime-playable-map ID; local `dong-mon` authoring keys are not cross-system persistence IDs. City and Map01A IDs are not aliases and no parent relationship is inferred from names.
+5. Active Shadow Slime tutorial sources were already aligned on combat; SYS-01 did not replay that implementation. Historical non-combat wording is superseded stage history only.
+6. Exact-source gates on `a66a67a40755c4601ce52c6c627ef0e869b64f81`: Product Bible unit 5/5 PASS; authority validator PASS; GameData VALID; code governance PASS; package hygiene PASS; shell syntax and `git diff --check` PASS. Source is remote-equal to `origin/feature/2d` before this closure-doc update.
+7. Continue only with operator-assigned **LGO-GAME-SYS-02 — Game-side domain/data authority audit**. Inventory current durable/account/world/inventory/progression authority before proposing PostgreSQL schema or service moves. Do not open DB implementation from the Game lane unless its dependencies are explicitly satisfied and assigned.
+
 # NEXT ACTION — UI Fidelity / after UIF-10 authoritative fidelity/device gates
 
 1. Preserve the closed UIF-02R and UIF-03..09 contracts. Authoritative UIF-10 gate/tooling source is `f3eae94435edf0cb382e51769683a83ed3ab51f0`, pushed remote-equal before this closure-doc update.

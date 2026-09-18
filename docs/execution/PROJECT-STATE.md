@@ -1,3 +1,15 @@
+## GAME-SYS-01 Product Bible v2 conflict closure — 2026-09-18
+
+- Authoritative source: `a66a67a40755c4601ce52c6c627ef0e869b64f81` (`docs(product): close SYS-01 authority conflicts`), pushed remote-equal to `origin/feature/2d` before closure-doc update.
+- Added `docs/LGO-PRODUCT-BIBLE-v2.md` plus machine-checkable `docs/LGO-PRODUCT-BIBLE-v2.json`; wired `tools/validate_lgo_product_bible_v2.py` into source-only closure and added 5 focused unit tests.
+- Founder Alpha conflict resolved without narrowing identity contracts: five canonical new-write IDs are `vo/kiem/phap/co/linh`; Founder Alpha combat completeness is staged first for `vo/kiem`. Legacy `class.martial` and `class.sword` remain compatible and existing data is not silently rewritten.
+- Map/world ID policy resolved by ID kind, not renaming: `map.city.linh_thanh` remains the GameData content-zone identity; `map-01a-cong-dong-lam` remains the persisted runtime Map01A identity; local `dong-mon` stays authoring-local. The city and Map01A IDs are not aliases; any future relationship requires explicit data/migration authority.
+- Updated the conflicting active Vision/GDD/content-registry/reference wording and added a supersession register. Historical `class.arcane/class.tech/class.spirit` planning labels are not canonical new-write identities and are not inferred as persisted aliases.
+- Shadow Slime active 2D GDD/direction was already aligned on tutorial combat, so no runtime/gameplay replay was performed.
+- Exact-source gates on `a66a67a40755c4601ce52c6c627ef0e869b64f81`: Product Bible tests 5/5, Product Bible validator PASS, GameData VALID, code governance PASS, package hygiene PASS, shell syntax PASS, `git diff --check` PASS. No Unity/full Player job was needed because SYS-01 changed no runtime source, and no physical-device claim was made.
+- Cross-sandbox decision was posted to the umbrella Mission before authority docs changed. No classId/runtimeClassId/mapId REST shape, account/persistence behavior or protocol changed.
+- Next operator-assigned Game task: SYS-02 domain/data authority audit. DB implementation remains dependency-gated.
+
 ## UIF-10 Authoritative fidelity/device gates — 2026-09-18
 
 - Authoritative gate/tooling source: `f3eae94435edf0cb382e51769683a83ed3ab51f0`, pushed remote-equal to `origin/feature/2d` before closure-doc publication.
