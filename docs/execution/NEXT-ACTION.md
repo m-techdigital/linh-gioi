@@ -1,3 +1,13 @@
+# NEXT ACTION — UI Fidelity / after UIF-08 Runtime texture/mobile memory closure
+
+1. Preserve UIF-03..07 behavior/presentation contracts and UIF-08 texture evidence. Authoritative UIF-08 runtime source is `bdc0461bccaf7439ce238b3e6a86659eff3cd1d2`: 40 Resources PNGs inventoried, 19 large textures all have explicit Android+iOS import decisions, and no mass recompression/Addressables migration was performed.
+2. Exact-source UIF-08 gates are GREEN: Unity EditMode 391/391; macOS Player AFTER build `175335082` bytes with errors=0/warnings=0; shared-skin/style/no-3D/no-source/package/code-governance/diff gates PASS. Worst-case forced-all-Resources Standalone estimate changed `59106352 -> 58756800` bytes (-349552), traced to removal of unnecessary mipmaps on `vo-lv1-rig-atlas`.
+3. Quality evidence is under `build/ui-fidelity-foundation-v1/uif08-quality-audit/`: sampled Character Hub frames are pixel-identical before/after; maximum changed-pixel ratio across selected PC/tablet/mobile frames is <0.5%. Tablet/mobile remain macOS profile/aspect simulations because Android/iOS PlaybackEngines are not installed; do not claim physical-device memory/frame-time PASS.
+4. **High-priority regression before mobile can be called final:** current 1600x720 mobile simulation still looks oversized. Measured Character Hub shell occupies ~76.94% of screen height, actor ~21.46%, NPC 25%; PanelSettings is `MatchWidthOrHeight match=1`, preserving desktop-like vertical occupancy. Evidence: `uif08-quality-audit/mobile-scale-finding.json`. Do not hide this behind UIF-08 technical PASS.
+5. Open/promote a bounded mobile-presentation-scale regression task before treating mobile fidelity as complete: reduce landscape UI/world presentation occupancy from measured evidence while preserving safe-area/touch minimums and all closed auth/gameplay semantics. Require PC/tablet non-regression and keep physical-device proof explicit.
+6. After that regression is closed or formally gated, continue sequentially with already-assigned UIF-09 HUD/world decomposition, then UIF-10 authoritative fidelity/device gates. Do not pull decomposition ahead of the mobile-size correction if both can be scheduled safely.
+7. Do not reopen texture import policy merely because mobile appears large; the size finding is presentation scale, not texture resolution.
+
 # NEXT ACTION — UI Fidelity / after UIF-07 World presentation scale closure
 
 1. Preserve the closed UIF-03 Entry/Auth, UIF-04 Character Select, UIF-05 Character Hub, UIF-06 Gameplay HUD and UIF-07 world-presentation contracts unless a concrete exact-source Player regression is proven. Do not reopen auth, persistence, account binding, Map01A world-entry or combat semantics from this closure.

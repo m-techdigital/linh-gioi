@@ -1,3 +1,14 @@
+## UIF-08 Runtime texture/mobile memory — 2026-09-18
+
+- Authoritative runtime source: `bdc0461bccaf7439ce238b3e6a86659eff3cd1d2`, pushed remote-equal to `origin/feature/2d`. Runtime commits: `42066390` texture-memory audit mode, `6207b7a9` compressed-storage estimator correction, `bdc0461b` selective mobile import policy.
+- Current Resources inventory: 40 PNGs (~14.65 MiB source PNG bytes; ~108.46 MiB RGBA32 reference footprint), with 19 textures >=1024 px. All 19/19 large textures now carry explicit Android+iOS decisions; no blind mass recompression or Addressables migration was performed.
+- Forced-all-Resources macOS Player estimate changed from 59,106,352 to 58,756,800 bytes (-349,552). The delta is explained by `vo-lv1-rig-atlas` mipmaps 11->1; runtime texture count remains 42 in the evidence runner. `Profiler.GetRuntimeMemorySizeLong` is zero for non-readable imported textures here, so the report records format/dimension/mipmap storage estimates instead of pretending they are physical GPU residency.
+- Exact AFTER Player build from `bdc0461b`: 175,335,082 bytes, errors=0, warnings=0. Full exact-source Unity EditMode: 391/391 PASS. Shared-skin/style-debt/no-3D/no-source/package/code-governance/diff gates PASS.
+- Quality boards/metrics: `build/ui-fidelity-foundation-v1/uif08-quality-audit/`. Selected Character Hub frames are pixel-identical before/after; maximum changed-pixel ratio is 0.219% PC / 0.448% tablet / 0.266% mobile, with changes confined to small runtime-render differences rather than visible texture degradation.
+- Android/iOS PlaybackEngines are not installed on this machine; Android/iOS overrides are configuration evidence only. Tablet/mobile evidence remains macOS profile/aspect simulation, not physical-device memory, frame-time, safe-area or fidelity proof.
+- User-reported mobile oversizing is **confirmed as an unresolved presentation-scale finding, not a texture issue**. Current 1600x720 simulation: Character Hub shell height ratio ~0.7694, actor ~0.2146, NPC 0.25, touch pad ~94.9 screen px; PanelSettings uses `MatchWidthOrHeight match=1`. Evidence is `uif08-quality-audit/mobile-scale-finding.json`.
+- UIF-08 therefore closes texture/import/memory-audit scope without claiming mobile sizing is final. A bounded mobile-presentation-scale regression must run before mobile fidelity can be considered complete; it must preserve safe-area/touch minimums and closed auth/gameplay behavior.
+
 ## UIF-07 World presentation scale — 2026-09-18
 
 - Authoritative runtime source: `b4a5303bb98f8884a3db3b8f7c4d7c7617a41b02`, pushed remote-equal to `origin/feature/2d` before closure-doc publication.
