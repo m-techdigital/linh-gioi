@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 using UnityEngine.TestTools;
 using UnityEditor;
 using System.Collections;
+using System.Linq;
 
 namespace LinhGioi.Tests
 {
@@ -75,6 +76,36 @@ namespace LinhGioi.Tests
             Assert.AreEqual(44, theme.minimumTouchTarget);
             Assert.AreEqual(8, theme.spacing.Length);
             Object.DestroyImmediate(theme);
+        }
+
+        [Test]
+        public void RuntimeTextureMemoryAuditSummarizesDistinctTextures()
+        {
+            var first = new Texture2D(64, 32, TextureFormat.RGBA32, false) { name = "audit-first" };
+            var second = new Texture2D(32, 32, TextureFormat.RGBA32, false) { name = "audit-second" };
+            try
+            {
+                var snapshot = RuntimeTextureMemoryAudit.Summarize(new[] { first, first, second }, new[] { first.GetInstanceID() });
+                Assert.That(snapshot.textureCount, Is.EqualTo(2));
+                Assert.That(snapshot.totalRuntimeBytes, Is.GreaterThan(0));
+                Assert.That(snapshot.entries.Length, Is.EqualTo(2));
+                Assert.That(snapshot.entries.Count(entry => entry.wasResidentBeforeAudit), Is.EqualTo(1));
+                Assert.That(snapshot.entries.Single(entry => entry.name == "audit-first").width, Is.EqualTo(64));
+                Assert.That(snapshot.entries.Single(entry => entry.name == "audit-second").height, Is.EqualTo(32));
+            }
+            finally
+            {
+                Object.DestroyImmediate(first);
+                Object.DestroyImmediate(second);
+            }
+        }
+
+        [Test]
+        public void RuntimeTextureMemoryAuditRunnerRequiresExplicitFlag()
+        {
+            Assert.That(RuntimeTextureMemoryAuditRunner.ShouldRunForArgs(new[] { "LinhGioiOnline" }), Is.False);
+            Assert.That(RuntimeTextureMemoryAuditRunner.ShouldRunForArgs(
+                new[] { "LinhGioiOnline", "--lgo-runtime-texture-memory-audit" }), Is.True);
         }
 
         [Test]

@@ -20,6 +20,12 @@ namespace LinhGioi.Bootstrap
             _shutdown = new CancellationTokenSource();
             try
             {
+                if (RuntimeTextureMemoryAuditRunner.ShouldRun())
+                {
+                    RuntimeTextureMemoryAuditRunner.RunFromCommandLine();
+                    return;
+                }
+
                 if (M4VisualFoundationSmokeRunner.ShouldRun())
                 {
                     M4VisualFoundationSmokeRunner.RunFromCommandLine();
