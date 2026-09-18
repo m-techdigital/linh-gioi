@@ -1,3 +1,15 @@
+## UIF-07 World presentation scale — 2026-09-18
+
+- Authoritative runtime source: `b4a5303bb98f8884a3db3b8f7c4d7c7617a41b02`, pushed remote-equal to `origin/feature/2d` before closure-doc publication.
+- Added shared `RuntimeWorldPresentationProfile` + `RuntimeWorldPresentationMetrics` authority. Map01A camera, actor/NPC scale targets, interaction-label sizing and background coverage are measured independently from UI scale; `PlayableWorldController` reuses the same profile classifier while preserving its historical prototype/smoke camera values.
+- Capture evidence now publishes actual runtime `worldMetrics` and fails closed when actor/NPC/coverage/label metrics are empty. This fixed a real closure-evidence defect found during exact Player audit; RED 0/1 -> GREEN 1/1, then Map01A fixture 23/23 PASS.
+- Fresh exact-source verification on the final runtime commit: Unity EditMode 388/388 PASS; shared/style/no-3D/no-source/package/code-governance gates PASS; macOS Player v2 build Succeeded with errors=0 warnings=0.
+- Fresh Player quest captures under `build/ui-fidelity-foundation-v1/uif07-world-after-v2/`: 18 frames/profile at PC 1600×900, tablet-simulation 1024×768 and mobile-landscape-simulation 1600×720. All manifests report `TECHNICAL_PASS_VISUAL_REVIEW_REQUIRED` and populated world metrics.
+- Machine audit `uif07-world-final-v2/world-metrics-audit.json` PASS: actor screen-height ratios 0.214739 / 0.214410 / 0.214593 (target 0.18–0.27), NPC 0.25 on all profiles (target 0.16–0.27), camera 3.8, ground offset 1.5, max foot error 0, parallax 32.2, positive background coverage and stable label sizing.
+- Visual board `uif07-world-final-v2/world-owner-after-board.jpg` PASS for world presentation scale/composition: stable actor/NPC size, grounded feet, complete background coverage, readable labels and open combat center. This is not a claim of complete owner art-detail equivalence.
+- Tablet/mobile remain macOS profile/aspect simulations rather than physical-device evidence. Known Unity map `.meta` + Graphics/Quality import rewrites were excluded from authority.
+- Next sequential assigned item: UIF-08 Runtime texture/mobile memory. Keep texture/memory optimization evidence-driven and do not blind-compress shipping art.
+
 ## UIF-06 Gameplay HUD information architecture + touch-control fidelity — 2026-09-18
 
 - Authoritative runtime source: `1b3642dd807419b15ec7ecc2278739740cf1d0ee`, pushed remote-equal to `origin/feature/2d` before closure-doc publication.
