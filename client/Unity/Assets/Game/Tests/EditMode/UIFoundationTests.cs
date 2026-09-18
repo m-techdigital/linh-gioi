@@ -1,3 +1,4 @@
+using LinhGioi.Foundation;
 using LinhGioi.UI;
 using NUnit.Framework;
 using UnityEngine;
@@ -167,6 +168,49 @@ namespace LinhGioi.Tests
             Assert.That(settings.screenMatchMode, Is.EqualTo(PanelScreenMatchMode.MatchWidthOrHeight));
             Assert.That(settings.match, Is.EqualTo(1f).Within(.001f),
                 "Landscape game UI must scale from safe-panel height instead of becoming oversized on wide phones.");
+        }
+
+        [TestCase("desktop", 1600, 900, "desktop")]
+        [TestCase("tablet", 1024, 768, "tablet")]
+        [TestCase("mobile", 1600, 720, "mobile")]
+        public void WorldPresentationProfileOwnsShippingMapScale(string forcedProfile, int width, int height, string expectedName)
+        {
+            var profile = RuntimeWorldPresentationProfile.FromScreen(forcedProfile, width, height);
+            Assert.That(profile.Name, Is.EqualTo(expectedName));
+            Assert.That(profile.CameraOrthographicSize, Is.EqualTo(3.8f).Within(.001f));
+            Assert.That(profile.CameraGroundOffsetY, Is.EqualTo(1.5f).Within(.001f));
+            Assert.That(profile.ActorMinScreenHeightRatio, Is.EqualTo(.18f).Within(.001f));
+            Assert.That(profile.ActorMaxScreenHeightRatio, Is.EqualTo(.27f).Within(.001f));
+            Assert.That(profile.NpcMinScreenHeightRatio, Is.EqualTo(.16f).Within(.001f));
+            Assert.That(profile.NpcMaxScreenHeightRatio, Is.EqualTo(.27f).Within(.001f));
+            Assert.That(profile.InteractionMarkerFontSize, Is.EqualTo(64));
+            Assert.That(profile.InteractionMarkerCharacterSize, Is.EqualTo(.045f).Within(.001f));
+        }
+
+        [Test]
+        public void WorldPresentationMetricsMeasureViewportHeightWithoutScreenGuessing()
+        {
+            var cameraObject = new GameObject("world presentation metric camera");
+            try
+            {
+                var camera = cameraObject.AddComponent<Camera>();
+                camera.orthographic = true;
+                camera.orthographicSize = 3.8f;
+                camera.transform.position = new Vector3(0f, 0f, -10f);
+                var actorBounds = new Bounds(Vector3.zero, new Vector3(1f, 1.70f, .1f));
+                var npcBounds = new Bounds(new Vector3(2f, 0f, 0f), new Vector3(1f, 1.90f, .1f));
+
+                Assert.That(RuntimeWorldPresentationMetrics.ScreenHeightRatio(camera, actorBounds),
+                    Is.EqualTo(1.70f / 7.6f).Within(.002f));
+                Assert.That(RuntimeWorldPresentationMetrics.ScreenHeightRatio(camera, npcBounds),
+                    Is.EqualTo(1.90f / 7.6f).Within(.002f));
+                Assert.That(RuntimeWorldPresentationMetrics.ScreenHeightRatio(null, actorBounds), Is.Zero);
+                Assert.That(RuntimeWorldPresentationMetrics.ScreenHeightRatio(camera, new Bounds(Vector3.zero, Vector3.zero)), Is.Zero);
+            }
+            finally
+            {
+                Object.DestroyImmediate(cameraObject);
+            }
         }
 
         [Test]
