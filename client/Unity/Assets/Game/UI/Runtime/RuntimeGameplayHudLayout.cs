@@ -65,10 +65,12 @@ namespace LinhGioi.UI
                 : new Rect(safeRect.xMin + edge, safeRect.yMax - edge - touchSize,
                     touchSize, touchSize);
 
-            var dialogueWidth = Mathf.Min(profile.DialogueOverlayWidth, maxWidth);
+            var dialogueLeft = safeRect.xMin + edge;
+            var dialogueAvailableWidth = Mathf.Max(0f, rightInfo.xMin - gap - dialogueLeft);
+            var dialogueWidth = Mathf.Min(profile.DialogueOverlayWidth, dialogueAvailableWidth);
             var dialogueHeight = Mathf.Min(profile.DialoguePanelMaxHeight, maxHeight);
             var dialogue = new Rect(
-                safeRect.xMin + Mathf.Max(edge, (safeRect.width - dialogueWidth) * .5f),
+                dialogueLeft,
                 safeRect.yMax - edge - dialogueHeight,
                 dialogueWidth,
                 dialogueHeight);

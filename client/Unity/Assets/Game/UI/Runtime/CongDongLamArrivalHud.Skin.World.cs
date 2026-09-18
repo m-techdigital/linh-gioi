@@ -117,6 +117,12 @@ namespace LinhGioi.UI
             element.style.justifyContent = Justify.FlexEnd;
         }
 
+        private static void ApplyLgoGameplayDialogueZone(VisualElement element)
+        {
+            element.AddToClassList(LgoGameplayDialogueZoneClass);
+            element.style.position = Position.Absolute;
+        }
+
         private static void ApplyLgoGameplayHudRect(VisualElement element, Rect rect)
         {
             element.style.position = Position.Absolute;

@@ -3478,18 +3478,48 @@ namespace LinhGioi.Tests.EditMode
         }
 
         [Test]
+        public void GameplayDialogueBindsToSharedSafeAreaZone()
+        {
+            var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
+            var host = new GameObject("gameplay dialogue semantic-zone test");
+            try
+            {
+                var scene = CongDongLamMap01AArtPreview.Attach(TwoDOnboardingController.Attach(host));
+                CongDongLamArrivalHud.Attach(scene);
+                var hud = host.GetComponentInChildren<CongDongLamArrivalHud>();
+                var flags = BindingFlags.Instance | BindingFlags.NonPublic;
+                typeof(CongDongLamArrivalHud).GetField("_forcedLayoutProfile", flags).SetValue(hud, "mobile");
+                typeof(CongDongLamArrivalHud).GetField("_touch", flags).SetValue(hud, true);
+                typeof(CongDongLamArrivalHud).GetMethod("Layout", flags).Invoke(hud, null);
+
+                var root = host.GetComponentInChildren<UIDocument>().rootVisualElement;
+                var safe = root.Q("Map01A Safe Hud");
+                var dialogue = root.Q("Map01A Dialogue Panel");
+                var rightInfo = root.Q("Map01A Right Hud Cluster");
+                Assert.That(dialogue.ClassListContains("lgo-gameplay-dialogue-zone"), Is.True,
+                    "Dialogue must bind to the shared semantic foreground zone instead of a legacy one-off rect.");
+
+                var dialogueRect = new Rect(dialogue.style.left.value.value, dialogue.style.top.value.value,
+                    dialogue.style.width.value.value, dialogue.style.height.value.value);
+                var rightRect = new Rect(rightInfo.style.left.value.value, rightInfo.style.top.value.value,
+                    rightInfo.style.width.value.value, rightInfo.style.height.value.value);
+                Assert.That(dialogueRect.xMin, Is.GreaterThanOrEqualTo(0f));
+                Assert.That(dialogueRect.yMin, Is.GreaterThanOrEqualTo(0f));
+                Assert.That(dialogueRect.xMax, Is.LessThanOrEqualTo(safe.style.width.value.value + .01f));
+                Assert.That(dialogueRect.yMax, Is.LessThanOrEqualTo(safe.style.height.value.value + .01f));
+                Assert.That(dialogueRect.Overlaps(rightRect), Is.False,
+                    $"Foreground dialogue must keep the owner/reference right-side information region readable. dialogue={dialogueRect} right={rightRect} safe={safe.style.width.value.value}x{safe.style.height.value.value}");
+            }
+            finally
+            {
+                foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                    if (!before.Contains(root)) Object.DestroyImmediate(root);
+            }
+        }
+
+        [Test]
         public void GameplayHudUsesCompactReferenceHierarchyAndBoundedDialogue()
         {
-            var desktopDialogue = CongDongLamArrivalHud.CalculateDialoguePanelRect(new Rect(0, 0, 1280, 720), touch: false);
-            Assert.That(desktopDialogue.width, Is.InRange(760f, 880f));
-            Assert.That(desktopDialogue.xMin, Is.GreaterThanOrEqualTo(20f));
-            Assert.That(desktopDialogue.xMax, Is.LessThan(1080f),
-                "Desktop dialogue must leave the right-side quest/navigation column readable like the owner HUD reference.");
-
-            var mobileDialogue = CongDongLamArrivalHud.CalculateDialoguePanelRect(new Rect(0, 0, 800, 480), touch: true);
-            Assert.That(mobileDialogue.xMin, Is.GreaterThanOrEqualTo(12f));
-            Assert.That(mobileDialogue.xMax, Is.LessThanOrEqualTo(788f));
-
             var before = new HashSet<GameObject>(UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects());
             var host = new GameObject("HUD reference hierarchy test");
             try

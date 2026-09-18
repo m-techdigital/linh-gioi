@@ -286,7 +286,7 @@ namespace LinhGioi.UI
             BuildRegister();
             BuildPasswordRecovery();
             BuildMenu();
-            _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); ApplyLgoLayeredFrame(_dialogue); Place(_dialogue, 28, null, null, 22);
+            _dialogue = new VisualElement { name = "Map01A Dialogue Panel" }; ApplyLgoGlassPanel(_dialogue); ApplyLgoLayeredFrame(_dialogue); ApplyLgoGameplayDialogueZone(_dialogue);
             _dialogue.style.paddingLeft = _dialogue.style.paddingRight = 14;
             _dialogue.style.paddingTop = _dialogue.style.paddingBottom = 10;
             _dialogue.style.fontSize = 17;
@@ -349,15 +349,6 @@ namespace LinhGioi.UI
             var bar = new UnityEngine.UIElements.ProgressBar { name = name, lowValue = 0, highValue = 100 };
             ApplyLgoVitalBar(bar, color);
             return bar;
-        }
-
-        public static Rect CalculateDialoguePanelRect(Rect safePanelRect, bool touch)
-        {
-            var side = touch ? 12f : 28f;
-            var rightReserve = touch ? 12f : 220f;
-            var maxWidth = touch ? 840f : 860f;
-            var width = Mathf.Min(maxWidth, Mathf.Max(0f, safePanelRect.width - side - rightReserve));
-            return new Rect(safePanelRect.x + side, safePanelRect.y + 22f, width, 0f);
         }
 
         public static float CalculateInventoryShellHeight(Rect inventoryRect, bool touch, bool compactShell)
@@ -447,10 +438,7 @@ namespace LinhGioi.UI
             _quest.style.width = rightColumnWidth;
             _questTabs.style.width = rightColumnWidth;
             _minimap.style.width = rightColumnWidth;
-            var dialogueRect = CalculateDialoguePanelRect(new Rect(0, 0, r.width, r.height), _touch);
-            _dialogue.style.left = dialogueRect.x;
-            _dialogue.style.right = StyleKeyword.Auto;
-            _dialogue.style.width = dialogueRect.width;
+            ApplyLgoGameplayHudRect(_dialogue, gameplayHud.Dialogue);
             var inventoryRect = CalculateInventoryModalRect(new Rect(0, 0, r.width, r.height), _touch);
             _inventory.style.left = inventoryRect.x;
             _inventory.style.right = StyleKeyword.Auto;
