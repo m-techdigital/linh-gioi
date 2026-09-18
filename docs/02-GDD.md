@@ -84,19 +84,26 @@ First 4-player dungeon, final boss teaching break/telegraph mechanics.
 
 ## 3. Paths/classes
 
-Founder Alpha supports:
+Canonical product identity/new-write IDs are `vo`, `kiem`, `phap`, `co`, `linh`. Founder Alpha combat-complete staging is Võ + Kiếm; this two-Path launch stage does not reduce the five-identity account/profile vocabulary. Legacy stored/shared `class.martial` and `class.sword` remain compatible aliases for Võ and Kiếm and are not silently rewritten.
 
-### `class.sword`
+### `kiem` — Kiếm
+- Founder Alpha combat-complete target;
+- legacy compatible identifier: `class.sword`;
 - fantasy: agile sword fighter;
 - strengths: mobility, crit, combo flow;
 - skill ceiling: animation cancel / perfect dodge follow-up.
 
-### `class.martial`
+### `vo` — Võ
+- Founder Alpha combat-complete target;
+- legacy compatible identifier: `class.martial`;
 - fantasy: close-range martial fighter;
 - strengths: counter, stagger, pressure;
 - skill ceiling: timing and resource rhythm.
 
-Future paths such as `class.arcane`, `class.tech`, `class.spirit` are reserved but out of current scope.
+### `phap`, `co`, `linh`
+These are canonical product identities for Pháp, Cơ and Linh. Their presence in account/profile/UI/data compatibility does not claim Founder Alpha combat completeness. Historical planning labels `class.arcane`, `class.tech`, `class.spirit` are superseded as product identity names and do not become persistence aliases without an explicit migration decision.
+
+See `docs/LGO-PRODUCT-BIBLE-v2.md` for the cross-system staging and compatibility rule.
 
 ## 4. Combat loadout
 

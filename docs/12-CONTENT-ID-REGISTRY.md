@@ -1,6 +1,6 @@
 # 12 — Content ID Registry v0.1
 
-Reserved Founder Alpha namespaces and starter IDs.
+Reserved Founder Alpha namespaces and starter IDs. This registry also records the distinction between GameData content IDs and current product/runtime identity IDs; see `docs/LGO-PRODUCT-BIBLE-v2.md`.
 
 ## Maps
 - `map.city.linh_thanh`
@@ -8,9 +8,25 @@ Reserved Founder Alpha namespaces and starter IDs.
 - `map.field.spirit_river`
 - `map.dungeon.shadow_gate`
 
-## Classes
-- `class.sword`
-- `class.martial`
+## Product/account class identity IDs
+Canonical new-write identity IDs:
+- `vo`
+- `kiem`
+- `phap`
+- `co`
+- `linh`
+
+Legacy durable compatibility IDs already used by GameData/persistence:
+- `class.sword` → `kiem`
+- `class.martial` → `vo`
+
+Founder Alpha completes combat content first for `vo` and `kiem`; that staging does not remove the other canonical identities. Existing legacy values are not silently rewritten.
+
+
+## Runtime playable map IDs
+- `map-01a-cong-dong-lam` — concrete Map01A runtime-state ID shared by server persistence and Unity entry mapping.
+
+`map.city.linh_thanh` and `map-01a-cong-dong-lam` are different ID kinds and are **not aliases**. Local authored key `dong-mon` is resource-local and must not be promoted to a cross-system persisted map ID without a contract change. Any future zone→map relationship must be explicit data.
 
 ## Spirits
 - `spirit.fox.ember`

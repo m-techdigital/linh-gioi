@@ -32,7 +32,7 @@ Founder Alpha intentionally contains only enough systems to prove the full loop:
 - 2 field zones;
 - 1 dungeon;
 - 1 signature world event;
-- 2 Paths/classes;
+- 2 combat-complete Paths/classes at Founder Alpha launch (Võ and Kiếm), while the product identity catalog remains five canonical product identities;
 - about 12 active skills total plus ultimates;
 - 3 spirit companions;
 - 8–12 regular enemy archetypes;
@@ -47,6 +47,10 @@ Founder Alpha intentionally contains only enough systems to prove the full loop:
 - one-room housing-lite;
 - no PvP in Founder Alpha.
 
+## Founder Alpha class staging clarification
+
+The current five product identities are `vo`, `kiem`, `phap`, `co`, `linh`. Founder Alpha's two-class limit is a **combat-content completion stage** for Võ and Kiếm, not a restriction that collapses the account/profile identity vocabulary to two values. Legacy `class.martial` / `class.sword` compatibility remains durable where already stored or shared. See `docs/LGO-PRODUCT-BIBLE-v2.md`.
+
 ## Explicit non-goals before Founder Alpha
 
 - 30v30 guild siege;
@@ -54,7 +58,7 @@ Founder Alpha intentionally contains only enough systems to prove the full loop:
 - marriage;
 - cross-server war;
 - open-world PvP;
-- 5+ launch classes;
+- 5 combat-complete launch classes; identity compatibility for five canonical classes is not the same as shipping five complete combat kits;
 - 15 professions;
 - complex player territory system;
 - custom UDP stack;

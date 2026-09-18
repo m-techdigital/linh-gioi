@@ -12,7 +12,7 @@
 - Reference HUD chính theo owner: `../reference-art/linh-gioi-world-event-ui.png`. Phân nhóm movement trái, combat phải, điều hướng hệ thống đáy, nhiệm vụ trái và trạng thái nhân vật riêng. Prototype chỉ triển khai hành vi thật đang được phép; không lấy sân luyện làm đích thay thế vòng chơi GDD. Bản HUD sinh bổ sung không thay nguồn này.
 
 - `../reference-art/linh-gioi-concept-board.png`: năm hướng Võ, Kiếm, Pháp, Cơ, Linh. Không thay thiết kế tổng thể bằng class đang có trong prototype.
-- `../02-GDD.md`, mục 3: `class.martial` và `class.sword` là mục tiêu Founder Alpha; `class.arcane`, `class.tech`, `class.spirit` dành cho tương lai. Giới tính trên board là mẫu tạo hình, không phải quy tắc khóa giới tính class.
+- `../LGO-PRODUCT-BIBLE-v2.md` và `../02-GDD.md`, mục 3: năm identity canonical là `vo`, `kiem`, `phap`, `co`, `linh`; Founder Alpha chỉ yêu cầu Võ + Kiếm combat-complete. `class.martial` / `class.sword` là legacy-compatible; `class.arcane` / `class.tech` / `class.spirit` chỉ là planning label lịch sử, không phải ID product canonical. Giới tính trên board là mẫu tạo hình, không phải quy tắc khóa giới tính class.
 - `lgo-five-paths-character-reference-v1.jpg`: concept đủ năm hướng, bám board gốc; chưa phải nội dung playable, sprite hay animation. Không cắt nhân vật từ composite để import.
 - `lgo-sword-costume-skill-concepts-v1.jpg`: ba trang phục của một nhân vật Kiếm, không phải ba class hoặc ba cấp trang bị. Ba biểu tượng bám tên preview hiện có; không chứng minh cả ba đã có combat server-authoritative.
 - `lgo-cross-platform-controls-draft-v1.jpg`: bản nháp HUD, chưa duyệt layout. Ô tablet chưa đúng 4:3, thứ tự icon mobile chưa đồng nhất; key badges chỉ là đề xuất, chưa phải mapping runtime. Không dùng ảnh này làm bằng chứng layout đạt.

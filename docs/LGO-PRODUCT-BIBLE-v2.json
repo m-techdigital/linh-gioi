@@ -1,0 +1,56 @@
+{
+  "version": 2,
+  "authority": "LGO Product Bible v2",
+  "classIdentity": {
+    "canonicalNewWriteIds": ["vo", "kiem", "phap", "co", "linh"],
+    "legacyReadAliases": {
+      "class.martial": "vo",
+      "class.sword": "kiem"
+    },
+    "policy": "New product/domain identity writes use canonical IDs. Existing legacy stored values remain readable and are never silently rewritten solely to modernize vocabulary."
+  },
+  "founderAlpha": {
+    "combatCompleteStageIds": ["vo", "kiem"],
+    "limitsIdentityCatalog": false,
+    "policy": "Founder Alpha stages two combat-complete Paths, while the product identity catalog remains five canonical identities."
+  },
+  "mapMachineIds": {
+    "map.city.linh_thanh": {
+      "kind": "content-zone",
+      "owner": "gamedata/registry.yaml",
+      "persistenceRole": "content/world taxonomy"
+    },
+    "map-01a-cong-dong-lam": {
+      "kind": "runtime-playable-map",
+      "owners": [
+        "server/api/src/main/java/com/linhgioi/server/api/persistence/CharacterRuntimeState.java",
+        "client/Unity/Assets/Game/World/Runtime/Map01ACharacterEntryMapper.cs"
+      ],
+      "persistenceRole": "Map01A lane/facing runtime state",
+      "aliasOfCityId": false
+    },
+    "dong-mon": {
+      "kind": "authoring-local-map-key",
+      "persistenceRole": "local authored-resource identity only",
+      "stableCrossSystemId": false
+    }
+  },
+  "supersessionRegister": [
+    {
+      "historicalClaim": "Founder Alpha has only two class identities",
+      "currentAuthority": "Five canonical identities exist; Founder Alpha completes combat content first for vo and kiem."
+    },
+    {
+      "historicalClaim": "class.sword/class.martial are the canonical product identity vocabulary",
+      "currentAuthority": "vo/kiem/phap/co/linh are canonical for new product identity writes; class.sword/class.martial remain legacy-compatible."
+    },
+    {
+      "historicalClaim": "map.city.linh_thanh and map-01a-cong-dong-lam can be treated as the same machine ID",
+      "currentAuthority": "They are distinct ID kinds and are not aliases; any future parent/containment mapping must be explicit data."
+    },
+    {
+      "historicalClaim": "Shadow Slime is only a non-combat marker",
+      "currentAuthority": "Active 2D GDD/direction and the current tutorial micro-slice use Shadow Slime as tutorial combat; old non-combat wording is prototype history."
+    }
+  ]
+}

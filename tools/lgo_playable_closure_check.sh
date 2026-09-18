@@ -88,6 +88,9 @@ check_repo_root() {
 source_only() {
   check_repo_root
   log "LGO_PLAYABLE_CLOSURE_MODE source-only"
+  if [[ -f tools/validate_lgo_product_bible_v2.py ]]; then
+    run_phase product_bible_v2 python3.12 tools/validate_lgo_product_bible_v2.py
+  fi
   run_phase m4_source_gates ./tools/lgo_m4_closure_check.sh --source-only
   run_phase m5_first_playable_loop python3.12 tools/validate_m5_first_playable_loop.py
   run_phase m5_guided_training_loop python3.12 tools/validate_m5_guided_training_loop.py
