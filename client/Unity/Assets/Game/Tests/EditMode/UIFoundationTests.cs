@@ -354,6 +354,49 @@ namespace LinhGioi.Tests
         }
 
         [Test]
+        public void UiEvidenceMetricsExposeGameplayHudZonesForOcclusionAudit()
+        {
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var profileType = uiAssembly.GetType("LinhGioi.UI.RuntimeUiLayoutProfile");
+            var fromScreen = profileType.GetMethod("FromScreen", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            var profile = fromScreen.Invoke(null, new object[] { "mobile", 1600, 720, 2091, 941 });
+            var safe = new Rect(0, 0, 2091, 941);
+            var gameplayType = uiAssembly.GetType("LinhGioi.UI.RuntimeGameplayHudLayout");
+            var calculate = gameplayType.GetMethod("Calculate", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            var gameplay = calculate.Invoke(null, new[] { (object)safe, profile });
+
+            var evidenceType = uiAssembly.GetType("LinhGioi.UI.RuntimeUiEvidenceMetrics");
+            var create = evidenceType.GetMethod("CreateGameplaySnapshot", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(create, Is.Not.Null,
+                "UIF-06 runtime evidence must export the same semantic HUD geometry used by Layout().");
+            var snapshot = create.Invoke(null, new object[] {
+                1600, 720, 2091, 941, safe, new Rect(496.5f, 108.5f, 1098, 724),
+                "mobile", "touch",
+                "scaleMode=ScaleWithScreenSize referenceResolution=1672x941 screenMatchMode=MatchWidthOrHeight match=1",
+                "macos-aspect-simulation", 44, gameplay
+            });
+
+            foreach (var pair in new[] {
+                ("gameplayPlayerStatus", "PlayerStatus"), ("gameplayRightInfo", "RightInfo"),
+                ("gameplayCombat", "Combat"), ("gameplayContext", "Context"),
+                ("gameplaySecondaryNav", "SecondaryNav"), ("gameplayTouchPad", "TouchPad"),
+                ("gameplayDialogue", "Dialogue"),
+            })
+            {
+                var actual = GetMember<object>(snapshot, pair.Item1);
+                var expected = GetMember<Rect>(gameplay, pair.Item2);
+                Assert.That(actual, Is.Not.Null, pair.Item1);
+                Assert.That(GetMember<float>(actual, "x"), Is.EqualTo(expected.x).Within(.01f), pair.Item1);
+                Assert.That(GetMember<float>(actual, "y"), Is.EqualTo(expected.y).Within(.01f), pair.Item1);
+                Assert.That(GetMember<float>(actual, "width"), Is.EqualTo(expected.width).Within(.01f), pair.Item1);
+                Assert.That(GetMember<float>(actual, "height"), Is.EqualTo(expected.height).Within(.01f), pair.Item1);
+            }
+        }
+
+        [Test]
         public void SharedRuntimeStyleSheetOwnsCriticalPrimitiveLayoutRules()
         {
             var source = System.IO.File.ReadAllText(System.IO.Path.Combine(Application.dataPath,

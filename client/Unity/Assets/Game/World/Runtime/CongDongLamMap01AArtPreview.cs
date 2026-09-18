@@ -650,6 +650,7 @@ namespace LinhGioi.World
             public bool inventoryItemDetailVerified;
             public int healthPotionCount, manaPotionCount, playerHealth;
             public bool dialogueOpened, greetingCompleted;
+            public RuntimeUiMetricsSnapshot uiMetrics;
             public bool voBaseVerified, voModularVerified, voWalkVerified, voSkillVerified;
             public bool voFemaleVerified, voSlotToggleVerified;
             public bool voFemaleMotionVerified, voProgressionVerified;
@@ -2272,6 +2273,7 @@ namespace LinhGioi.World
             result.manaPotionCount = ManaPotionCount;
             result.playerHealth = PlayerHealth;
             result.parallaxDelta = FarOffset - initial;
+            result.uiMetrics = RuntimeUiMetrics;
             var mapFailed = !result.mapQuestFlowVerified || !result.functionalUiVerified
                 || !result.dialogueOpened || !result.greetingCompleted
                 || !result.inventoryItemDetailVerified
@@ -2279,6 +2281,7 @@ namespace LinhGioi.World
                 || float.IsNaN(FootY) || result.maxFootError > .001f || Mathf.Abs(result.parallaxDelta) < .01f;
             mapFailed |= questOnly && !result.dialogueRevisitsVerified;
             mapFailed |= questOnly && !result.questWorldFramesUnobstructed;
+            mapFailed |= questOnly && result.uiMetrics == null;
             var wardrobeFailed = !questOnly && (!result.voBaseVerified || !result.voModularVerified
                 || !result.voWalkVerified || !result.voSkillVerified || !result.voFemaleVerified || !result.voSlotToggleVerified
                 || !result.voFemaleMotionVerified || !result.voProgressionVerified

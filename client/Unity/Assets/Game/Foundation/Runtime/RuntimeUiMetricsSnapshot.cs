@@ -3,6 +3,15 @@ using System;
 namespace LinhGioi.Foundation
 {
     [Serializable]
+    public sealed class RuntimeUiRectSnapshot
+    {
+        public float x;
+        public float y;
+        public float width;
+        public float height;
+    }
+
+    [Serializable]
     public sealed class RuntimeUiMetricsSnapshot
     {
         public string evidenceAuthority;
@@ -24,5 +33,12 @@ namespace LinhGioi.Foundation
         public float characterHubShellScreenHeightRatio;
         public int minimumTouchTargetPanelUnits;
         public float minimumTouchTargetScreenPixels;
+        public RuntimeUiRectSnapshot gameplayPlayerStatus;
+        public RuntimeUiRectSnapshot gameplayRightInfo;
+        public RuntimeUiRectSnapshot gameplayCombat;
+        public RuntimeUiRectSnapshot gameplayContext;
+        public RuntimeUiRectSnapshot gameplaySecondaryNav;
+        public RuntimeUiRectSnapshot gameplayTouchPad;
+        public RuntimeUiRectSnapshot gameplayDialogue;
     }
 }

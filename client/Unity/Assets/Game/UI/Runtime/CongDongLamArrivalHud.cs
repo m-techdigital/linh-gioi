@@ -446,7 +446,7 @@ namespace LinhGioi.UI
             _inventory.style.bottom = StyleKeyword.Auto;
             _inventory.style.width = inventoryRect.width;
             _inventory.style.height = CalculateInventoryShellHeight(inventoryRect, _touch, IsInventoryCompactShellActive());
-            PublishRuntimeUiMetrics(layout, inventoryRect);
+            PublishRuntimeUiMetrics(layout, inventoryRect, gameplayHud);
             _talk.style.fontSize = layout.WorldTalkFontSize;
             if (_inventoryHeroPanel != null)
             {
@@ -477,16 +477,18 @@ namespace LinhGioi.UI
                 }
             }
         }
-        private void PublishRuntimeUiMetrics(RuntimeUiLayoutProfile layout, Rect characterHubShellRect)
+        private void PublishRuntimeUiMetrics(RuntimeUiLayoutProfile layout, Rect characterHubShellRect,
+            RuntimeGameplayHudLayout gameplayHud)
         {
             if (_scene == null) return;
             var authority = Application.isMobilePlatform
                 ? "device-runtime-unverified"
                 : layout.InputClass == "touch" ? "macos-aspect-simulation" : "macos-player";
-            _scene.SetRuntimeUiMetrics(RuntimeUiEvidenceMetrics.CreateSnapshot(
+            _scene.SetRuntimeUiMetrics(RuntimeUiEvidenceMetrics.CreateGameplaySnapshot(
                 _metrics.ScreenPixelWidth, _metrics.ScreenPixelHeight, _metrics.PanelWidth, _metrics.PanelHeight,
                 _metrics.SafePanelRect, characterHubShellRect, layout.Name, layout.InputClass,
-                RuntimePanelSettingsProvider.Describe(_ownedPanel), authority, RuntimeUiTheme.Current.minimumTouchTarget));
+                RuntimePanelSettingsProvider.Describe(_ownedPanel), authority,
+                RuntimeUiTheme.Current.minimumTouchTarget, gameplayHud));
         }
 
         private void Update()
