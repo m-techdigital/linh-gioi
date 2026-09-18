@@ -19,7 +19,7 @@ namespace LinhGioi.UI
 
         private void BuildRegister()
         {
-            _registerOverlay = new VisualElement { name = "Map01A Register Overlay" };
+            _registerOverlay = RuntimeUiFactory.NewModalSurface("Map01A Register Overlay");
             ApplyLgoRegisterPanel(_registerOverlay);
 
             var header = new VisualElement { name = "Map01A Register Header", pickingMode = PickingMode.Ignore };
@@ -220,7 +220,7 @@ namespace LinhGioi.UI
             UpdateServerSelectScreen();
             UpdateEntryScreen();
             UpdateRegisterScreen();
-            AnimateLgoCharacterHubSwap(_registerOverlay);
+            AnimateLgoSurfaceSwap(_registerOverlay);
         }
 
         private void CloseRegister()

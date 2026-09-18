@@ -284,9 +284,9 @@ namespace LinhGioi.UI
             button.style.minHeight = 52;
             button.style.fontSize = 23;
             button.style.marginRight = 6;
-            ApplyLgoCharacterHubSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
+            ApplyLgoUiSkinSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
             RemoveLgoOuterBorder(button);
-            ApplyLgoCharacterHubInteractiveMotion(button);
+            ApplyLgoInteractiveMotion(button);
         }
 
         private static void ApplyLgoCharacterHubTabState(Button button, bool selected)
@@ -294,13 +294,13 @@ namespace LinhGioi.UI
             ApplyLgoSelectedTab(button, selected);
             if (selected)
             {
-                ApplyLgoCharacterHubSurface(button, ref _characterHubTabSelected, "character-hub-tab-selected");
+                ApplyLgoUiSkinSurface(button, ref _characterHubTabSelected, "character-hub-tab-selected");
                 button.experimental.animation.Start(
                     new StyleValues { opacity = .62f },
                     new StyleValues { opacity = 1f },
                     150);
             }
-            else ApplyLgoCharacterHubSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
+            else ApplyLgoUiSkinSurface(button, ref _characterHubTabIdle, "character-hub-tab-idle");
             RemoveLgoOuterBorder(button);
         }
 
@@ -341,17 +341,9 @@ namespace LinhGioi.UI
             button.style.borderLeftWidth = button.style.borderRightWidth = 2;
             button.style.borderTopColor = button.style.borderLeftColor = button.style.borderRightColor = new Color(.22f, .82f, 1f, 1f);
             button.style.borderBottomColor = new Color(.98f, .78f, .32f, 1f);
-            ApplyLgoCharacterHubSurface(button, ref _characterHubActionBlue, "character-hub-action-blue");
+            ApplyLgoUiSkinSurface(button, ref _characterHubActionBlue, "character-hub-action-blue");
             RemoveLgoOuterBorder(button);
-            ApplyLgoCharacterHubInteractiveMotion(button);
-        }
-
-        private static void ApplyLgoCharacterHubGoldAction(Button button)
-        {
-            ApplyLgoButton(button, true);
-            ApplyLgoCharacterHubSurface(button, ref _characterHubActionGold, "character-hub-action-gold");
-            RemoveLgoOuterBorder(button);
-            ApplyLgoCharacterHubInteractiveMotion(button);
+            ApplyLgoInteractiveMotion(button);
         }
 
         private static void ApplyLgoCharacterHubInspectorAction(Button button)
@@ -374,15 +366,6 @@ namespace LinhGioi.UI
                     new StyleValues { opacity = 0f },
                     new StyleValues { opacity = 1f },
                     160);
-        }
-
-        private static void AnimateLgoCharacterHubSwap(VisualElement element)
-        {
-            if (element == null) return;
-            element.experimental.animation.Start(
-                new StyleValues { opacity = .38f },
-                new StyleValues { opacity = 1f },
-                130);
         }
 
         private static void ApplyLgoEquipmentLevelBadge(Label badge)
@@ -414,9 +397,9 @@ namespace LinhGioi.UI
             button.style.borderLeftWidth = button.style.borderRightWidth = 2;
             button.style.borderTopColor = button.style.borderBottomColor = UiGold;
             button.style.borderLeftColor = button.style.borderRightColor = new Color(.62f, .46f, .22f, .94f);
-            ApplyLgoCharacterHubSurface(button, ref _characterHubClose, "character-hub-close");
+            ApplyLgoUiSkinSurface(button, ref _characterHubClose, "character-hub-close");
             RemoveLgoOuterBorder(button);
-            ApplyLgoCharacterHubInteractiveMotion(button);
+            ApplyLgoInteractiveMotion(button);
         }
 
         private static void ApplyLgoInventoryGridCell(VisualElement cell)
@@ -656,7 +639,7 @@ namespace LinhGioi.UI
         private static void ApplyLgoCharacterHubLockedAction(Button button, bool primary)
         {
             if (primary) ApplyLgoCharacterHubPrimaryAction(button);
-            else ApplyLgoCharacterHubGoldAction(button);
+            else ApplyLgoGoldAction(button);
             ApplyLgoCharacterHubInspectorAction(button);
             button.style.color = primary ? new Color(.90f, .95f, 1f, 1f) : new Color(.20f, .16f, .10f, 1f);
             ApplyLgoCharacterHubUnavailableControl(button);
@@ -703,7 +686,7 @@ namespace LinhGioi.UI
             node.style.flexDirection = FlexDirection.Column;
             node.style.alignItems = Align.Center;
             node.style.justifyContent = Justify.Center;
-            ApplyLgoCharacterHubInteractiveMotion(node);
+            ApplyLgoInteractiveMotion(node);
         }
 
         private static void ApplyLgoPotentialOverlayContent(VisualElement icon, Label title, Label value)

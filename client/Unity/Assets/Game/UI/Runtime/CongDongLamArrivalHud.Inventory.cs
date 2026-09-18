@@ -145,7 +145,7 @@ namespace LinhGioi.UI
             Place(_inventoryBackdrop, 0, 0, 0, 0);
             ApplyLgoCharacterHubBackdrop(_inventoryBackdrop);
             _inventoryBackdrop.style.display = DisplayStyle.None;
-            _inventory = new VisualElement { name = "Map01A Inventory" };
+            _inventory = RuntimeUiFactory.NewModalSurface("Map01A Inventory");
             ApplyLgoCharacterHubShell(_inventory); Place(_inventory, 72, 72, 86, 72);
             RuntimeUiTypography.ApplyBodyFont(_inventory);
             _inventory.style.flexDirection = FlexDirection.Column;
@@ -323,7 +323,7 @@ namespace LinhGioi.UI
             _inventoryDetailPrimaryAction = InventoryButton(UseInventoryDetailPrimaryAction, "Map01A Inventory Detail Primary Action");
             ApplyLgoCharacterHubPrimaryAction(_inventoryDetailPrimaryAction);
             _inventoryDetailLockAction = InventoryButton(ToggleSelectedEquipmentLock, "Map01A Inventory Detail Lock Action", "Khóa");
-            ApplyLgoCharacterHubGoldAction(_inventoryDetailLockAction);
+            ApplyLgoGoldAction(_inventoryDetailLockAction);
             _inventoryDetailSellAction = InventoryButton(() => { }, "Map01A Inventory Detail Sell Action", "Bán");
             ApplyLgoButton(_inventoryDetailSellAction);
             _inventoryDetailSellAction.SetEnabled(false);
@@ -797,8 +797,8 @@ namespace LinhGioi.UI
             _inventoryFooter.style.display = DisplayStyle.Flex;
             _inventoryDetailSellAction.style.display = characterInfo ? DisplayStyle.None : DisplayStyle.Flex;
             ApplyHubMainTabSelection(null, characterInfo, !characterInfo);
-            AnimateLgoCharacterHubSwap(characterInfo ? _inventoryHeroPanel : _inventoryGridPanel);
-            AnimateLgoCharacterHubSwap(_inventoryDetailPanel);
+            AnimateLgoSurfaceSwap(characterInfo ? _inventoryHeroPanel : _inventoryGridPanel);
+            AnimateLgoSurfaceSwap(_inventoryDetailPanel);
             RefreshInventoryDetailCard();
         }
 

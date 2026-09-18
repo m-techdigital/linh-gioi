@@ -347,6 +347,128 @@
     padding-right: 8px;
 }
 
+/* UIF-03R: named Entry/Auth composition profiles. These tune family density,
+   while RuntimeAuthLayoutVariant owns surface width/placement. */
+.lgo-auth-profile-tablet .lgo-entry-control-card {
+    min-height: 404px;
+}
+
+.lgo-auth-profile-tablet .lgo-server-select-panel {
+    min-height: 396px;
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 18px;
+    padding-bottom: 18px;
+}
+
+.lgo-auth-profile-tablet .lgo-server-select-card {
+    height: 102px;
+    margin-top: 14px;
+    margin-bottom: 10px;
+}
+
+.lgo-auth-profile-tablet .lgo-server-select-action {
+    min-height: 54px;
+}
+
+.lgo-auth-profile-tablet .lgo-auth-flow-panel {
+    padding-left: 24px;
+    padding-right: 24px;
+    padding-top: 18px;
+    padding-bottom: 16px;
+}
+
+.lgo-auth-profile-tablet .lgo-auth-flow-primary {
+    height: 54px;
+    font-size: 19px;
+}
+
+.lgo-auth-profile-tablet .lgo-register-panel {
+    min-height: 462px;
+}
+
+.lgo-auth-profile-tablet .lgo-password-recovery-panel {
+    min-height: 390px;
+}
+
+.lgo-auth-profile-mobile .lgo-entry-control-card {
+    min-height: 360px;
+}
+
+.lgo-auth-profile-mobile .lgo-server-select-panel {
+    min-height: 344px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 14px;
+    padding-bottom: 14px;
+}
+
+.lgo-auth-profile-mobile .lgo-server-select-title-row {
+    min-height: 42px;
+}
+
+.lgo-auth-profile-mobile .lgo-server-select-card {
+    height: 90px;
+    margin-top: 10px;
+    margin-bottom: 8px;
+    padding-left: 14px;
+    padding-right: 14px;
+}
+
+.lgo-auth-profile-mobile .lgo-server-select-status-row {
+    min-height: 30px;
+    margin-bottom: 10px;
+}
+
+.lgo-auth-profile-mobile .lgo-server-select-action {
+    min-height: 50px;
+    font-size: 17px;
+}
+
+.lgo-auth-profile-mobile .lgo-auth-flow-panel {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 14px;
+    padding-bottom: 12px;
+}
+
+.lgo-auth-profile-mobile .lgo-auth-flow-header {
+    margin-bottom: 10px;
+}
+
+.lgo-auth-profile-mobile .lgo-auth-flow-primary {
+    height: 50px;
+    font-size: 18px;
+    margin-top: 2px;
+}
+
+.lgo-auth-profile-mobile .lgo-auth-flow-back {
+    min-height: 36px;
+    margin-top: 4px;
+}
+
+.lgo-auth-profile-mobile .lgo-register-panel {
+    min-height: 420px;
+}
+
+.lgo-auth-profile-mobile .lgo-register-agreement {
+    min-height: 40px;
+}
+
+.lgo-auth-profile-mobile .lgo-password-recovery-panel {
+    min-height: 344px;
+}
+
+.lgo-auth-profile-mobile .lgo-password-recovery-rule {
+    min-height: 20px;
+    margin-top: 2px;
+    margin-bottom: 4px;
+}
+
+.lgo-auth-profile-mobile .lgo-password-recovery-verify-footer {
+    min-height: 34px;
+}
+
 .lgo-character-select-overlay {
     position: absolute;
     left: 0;

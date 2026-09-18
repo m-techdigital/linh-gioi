@@ -107,7 +107,7 @@ namespace LinhGioi.UI
             ApplyLgoEntryShell(_entryPanel);
             _entryOverlay.Add(_entryPanel);
 
-            _entryControlCard = new VisualElement { name = "Map01A Entry Control Card" };
+            _entryControlCard = RuntimeUiFactory.NewModalSurface("Map01A Entry Control Card");
             ApplyLgoEntryControlCard(_entryControlCard);
             _entryPanel.Add(_entryControlCard);
 
@@ -334,31 +334,60 @@ namespace LinhGioi.UI
         private void LayoutEntryScreen(RuntimeUiLayoutProfile layout, Rect safePanelRect)
         {
             if (_entryPanel == null || _entryBrandStage == null) return;
+            var auth = layout.AuthVariant;
+            var entrySurface = !_serverSelectOpen && !_registerOpen && !_passwordRecoveryOpen;
+            var surfaceWidth = _serverSelectOpen
+                ? auth.ServerSurfaceWidth
+                : _registerOpen
+                    ? auth.RegisterSurfaceWidth
+                    : _passwordRecoveryOpen ? auth.RecoverySurfaceWidth : auth.EntrySurfaceWidth;
+
+            _entryOverlay.EnableInClassList("lgo-auth-profile-pc", auth.Name == "PCWide");
+            _entryOverlay.EnableInClassList("lgo-auth-profile-tablet", auth.Name == "Tablet");
+            _entryOverlay.EnableInClassList("lgo-auth-profile-mobile", auth.Name == "MobileLandscape");
+            _entryOverlay.EnableInClassList("lgo-auth-surface-entry", entrySurface);
+            _entryOverlay.EnableInClassList("lgo-auth-surface-server", _serverSelectOpen);
+            _entryOverlay.EnableInClassList("lgo-auth-surface-register", _registerOpen);
+            _entryOverlay.EnableInClassList("lgo-auth-surface-recovery", _passwordRecoveryOpen);
+
             var centerX = safePanelRect.x + safePanelRect.width * .5f;
-            var cardWidth = Mathf.Min(layout.LoginCardWidth, Mathf.Max(0f, safePanelRect.width - 24f));
+            var cardWidth = Mathf.Min(surfaceWidth, Mathf.Max(0f, safePanelRect.width - 24f));
             var panelLeft = Mathf.Clamp(centerX - cardWidth * .5f, safePanelRect.x + 12f,
                 Mathf.Max(safePanelRect.x + 12f, safePanelRect.xMax - cardWidth - 12f));
-            Place(_entryPanel, panelLeft, null, safePanelRect.y + layout.EntryPanelTop, null);
+            Place(_entryPanel, panelLeft, null, safePanelRect.y + auth.PanelTop, null);
             _entryPanel.style.width = cardWidth;
             _entryControlCard.style.width = Length.Percent(100);
 
-            var brandWidth = Mathf.Min(layout.LoginLogoWidth, Mathf.Max(0f, safePanelRect.width - 32f));
-            Place(_entryBrandStage, centerX - brandWidth * .5f, null, safePanelRect.y + layout.EntryBrandTop, null);
+            var brandWidth = Mathf.Min(auth.BrandWidth, Mathf.Max(0f, safePanelRect.width - 32f));
+            Place(_entryBrandStage, centerX - brandWidth * .5f, null, safePanelRect.y + auth.BrandTop, null);
             _entryBrandStage.style.width = brandWidth;
-            _entryBrandStage.style.height = layout.EntryBrandHeight;
+            _entryBrandStage.style.height = auth.BrandHeight;
 
-            Place(_entrySlogan, safePanelRect.x + layout.EntrySloganLeft, null,
-                safePanelRect.y + layout.EntrySloganTop, null);
-            _entrySlogan.style.width = Mathf.Min(layout.EntrySloganWidth, safePanelRect.width * .30f);
+            var showPeripheral = entrySurface && auth.ShowPeripheralChrome;
+            _entrySlogan.style.display = showPeripheral ? DisplayStyle.Flex : DisplayStyle.None;
+            _entrySideActions.style.display = showPeripheral ? DisplayStyle.Flex : DisplayStyle.None;
+            _entrySignature.style.display = showPeripheral ? DisplayStyle.Flex : DisplayStyle.None;
+            _entryNoticePanel.style.width = Mathf.Min(auth.NoticeWidth, Mathf.Max(0f, safePanelRect.width - 48f));
+            _entryNoticePanel.style.display = entrySurface && auth.ShowNotice ? DisplayStyle.Flex : DisplayStyle.None;
 
-            _entryNoticePanel.style.width = Mathf.Min(layout.EntryNoticeWidth, safePanelRect.width - 48f);
-            Place(_entryNoticePanel, safePanelRect.x + 24f, null, null,
-                Mathf.Max(18f, _metrics.PanelHeight - safePanelRect.yMax + layout.EntryNoticeBottom));
+            if (showPeripheral)
+            {
+                Place(_entrySlogan, safePanelRect.x + auth.SloganLeft, null,
+                    safePanelRect.y + auth.SloganTop, null);
+                _entrySlogan.style.width = Mathf.Min(auth.SloganWidth, safePanelRect.width * .30f);
+                Place(_entrySideActions, null,
+                    Mathf.Max(18f, _metrics.PanelWidth - safePanelRect.xMax + layout.EntryUtilityRight),
+                    safePanelRect.y + layout.EntryUtilityTop, null);
+                Place(_entrySignature, null,
+                    Mathf.Max(24f, _metrics.PanelWidth - safePanelRect.xMax + layout.EntrySignatureRight),
+                    null, Mathf.Max(24f, _metrics.PanelHeight - safePanelRect.yMax + layout.EntrySignatureBottom));
+            }
 
-            Place(_entrySideActions, null, Mathf.Max(18f, _metrics.PanelWidth - safePanelRect.xMax + layout.EntryUtilityRight),
-                safePanelRect.y + layout.EntryUtilityTop, null);
-            Place(_entrySignature, null, Mathf.Max(24f, _metrics.PanelWidth - safePanelRect.xMax + layout.EntrySignatureRight),
-                null, Mathf.Max(24f, _metrics.PanelHeight - safePanelRect.yMax + layout.EntrySignatureBottom));
+            if (entrySurface && auth.ShowNotice)
+            {
+                Place(_entryNoticePanel, safePanelRect.x + 24f, null, null,
+                    Mathf.Max(18f, _metrics.PanelHeight - safePanelRect.yMax + layout.EntryNoticeBottom));
+            }
         }
 
         private bool ShouldShowEntryOnLaunch() => ShouldShowEntryOnLaunchForArgs(

@@ -32,6 +32,7 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoEntryLogo(Label label)
         {
+            label.AddToClassList("lgo-entry-logo");
             RuntimeUiTypography.ApplyHeadingFont(label);
             label.style.fontSize = 82;
             label.style.letterSpacing = 6;
@@ -41,6 +42,7 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoEntryLogoOnline(Label label)
         {
+            label.AddToClassList("lgo-entry-logo-online");
             label.style.fontSize = 16;
             label.style.letterSpacing = 5;
             label.style.color = RuntimeUiTheme.WithAlpha(RuntimeUiTheme.Current.text, .92f);
@@ -312,9 +314,9 @@ namespace LinhGioi.UI
         {
             panel.AddToClassList(LgoAuthFlowPanelClass);
             ApplyLgoEntryControlCard(panel);
-            ApplyLgoCharacterHubSurface(panel, ref _characterHubSurface, "character-hub-surface");
+            ApplyLgoUiSkinSurface(panel, ref _sharedModalSurface, "character-hub-surface");
             RemoveLgoOuterBorder(panel);
-            ApplyLgoCharacterHubFiligreeFrame(panel);
+            ApplyLgoModalFiligreeFrame(panel);
             if (minHeight > 0f) panel.style.minHeight = minHeight;
         }
 
@@ -355,7 +357,7 @@ namespace LinhGioi.UI
         private static void ApplyLgoAuthFlowPrimary(Button button)
         {
             button.AddToClassList(LgoAuthFlowPrimaryClass);
-            ApplyLgoCharacterHubGoldAction(button);
+            ApplyLgoGoldAction(button);
             button.style.flexGrow = StyleKeyword.Null;
             button.style.height = StyleKeyword.Null;
             button.style.minHeight = StyleKeyword.Null;

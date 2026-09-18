@@ -18,7 +18,7 @@ namespace LinhGioi.UI
 
         private void BuildPasswordRecovery()
         {
-            _passwordRecoveryOverlay = new VisualElement { name = "Map01A Password Recovery Overlay" };
+            _passwordRecoveryOverlay = RuntimeUiFactory.NewModalSurface("Map01A Password Recovery Overlay");
             ApplyLgoPasswordRecoveryPanel(_passwordRecoveryOverlay);
 
             var header = new VisualElement { name = "Map01A Password Recovery Header", pickingMode = PickingMode.Ignore };
@@ -372,7 +372,7 @@ namespace LinhGioi.UI
             UpdateRegisterScreen();
             UpdateEntryScreen();
             UpdatePasswordRecoveryScreen();
-            AnimateLgoCharacterHubSwap(_passwordRecoveryOverlay);
+            AnimateLgoSurfaceSwap(_passwordRecoveryOverlay);
         }
 
         private void ClosePasswordRecovery()

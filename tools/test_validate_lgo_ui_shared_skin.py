@@ -306,7 +306,7 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
             inventory.write_text(
                 inventory.read_text(encoding="utf-8").replace(
                     "ApplyLgoCharacterHubShell(_inventory);",
-                    "ApplyLgoModalShell(_inventory, 12);",
+                    "ApplyLgoModalChrome(_inventory, 12);",
                     1,
                 ),
                 encoding="utf-8",
@@ -327,12 +327,12 @@ class ValidateLgoUiSharedSkinTests(unittest.TestCase):
     def test_rejects_character_hub_that_drops_shared_depth_or_interaction(self) -> None:
         with self._copy_minimal_repo() as temp:
             self._replace_skin_marker(Path(temp), "ApplyLgoCharacterHubSelectionState", "ApplyFlatSelectionState")
-            self._replace_skin_marker(Path(temp), "ApplyLgoCharacterHubInteractiveMotion", "ApplyStaticButton")
+            self._replace_skin_marker(Path(temp), "ApplyLgoInteractiveMotion", "ApplyStaticButton")
 
             violations = validator.validate_root(Path(temp))
 
         self.assertTrue(any("ApplyLgoCharacterHubSelectionState" in item for item in violations), violations)
-        self.assertTrue(any("ApplyLgoCharacterHubInteractiveMotion" in item for item in violations), violations)
+        self.assertTrue(any("ApplyLgoInteractiveMotion" in item for item in violations), violations)
 
     def test_rejects_character_hub_that_drops_shared_vector_frame(self) -> None:
         with self._copy_minimal_repo() as temp:

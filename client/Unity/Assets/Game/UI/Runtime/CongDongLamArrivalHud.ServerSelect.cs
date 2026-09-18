@@ -19,7 +19,7 @@ namespace LinhGioi.UI
 
         private void BuildServerSelect()
         {
-            _serverSelectOverlay = new VisualElement { name = "Map01A Server Select Overlay" };
+            _serverSelectOverlay = RuntimeUiFactory.NewModalSurface("Map01A Server Select Overlay");
             ApplyLgoServerSelectPanel(_serverSelectOverlay);
 
             var titleRow = new VisualElement { name = "Map01A Server Select Title Row", pickingMode = PickingMode.Ignore };

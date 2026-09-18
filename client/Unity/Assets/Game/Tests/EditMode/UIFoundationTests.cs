@@ -209,8 +209,11 @@ namespace LinhGioi.Tests
             Assert.That(utility.ClassListContains("lgo-utility-action"), Is.True);
             var ornament = new VisualElement(); InvokeHudSkin("ApplyLgoOrnamentRail", ornament);
             Assert.That(ornament.ClassListContains("lgo-ornament"), Is.True);
-            var modal = new VisualElement(); InvokeHudSkin("ApplyLgoModalShell", modal, 12f);
+            var modalTheme = ScriptableObject.CreateInstance<ThemeTokens>();
+            var modal = new ModalPanel(modalTheme);
+            Assert.That(modal.ClassListContains("lgo-panel"), Is.True);
             Assert.That(modal.ClassListContains("lgo-modal"), Is.True);
+            UnityEngine.Object.DestroyImmediate(modalTheme);
         }
 
         private static void InvokeHudSkin(string methodName, params object[] arguments)
@@ -342,8 +345,8 @@ namespace LinhGioi.Tests
 
             Assert.That(GetMember<float>(tablet, "PresentationScale"), Is.EqualTo(1f).Within(.001f));
             Assert.That(GetMember<float>(mobile, "PresentationScale"), Is.EqualTo(1f).Within(.001f));
-            Assert.That(GetMember<float>(tablet, "LoginCardWidth"), Is.EqualTo(577.3f).Within(.2f));
-            Assert.That(GetMember<float>(mobile, "LoginCardWidth"), Is.EqualTo(580f).Within(.1f));
+            Assert.That(GetMember<float>(tablet, "LoginCardWidth"), Is.EqualTo(502f).Within(.2f));
+            Assert.That(GetMember<float>(mobile, "LoginCardWidth"), Is.EqualTo(480.93f).Within(.2f));
             Assert.That(GetMember<float>(tablet, "CharacterSelectedPreviewMaxWidth"), Is.EqualTo(426.7f).Within(.2f));
             Assert.That(GetMember<float>(mobile, "CharacterSelectedPreviewMaxWidth"), Is.EqualTo(360f).Within(.1f));
             Assert.That(GetMember<float>(tablet, "GameplayHudPlayerStatusWidth"), Is.EqualTo(278f).Within(.01f));
@@ -382,20 +385,91 @@ namespace LinhGioi.Tests
         }
 
         [Test]
-        public void ResponsiveUiContainsLegacyPresentationScaleToExplicitCompatibilityBoundary()
+        public void ProductionModalRootsUseSharedModalBaseFactory()
         {
             var uiDir = System.IO.Path.Combine(Application.dataPath, "Game/UI/Runtime");
-            var consumers = System.IO.Directory.GetFiles(uiDir, "*.cs")
-                .Where(path => System.IO.File.ReadAllText(path).Contains("RuntimePresentationScaleProfile"))
-                .Select(System.IO.Path.GetFileName)
-                .OrderBy(name => name)
-                .ToArray();
-            Assert.That(consumers, Is.EqualTo(new[] { "RuntimeUiLayoutProfile.cs" }),
-                "UI screens must not call the legacy scalar profile directly; per-screen variants own composition.");
+            var expected = new[]
+            {
+                ("CongDongLamArrivalHud.Entry.cs", "_entryControlCard = RuntimeUiFactory.NewModalSurface"),
+                ("CongDongLamArrivalHud.ServerSelect.cs", "_serverSelectOverlay = RuntimeUiFactory.NewModalSurface"),
+                ("CongDongLamArrivalHud.Register.cs", "_registerOverlay = RuntimeUiFactory.NewModalSurface"),
+                ("CongDongLamArrivalHud.PasswordRecovery.cs", "_passwordRecoveryOverlay = RuntimeUiFactory.NewModalSurface"),
+                ("CongDongLamArrivalHud.CharacterSelect.cs", "RuntimeUiFactory.NewModalSurface(\"Map01A Character Select Account Panel\""),
+                ("CongDongLamArrivalHud.Inventory.cs", "_inventory = RuntimeUiFactory.NewModalSurface"),
+                ("CongDongLamArrivalHud.Menu.cs", "RuntimeUiFactory.NewModalSurface(\"Map01A Menu Panel\""),
+            };
+            foreach (var item in expected)
+            {
+                var source = System.IO.File.ReadAllText(System.IO.Path.Combine(uiDir, item.Item1));
+                Assert.That(source, Does.Contain(item.Item2),
+                    item.Item1 + " must instantiate the shared ModalPanel-backed base instead of simulating it.");
+            }
+
+            var factorySource = System.IO.File.ReadAllText(System.IO.Path.Combine(uiDir, "RuntimeUiFactory.cs"));
+            Assert.That(factorySource, Does.Contain("internal static ModalPanel NewModalSurface"));
+            Assert.That(factorySource, Does.Contain("new ModalPanel(RuntimeUiTheme.Current"),
+                "The factory must create the true ModalPanel primitive.");
+        }
+
+        [Test]
+        public void ModalPrimitiveOwnsSharedSemanticClasses()
+        {
+            var source = System.IO.File.ReadAllText(
+                System.IO.Path.Combine(Application.dataPath, "Game/UI/Runtime/UIPrimitives.cs"));
+            Assert.That(source, Does.Contain("AddToClassList(\"lgo-panel\")"));
+            Assert.That(source, Does.Contain("AddToClassList(\"lgo-modal\")"));
+            Assert.That(source, Does.Contain("ModalPanel(ThemeTokens theme, float maxWidth"),
+                "ModalPanel must support composition-owned width without forcing one global modal width.");
+        }
+
+        [Test]
+        public void AuthReworkUsesNamedCompositionVariantsInsteadOfLegacyMobileScalar()
+        {
+            var uiDir = System.IO.Path.Combine(Application.dataPath, "Game/UI/Runtime");
             var layoutSource = System.IO.File.ReadAllText(
                 System.IO.Path.Combine(uiDir, "RuntimeUiLayoutProfile.cs"));
-            Assert.That(layoutSource, Does.Contain("legacyMobileScaleCap"),
-                "The remaining UI use must stay visibly marked as temporary Auth compatibility.");
+            var entrySource = System.IO.File.ReadAllText(
+                System.IO.Path.Combine(uiDir, "CongDongLamArrivalHud.Entry.cs"));
+
+            Assert.That(layoutSource, Does.Not.Contain("RuntimePresentationScaleProfile"),
+                "UIF-03R must remove the last legacy Auth whole-content scalar dependency.");
+            Assert.That(layoutSource, Does.Not.Contain("MobileScale"),
+                "Auth density must come from named composition variants, not one mobile multiplier.");
+            Assert.That(layoutSource, Does.Contain("RuntimeAuthLayoutVariant"),
+                "Auth needs one typed PCWide/Tablet/MobileLandscape composition owner.");
+            Assert.That(entrySource, Does.Contain("AuthVariant"),
+                "Entry/Auth layout must consume the typed Auth composition variant.");
+            Assert.That(entrySource, Does.Contain("lgo-auth-profile-mobile"),
+                "Mobile Auth must be an explicit semantic composition class.");
+        }
+
+        [Test]
+        public void AuthCompositionVariantsRebalanceSurfaceWidthsAndPeripheralChrome()
+        {
+            var uiAssembly = typeof(ThemeTokens).Assembly;
+            var variantType = uiAssembly.GetType("LinhGioi.UI.RuntimeAuthLayoutVariant");
+            Assert.That(variantType, Is.Not.Null);
+            var fromWindow = variantType.GetMethod("FromWindow", System.Reflection.BindingFlags.Static
+                | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            Assert.That(fromWindow, Is.Not.Null);
+
+            var pc = fromWindow.Invoke(null, new object[] { "desktop", 1673, 941 });
+            var tablet = fromWindow.Invoke(null, new object[] { "tablet", 1255, 941 });
+            var mobile = fromWindow.Invoke(null, new object[] { "mobile", 2091, 941 });
+
+            Assert.That(GetMember<string>(pc, "Name"), Is.EqualTo("PCWide"));
+            Assert.That(GetMember<string>(tablet, "Name"), Is.EqualTo("Tablet"));
+            Assert.That(GetMember<string>(mobile, "Name"), Is.EqualTo("MobileLandscape"));
+            Assert.That(GetMember<float>(mobile, "EntrySurfaceWidth"), Is.LessThan(520f),
+                "Mobile landscape needs recomposition, not the historical ~580-unit login card.");
+            Assert.That(GetMember<float>(tablet, "EntrySurfaceWidth"), Is.LessThan(540f));
+            Assert.That(GetMember<float>(pc, "ServerSurfaceWidth"), Is.GreaterThan(GetMember<float>(pc, "RecoverySurfaceWidth")),
+                "Server selection may intentionally use a broader surface than the recovery form.");
+            Assert.That(GetMember<bool>(pc, "ShowPeripheralChrome"), Is.True);
+            Assert.That(GetMember<bool>(tablet, "ShowPeripheralChrome"), Is.False);
+            Assert.That(GetMember<bool>(mobile, "ShowPeripheralChrome"), Is.False);
+            Assert.That(GetMember<bool>(tablet, "ShowNotice"), Is.True);
+            Assert.That(GetMember<bool>(mobile, "ShowNotice"), Is.False);
         }
 
         [Test]
@@ -743,8 +817,8 @@ namespace LinhGioi.Tests
         }
 
         [TestCase("desktop", 1600, 900, 1673, 941, 540f, 565f)]
-        [TestCase("tablet", 1024, 768, 1255, 941, 460f, 480f)]
-        [TestCase("mobile", 1600, 720, 2091, 941, 435f, 450f)]
+        [TestCase("tablet", 1024, 768, 1255, 941, 395f, 425f)]
+        [TestCase("mobile", 1600, 720, 2091, 941, 355f, 380f)]
         public void EntryLoginProfileKeepsCanonicalCardAndBrandScale(string profile, int screenWidth, int screenHeight,
             int panelWidth, int panelHeight, float minimumScreenCardWidth, float maximumScreenCardWidth)
         {
@@ -759,8 +833,8 @@ namespace LinhGioi.Tests
             var screenCardWidth = cardWidth * screenHeight / panelHeight;
             Assert.That(screenCardWidth, Is.InRange(minimumScreenCardWidth, maximumScreenCardWidth),
                 "Entry form must preserve the canonical height-scaled physical width instead of desktop-style oversizing on touch profiles.");
-            Assert.That(logoWidth, Is.EqualTo(cardWidth * .96f).Within(.01f),
-                "Brand and form scale must come from one responsive profile contract.");
+            Assert.That(logoWidth / cardWidth, Is.InRange(.85f, .97f),
+                "Brand and form must remain coordinated by the named Auth composition variant.");
         }
 
         private static object CreateViewportMetrics(int screenWidth, int screenHeight, Rect safeArea,
@@ -892,6 +966,9 @@ namespace LinhGioi.Tests
             Assert.That(source, Does.Contain(".lgo-auth-flow-subtitle-row"));
             Assert.That(source, Does.Contain(".lgo-password-recovery-rule"));
             Assert.That(source, Does.Contain(".lgo-password-recovery-verify-footer"));
+            Assert.That(source, Does.Contain(".lgo-auth-profile-tablet"));
+            Assert.That(source, Does.Contain(".lgo-auth-profile-mobile"),
+                "UIF-03R density changes must stay in named Auth profile rules, not per-screen rescue styles.");
         }
 
         [Test]

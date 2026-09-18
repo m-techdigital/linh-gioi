@@ -23,7 +23,7 @@ namespace LinhGioi.UI
         private static void ApplyLgoCharacterSelectPanel(VisualElement panel)
         {
             panel.AddToClassList(LgoCharacterSelectPanelClass);
-            ApplyLgoModalShell(panel, 14);
+            ApplyLgoModalChrome(panel, 14);
             panel.style.minWidth = 0;
             panel.style.minHeight = 0;
             panel.style.backgroundColor = new Color(.006f, .026f, .052f, .94f);

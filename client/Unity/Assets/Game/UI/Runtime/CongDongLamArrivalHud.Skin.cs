@@ -130,22 +130,22 @@ namespace LinhGioi.UI
         private const string LgoLayeredFrameClass = "lgo-layered-frame";
         private const string LgoFrameCornerClass = "lgo-frame-corner";
         private const string LgoVitalBarClass = "lgo-vital-bar";
-        private const string LgoCharacterHubInteractiveMotionClass = "lgo-character-hub-interactive-motion";
+        private const string LgoInteractiveMotionClass = "lgo-interactive-motion";
         private const string LgoCharacterHubSelectedClass = "lgo-character-hub-selected";
-        private const string LgoCharacterHubSkinRoot = "LGOMaps/CongDongLamMap01AUiSkin/";
-        private static Texture2D _characterHubSurface, _characterHubPanelSurface, _characterHubTabIdle,
-            _characterHubTabSelected, _characterHubActionBlue, _characterHubActionGold, _characterHubClose,
+        private const string LgoUiSkinRoot = "LGOMaps/CongDongLamMap01AUiSkin/";
+        private static Texture2D _sharedModalSurface, _characterHubPanelSurface, _characterHubTabIdle,
+            _characterHubTabSelected, _characterHubActionBlue, _sharedGoldActionSurface, _characterHubClose,
             _characterHubPotentialTopology;
 
-        private static Texture2D LoadLgoCharacterHubTexture(ref Texture2D cache, string name)
+        private static Texture2D LoadLgoUiSkinTexture(ref Texture2D cache, string name)
         {
-            if (cache == null) cache = Resources.Load<Texture2D>(LgoCharacterHubSkinRoot + name);
+            if (cache == null) cache = Resources.Load<Texture2D>(LgoUiSkinRoot + name);
             return cache;
         }
 
-        private static void ApplyLgoCharacterHubSurface(VisualElement element, ref Texture2D cache, string name)
+        private static void ApplyLgoUiSkinSurface(VisualElement element, ref Texture2D cache, string name)
         {
-            var texture = LoadLgoCharacterHubTexture(ref cache, name);
+            var texture = LoadLgoUiSkinTexture(ref cache, name);
             if (texture == null) return;
             element.style.backgroundImage = new StyleBackground(texture);
             element.style.unityBackgroundScaleMode = ScaleMode.StretchToFill;
@@ -159,11 +159,11 @@ namespace LinhGioi.UI
 
         private static void ApplyLgoCharacterHubPanelSurface(VisualElement element)
         {
-            ApplyLgoCharacterHubSurface(element, ref _characterHubPanelSurface, "character-hub-panel-surface");
+            ApplyLgoUiSkinSurface(element, ref _characterHubPanelSurface, "character-hub-panel-surface");
         }
 
         private static Texture2D LoadLgoCharacterHubPotentialTopology()
-            => LoadLgoCharacterHubTexture(ref _characterHubPotentialTopology, "character-hub-potential-topology");
+            => LoadLgoUiSkinTexture(ref _characterHubPotentialTopology, "character-hub-potential-topology");
 
 
         private static void ApplyLgoFrameColors(VisualElement element, Color background, Color border)
@@ -220,7 +220,7 @@ namespace LinhGioi.UI
             element.Add(corner);
         }
 
-        private static void ApplyLgoCharacterHubFiligreeFrame(VisualElement element)
+        private static void ApplyLgoModalFiligreeFrame(VisualElement element)
         {
             RuntimeUiSkin.ApplyOrnamentedShellFrame(element);
         }
@@ -257,21 +257,37 @@ namespace LinhGioi.UI
                     child.style.display = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        private static void ApplyLgoModalShell(VisualElement element, float padding = 12)
+        private static void ApplyLgoModalChrome(VisualElement element, float padding = 12)
         {
-            element.AddToClassList("lgo-modal");
             ApplyLgoGlassPanel(element);
             ApplyLgoLayeredFrame(element);
             element.style.paddingLeft = element.style.paddingRight = padding;
             element.style.paddingTop = element.style.paddingBottom = padding;
         }
 
+        private static void ApplyLgoGoldAction(Button button)
+        {
+            ApplyLgoButton(button, true);
+            ApplyLgoUiSkinSurface(button, ref _sharedGoldActionSurface, "character-hub-action-gold");
+            RemoveLgoOuterBorder(button);
+            ApplyLgoInteractiveMotion(button);
+        }
+
+        private static void AnimateLgoSurfaceSwap(VisualElement element)
+        {
+            if (element == null) return;
+            element.experimental.animation.Start(
+                new StyleValues { opacity = .38f },
+                new StyleValues { opacity = 1f },
+                130);
+        }
+
         private static void ApplyLgoCharacterHubShell(VisualElement element)
         {
             element.AddToClassList(LgoCharacterHubShellClass);
-            ApplyLgoModalShell(element, 12);
+            ApplyLgoModalChrome(element, 12);
             SetLgoFrameCornerVisibility(element, false);
-            ApplyLgoCharacterHubFiligreeFrame(element);
+            ApplyLgoModalFiligreeFrame(element);
             element.style.backgroundColor = new Color(.004f, .024f, .052f, .98f);
             element.style.borderTopWidth = element.style.borderBottomWidth = 0;
             element.style.borderLeftWidth = element.style.borderRightWidth = 0;
@@ -279,7 +295,7 @@ namespace LinhGioi.UI
             element.style.borderLeftColor = element.style.borderRightColor = new Color(.70f, .48f, .16f, .92f);
             element.style.paddingTop = 0;
             element.style.paddingBottom = 0;
-            ApplyLgoCharacterHubSurface(element, ref _characterHubSurface, "character-hub-surface");
+            ApplyLgoUiSkinSurface(element, ref _sharedModalSurface, "character-hub-surface");
         }
 
         private static void ApplyLgoCharacterHubTitle(Label label)
@@ -394,7 +410,7 @@ namespace LinhGioi.UI
                 : selected ? new Color(.10f, .075f, .025f, .48f) : new Color(.010f, .040f, .070f, .94f);
             RemoveLgoOuterBorder(icon);
             icon.style.overflow = Overflow.Visible;
-            if (icon is Button button) ApplyLgoCharacterHubInteractiveMotion(button);
+            if (icon is Button button) ApplyLgoInteractiveMotion(button);
         }
 
         private static void ApplyLgoCharacterHubHeroIconFrame(VisualElement icon, bool visible = true)
@@ -405,10 +421,10 @@ namespace LinhGioi.UI
                 = visible ? DisplayStyle.Flex : DisplayStyle.None;
         }
 
-        private static void ApplyLgoCharacterHubInteractiveMotion(Button button)
+        private static void ApplyLgoInteractiveMotion(Button button)
         {
-            if (button == null || button.ClassListContains(LgoCharacterHubInteractiveMotionClass)) return;
-            button.AddToClassList(LgoCharacterHubInteractiveMotionClass);
+            if (button == null || button.ClassListContains(LgoInteractiveMotionClass)) return;
+            button.AddToClassList(LgoInteractiveMotionClass);
             button.RegisterCallback<PointerEnterEvent>(_ =>
             {
                 if (!button.enabledSelf) return;
@@ -455,7 +471,7 @@ namespace LinhGioi.UI
             element.style.borderBottomColor = element.style.borderRightColor = selected
                 ? new Color(1f, .76f, .26f, 1f)
                 : new Color(.18f, .30f, .40f, .72f);
-            if (element is Button button) ApplyLgoCharacterHubInteractiveMotion(button);
+            if (element is Button button) ApplyLgoInteractiveMotion(button);
         }
 
         private static void ApplyLgoVitalBar(UnityEngine.UIElements.ProgressBar bar, Color fillColor)

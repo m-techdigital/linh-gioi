@@ -112,7 +112,7 @@ namespace LinhGioi.UI
 
         private void BuildCharacterSelectAccountSurface()
         {
-            var panel = new VisualElement { name = "Map01A Character Select Account Panel" };
+            var panel = RuntimeUiFactory.NewModalSurface("Map01A Character Select Account Panel");
             ApplyLgoCharacterSelectPanel(panel);
 
             var title = LgoTitleLabel("Chọn Nhân Vật", 28, TextAnchor.MiddleCenter);

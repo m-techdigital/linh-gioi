@@ -22,10 +22,9 @@ namespace LinhGioi.UI
             _menuOverlay.style.paddingRight = 18;
             _menuOverlay.style.paddingBottom = 94;
 
-            var panel = new VisualElement { name = "Map01A Menu Panel" };
+            var panel = RuntimeUiFactory.NewModalSurface("Map01A Menu Panel");
             panel.style.width = 370;
-            ApplyLgoModalShell(panel, 16);
-            ApplyLgoLayeredFrame(panel);
+            ApplyLgoModalChrome(panel, 16);
             _menuOverlay.Add(panel);
 
             var header = new VisualElement { name = "Map01A Menu Header" };

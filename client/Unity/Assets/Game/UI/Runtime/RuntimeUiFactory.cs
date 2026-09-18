@@ -14,6 +14,14 @@ namespace LinhGioi.UI
             return NewPanel(maxWidth, new VisualElement());
         }
 
+        internal static ModalPanel NewModalSurface(string elementName, float maxWidth = 0f)
+        {
+            var panel = new ModalPanel(RuntimeUiTheme.Current, maxWidth);
+            if (!string.IsNullOrWhiteSpace(elementName)) panel.name = elementName;
+            panel.style.flexDirection = FlexDirection.Column;
+            return panel;
+        }
+
         private static VisualElement NewPanel(float maxWidth, VisualElement panel)
         {
             panel.style.maxWidth = maxWidth;

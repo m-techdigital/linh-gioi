@@ -36,6 +36,7 @@ namespace LinhGioi.UI
     {
         public BasePanel(ThemeTokens theme)
         {
+            AddToClassList("lgo-panel");
             style.backgroundColor = theme.surface;
             RuntimeUiSkin.ApplyPadding(this, theme.SpaceL, theme.SpaceL);
             style.borderTopLeftRadius = RuntimeUiSizing.BasePanelRadius;
@@ -45,12 +46,14 @@ namespace LinhGioi.UI
         }
     }
 
-    public sealed class ModalPanel : BasePanel
+    public class ModalPanel : BasePanel
     {
-        public ModalPanel(ThemeTokens theme) : base(theme)
+        public ModalPanel(ThemeTokens theme, float maxWidth = RuntimeUiSizing.ModalMaxWidth) : base(theme)
         {
+            AddToClassList("lgo-modal");
             style.backgroundColor = theme.surfaceRaised;
-            style.maxWidth = RuntimeUiSizing.ModalMaxWidth;
+            if (maxWidth > 0f) style.maxWidth = maxWidth;
+            else style.maxWidth = StyleKeyword.Null;
         }
     }
 

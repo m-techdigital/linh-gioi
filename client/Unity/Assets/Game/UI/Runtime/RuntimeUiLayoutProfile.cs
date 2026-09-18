@@ -1,4 +1,3 @@
-using LinhGioi.Foundation;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -18,13 +17,6 @@ namespace LinhGioi.UI
         internal const int NarrowMaxLongSide = 1180;
         internal const int RegularMaxShortSide = 980;
         internal const int RegularMaxLongSide = 1500;
-        internal const float MobileScaleBaseline = 520f;
-        internal const float MobileScaleMin = 0.50f;
-        internal const float MobileScaleMax = 0.86f;
-        internal const float MobileLoginCardWidthRatio = 0.28f;
-        internal const float TabletLoginCardWidthRatio = 0.46f;
-        internal const float DesktopLoginCardWidthRatio = 0.345f;
-        internal const float LoginLogoAspect = 0.50f;
 
         internal readonly string Name;
         internal readonly int Width;
@@ -36,22 +28,19 @@ namespace LinhGioi.UI
         internal readonly string InputClass;
         internal readonly RuntimeUiAdaptiveProfile AdaptiveProfile;
         internal readonly RuntimeCharacterHubLayoutVariant CharacterHubVariant;
-        internal readonly float MobileScale;
+        internal readonly RuntimeAuthLayoutVariant AuthVariant;
         internal readonly float PresentationScale;
-        internal readonly float LoginLogoWidth;
-        internal readonly float LoginLogoHeight;
-        internal readonly float LoginCardWidth;
-        internal readonly int LoginCardPadding;
-        internal readonly int LoginButtonHeight;
-        internal readonly int LoginButtonFontSize;
 
-        internal float EntryPanelTop => Mathf.Clamp(Height * 0.34f, 300f, 320f);
-        internal float EntryBrandTop => IsTablet ? 50f : 58f;
-        internal float EntryBrandHeight => 232f;
-        internal float EntrySloganLeft => Mathf.Clamp(Width * 0.13f, 64f, 218f);
-        internal float EntrySloganTop => 28f;
-        internal float EntrySloganWidth => IsTablet ? 300f : 340f;
-        internal float EntryNoticeWidth => IsTablet ? 300f : 545f;
+        internal float LoginLogoWidth => AuthVariant.BrandWidth;
+        internal float LoginLogoHeight => AuthVariant.BrandHeight;
+        internal float LoginCardWidth => AuthVariant.EntrySurfaceWidth;
+        internal float EntryPanelTop => AuthVariant.PanelTop;
+        internal float EntryBrandTop => AuthVariant.BrandTop;
+        internal float EntryBrandHeight => AuthVariant.BrandHeight;
+        internal float EntrySloganLeft => AuthVariant.SloganLeft;
+        internal float EntrySloganTop => AuthVariant.SloganTop;
+        internal float EntrySloganWidth => AuthVariant.SloganWidth;
+        internal float EntryNoticeWidth => AuthVariant.NoticeWidth;
         internal float EntryNoticeBottom => 30f;
         internal float EntryUtilityTop => 58f;
         internal float EntryUtilityRight => 24f;
@@ -106,11 +95,11 @@ namespace LinhGioi.UI
         internal int LoginControlColumnPaddingBottom => IsMobile ? 0 : 12;
         internal int LoginControlColumnMarginLeft => IsMobile ? 0 : IsTablet ? 8 : 22;
         internal int LoginControlColumnMarginTop => IsMobile ? 0 : IsTablet ? 2 : 12;
-        internal int LoginLogoMarginBottom => IsMobile ? Mathf.RoundToInt(-10f * MobileScale) : IsTablet ? -8 : -10;
-        internal int LoginHeroTitleFontSize => IsTablet ? 23 : 25;
-        internal int LoginCardMinHeight => IsMobile ? Mathf.RoundToInt(84f * MobileScale) : IsTablet ? 132 : 140;
-        internal int LoginCardPaddingTop => IsMobile ? Mathf.RoundToInt(5f * MobileScale) : IsTablet ? 14 : 16;
-        internal int LoginCardPaddingBottom => IsMobile ? Mathf.RoundToInt(5f * MobileScale) : IsTablet ? 14 : 16;
+        internal int LoginLogoMarginBottom => IsMobile ? -8 : IsTablet ? -8 : -10;
+        internal int LoginHeroTitleFontSize => IsMobile ? 21 : IsTablet ? 23 : 25;
+        internal int LoginCardMinHeight => IsMobile ? 76 : IsTablet ? 132 : 140;
+        internal int LoginCardPaddingTop => IsMobile ? 5 : IsTablet ? 14 : 16;
+        internal int LoginCardPaddingBottom => IsMobile ? 5 : IsTablet ? 14 : 16;
         internal int LoginCardMarginBottom => IsMobile ? 0 : 18;
         internal Color LoginCardBackground => IsMobile
             ? new Color(0.005f, 0.018f, 0.040f, 0.18f)
@@ -118,11 +107,11 @@ namespace LinhGioi.UI
                 ? new Color(0.005f, 0.018f, 0.040f, 0.36f)
                 : new Color(0.005f, 0.018f, 0.040f, 0.42f);
         internal StyleLength LoginServerRowMaxWidth => IsMobile ? new StyleLength(Length.Percent(100)) : new StyleLength(436f);
-        internal int LoginServerRowMinHeight => IsMobile ? Mathf.RoundToInt(34f * MobileScale) : IsTablet ? 40 : 42;
+        internal int LoginServerRowMinHeight => IsMobile ? 34 : IsTablet ? 40 : 42;
         internal int LoginServerRowPaddingHorizontal => IsMobile ? 14 : 22;
         internal int LoginServerRowPaddingVertical => IsMobile ? 3 : 7;
-        internal int LoginServerTextFontSize => IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.055f, 11f, 15f)) : IsTablet ? 18 : 19;
-        internal int LoginButtonMarginTop => IsMobile ? Mathf.RoundToInt(2f * MobileScale) : 8;
+        internal int LoginServerTextFontSize => IsMobile ? 14 : IsTablet ? 18 : 19;
+        internal int LoginButtonMarginTop => IsMobile ? 2 : 8;
 
         internal int LobbyIntroMarginBottom => IsMobile ? 6 : 10;
         internal int LobbyContentMarginTop => 4;
@@ -310,23 +299,9 @@ namespace LinhGioi.UI
             InputClass = inputClass ?? (IsMobile || IsTablet ? "touch" : "pointer");
             AdaptiveProfile = RuntimeUiAdaptiveProfile.FromWindow(LayoutClass, InputClass, width, height);
             CharacterHubVariant = RuntimeCharacterHubLayoutVariant.FromWindow(LayoutClass, InputClass, width, height);
-            // UIF-02R does not impose one global visual scale on Auth, Select, or HUD.
+            AuthVariant = RuntimeAuthLayoutVariant.FromWindow(LayoutClass, width, height);
+            // Global visual scale remains compatibility-only; each screen family owns composition.
             PresentationScale = 1f;
-            // Preserve pre-rework Auth mobile geometry until UIF-03R owns that composition explicitly.
-            var legacyMobileScaleCap = RuntimePresentationScaleProfile.FromWindow(name, width, height).UiContentScale;
-            MobileScale = IsMobile
-                ? Mathf.Min(Mathf.Clamp(ShortSide / MobileScaleBaseline, MobileScaleMin, MobileScaleMax), legacyMobileScaleCap)
-                : 1f;
-            LoginCardWidth = IsMobile
-                ? Mathf.Clamp(width * MobileLoginCardWidthRatio, 420f, 580f)
-                : IsTablet
-                    ? Mathf.Clamp(width * TabletLoginCardWidthRatio, 450f, 580f)
-                    : Mathf.Clamp(width * DesktopLoginCardWidthRatio, 530f, 590f);
-            LoginLogoWidth = LoginCardWidth * 0.96f;
-            LoginLogoHeight = LoginLogoWidth * LoginLogoAspect;
-            LoginCardPadding = IsMobile ? Mathf.RoundToInt(13f * MobileScale) : IsTablet ? 20 : 24;
-            LoginButtonHeight = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.13f, 26f, 36f)) : IsTablet ? 50 : 52;
-            LoginButtonFontSize = IsMobile ? Mathf.RoundToInt(Mathf.Clamp(ShortSide * 0.055f, 11f, 15f)) : IsTablet ? 19 : 20;
         }
 
         internal static RuntimeUiLayoutProfile FromScreen(string forcedProfile, int screenWidth, int screenHeight, int layoutWidth = 0, int layoutHeight = 0)

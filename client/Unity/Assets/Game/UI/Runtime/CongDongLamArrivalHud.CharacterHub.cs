@@ -806,10 +806,10 @@ namespace LinhGioi.UI
                     : "Linh thú đồng hành, kỹ năng hỗ trợ và mức thân mật";
             ApplyHubMainTabSelection(mode);
             ShowHubDetail(mode);
-            AnimateLgoCharacterHubSwap(mode == CharacterHubMode.Skills
+            AnimateLgoSurfaceSwap(mode == CharacterHubMode.Skills
                 ? _skillsPanel
                 : mode == CharacterHubMode.Potential ? _potentialPanel : _spiritPetPanel);
-            AnimateLgoCharacterHubSwap(_hubPreviewDetailPanel);
+            AnimateLgoSurfaceSwap(_hubPreviewDetailPanel);
         }
 
         private void ApplyHubMainTabSelection(CharacterHubMode? previewMode = null, bool character = false, bool storage = false)
